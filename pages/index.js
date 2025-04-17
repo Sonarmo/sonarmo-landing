@@ -1,7 +1,15 @@
+import Image from "next/image";
+
 export default function Home() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-black text-white">
-      <h1 className="text-4xl font-bold">Bienvenue sur Sonarmo</h1>
+    <main className="bg-black min-h-screen flex items-center justify-center">
+      <Image
+        src="/logo-sonarmo-officiel.png"
+        alt="Sonarmo logo"
+        width={1280}
+        height={720}
+        priority
+      />
     </main>
   );
 }
