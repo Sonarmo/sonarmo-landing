@@ -15,14 +15,14 @@ export default function Home() {
         {/* HEADER */}
         <header className="flex justify-between items-center px-6 py-4">
           <div className="flex items-center gap-2">
-            <Image src="/logo-sonarmo-officiel.png" alt="Logo" width={32} height={32} />
+            <Image src="/favicon.png" alt="Logo" width={32} height={32} />
             <span className="text-white text-lg font-semibold">Sonarmo</span>
           </div>
           <nav className="flex gap-6 text-sm items-center">
             <a href="#services" className="hover:text-gray-300">NOTRE SERVICE</a>
             <a href="#contact" className="hover:text-gray-300">CONTACTEZ-NOUS</a>
             <a href="#login" className="hover:text-gray-300 flex items-center gap-1">
-              <Image src="/logo-sonarmo-officiel.png" alt="Mini Logo" width={14} height={14} />
+              <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
               SE CONNECTER
             </a>
           </nav>
@@ -34,10 +34,10 @@ export default function Home() {
 
           <div className="relative z-10 flex flex-col items-center">
             <Image
-              src="/logo-sonarmo-officiel.png"
+              src="/logo-app-header.png"
               alt="Sonarmo Logo"
-              width={80}
-              height={80}
+              width={400}
+              height={400}
               className="mb-6"
             />
             <h1 className="text-5xl font-semibold mb-4">
@@ -73,16 +73,52 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
             <div className="flex flex-col gap-2 mb-6 md:mb-0">
               <div className="flex items-center gap-4">
-                <Image src="/icons/instagram.svg" alt="Instagram" width={20} height={20} />
-                <Image src="/icons/linkedin.svg" alt="LinkedIn" width={20} height={20} />
-                <Image src="/icons/facebook.svg" alt="Facebook" width={20} height={20} />
+                <a
+                  href="https://www.instagram.com/sonarmo_music/?hl=fr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/icons/instagram.png"
+                    alt="Instagram"
+                    width={24}
+                    height={24}
+                    className="hover:opacity-70 transition"
+                  />
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/sonarmo/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/icons/linkedin.png"
+                    alt="LinkedIn"
+                    width={24}
+                    height={24}
+                    className="hover:opacity-70 transition"
+                  />
+                </a>
+                <a
+                  href="https://www.facebook.com/profile.php?id=61574580608705"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/icons/facebook.png"
+                    alt="Facebook"
+                    width={24}
+                    height={24}
+                    className="hover:opacity-70 transition"
+                  />
+                </a>
               </div>
               <p>Sonarmo Team</p>
               <a href="#" className="hover:text-white">A propos de nous</a>
               <a href="#" className="hover:text-white">Nous contacter</a>
             </div>
             <div className="flex flex-col items-end text-right gap-2">
-              <Image src="/logo-sonarmo-officiel.png" alt="Sonarmo Logo" width={100} height={30} />
+              <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
               <p className="text-xs">&copy;2025 Sonarmo Team. All Rights Reserved</p>
               <p className="text-xs">Terms of Use &amp; Privacy Policy</p>
             </div>
