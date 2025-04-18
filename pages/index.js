@@ -49,7 +49,7 @@ export default function Home() {
             Intelligence Atmosphérique
           </h1>
           <p className="max-w-xl text-base sm:text-lg text-gray-300 mb-8">
-            Chaque lieu à une histoire, une identité unique. Sonarmo crée une ambiance sonore personnalisée, pensée spécialement pour refléter l'âme de votre espace et offrir une expérience immersive incomparable.
+            Chaque lieu à une histoire, une identité unique. Sonarmo crée une ambiance sonore personnalisée, pensée spécialement pour refléter l&apos;âme de votre espace et offrir une expérience immersive incomparable.
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
