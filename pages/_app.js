@@ -1,3 +1,5 @@
+import '@/styles/globals.css'  // ou './styles/globals.css' selon ton chemin réel
+
 import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
@@ -12,3 +14,4 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
+
