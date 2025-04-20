@@ -20,12 +20,12 @@ export default function Home() {
             <span className="text-white text-lg font-semibold">Sonarmo</span>
           </div>
           <nav className="flex gap-6 text-sm items-center">
-            <a href="#services" className="hover:text-gray-300">NOTRE SERVICE</a>
+            <Link href="#services" className="hover:text-gray-300">NOTRE SERVICE</Link>
             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-            <a href="#login" className="hover:text-gray-300 flex items-center gap-1">
+            <Link href="#login" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
               SE CONNECTER
-            </a>
+            </Link>
           </nav>
         </header>
 
@@ -124,8 +124,8 @@ export default function Home() {
                 </a>
               </div>
               <p>Sonarmo Team</p>
-              <a href="#" className="hover:text-white">A propos de nous</a>
-              <link href="/contact" className="hover:text-white">Nous contacter</link>
+              <Link href="/" className="hover:text-white">A propos de nous</Link>
+              <Link href="/contact" className="hover:text-white">Nous contacter</Link>
             </div>
             <div className="flex flex-col items-end text-right gap-2">
               <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
