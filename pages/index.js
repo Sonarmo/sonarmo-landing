@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Head from "next/head";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -20,7 +21,7 @@ export default function Home() {
           </div>
           <nav className="flex gap-6 text-sm items-center">
             <a href="#services" className="hover:text-gray-300">NOTRE SERVICE</a>
-            <a href="#contact" className="hover:text-gray-300">CONTACTEZ-NOUS</a>
+            <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
             <a href="#login" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
               SE CONNECTER
@@ -29,16 +30,24 @@ export default function Home() {
         </header>
 
         {/* HERO SECTION */}
-        <section className="relative text-center px-4 py-20 overflow-hidden">
+        <section className="relative text-center px-4 py-0 overflow-hidden">
           <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-gradient-to-br from-[#F28500] to-[#FF00FF] rounded-full blur-3xl opacity-30 translate-x-1/3 translate-y-1/3 z-0" />
 
-          <div className="relative w-[400px] h-[400px] mb-6 mx-auto">
-            <Image
-              src="/Logo-app-header.png"
-              alt="Sonarmo Logo"
-              fill
-              className="object-contain"
-            />
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2 }}
+            className="relative z-10 flex flex-col items-center"
+          >
+            <div className="relative w-[400px] h-[180px] mb-1">
+              <Image
+                src="/Logo-app-header.png"
+                alt="Sonarmo Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
             <h1 className="text-5xl font-semibold mb-4">
               <span className="text-white">Intelligence </span>
               <span className="text-[#FCE2BA]">Atmosphérique</span>
@@ -49,7 +58,7 @@ export default function Home() {
             <button className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-3 rounded-full text-white font-semibold shadow-md">
               Découvrir
             </button>
-          </div>
+          </motion.div>
         </section>
 
         {/* CONTACT SECTION */}
@@ -61,9 +70,11 @@ export default function Home() {
             <p className="text-gray-400 mb-8 max-w-md">
               Une question, une idée, ou juste envie d&apos;en parler ? Faites-nous signe, on adore discuter !
             </p>
-            <button className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-3 rounded-full text-white font-semibold shadow-md">
-              ON S&apos;APPELLE ?
-            </button>
+            <Link href="/contact">
+              <button className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-3 rounded-full text-white font-semibold shadow-md">
+                ON S&apos;APPELLE ?
+              </button>
+            </Link>
           </div>
         </section>
 
@@ -114,7 +125,7 @@ export default function Home() {
               </div>
               <p>Sonarmo Team</p>
               <a href="#" className="hover:text-white">A propos de nous</a>
-              <a href="#" className="hover:text-white">Nous contacter</a>
+              <a href="/contact" className="hover:text-white">Nous contacter</a>
             </div>
             <div className="flex flex-col items-end text-right gap-2">
               <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
