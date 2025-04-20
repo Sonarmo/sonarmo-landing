@@ -34,7 +34,7 @@ export default function Home() {
 
           <div className="relative z-10 flex flex-col items-center">
             <Image
-              src="/logo-app-header.png"
+              src="/Logo-app-header.png"
               alt="Sonarmo Logo"
               width={400}
               height={400}
