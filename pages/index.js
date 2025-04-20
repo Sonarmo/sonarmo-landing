@@ -125,7 +125,7 @@ export default function Home() {
               </div>
               <p>Sonarmo Team</p>
               <a href="#" className="hover:text-white">A propos de nous</a>
-              <a href="/contact" className="hover:text-white">Nous contacter</a>
+              <link href="/contact" className="hover:text-white">Nous contacter</link>
             </div>
             <div className="flex flex-col items-end text-right gap-2">
               <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
