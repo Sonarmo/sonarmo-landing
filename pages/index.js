@@ -32,13 +32,12 @@ export default function Home() {
         <section className="relative text-center px-4 py-20 overflow-hidden">
           <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-gradient-to-br from-[#F28500] to-[#FF00FF] rounded-full blur-3xl opacity-30 translate-x-1/3 translate-y-1/3 z-0" />
 
-          <div className="relative z-10 flex flex-col items-center">
+          <div className="relative w-[400px] h-[400px] mb-6 mx-auto">
             <Image
               src="/Logo-app-header.png"
               alt="Sonarmo Logo"
-              width={400}
-              height={400}
-              className="mb-6"
+              fill
+              className="object-contain"
             />
             <h1 className="text-5xl font-semibold mb-4">
               <span className="text-white">Intelligence </span>
