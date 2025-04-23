@@ -89,25 +89,44 @@ export default function Experience() {
                     </div>
                 </section>
 
-                {/* SECTION - PERSONNALISATION */}
+                {/* SECTION - CIBLE - À QUI S'ADRESSE SONARMO */}
                 <section className="py-16 text-center">
-                    <h2 className="text-3xl font-semibold mb-4">Personnalisation en temps réel</h2>
-                    <p className="text-gray-400 max-w-xl mx-auto mb-8">
-                        Ajustez l’énergie musicale, le volume et l’ambiance selon l’instant. L’interface mobile vous permet de créer ou régénérer une playlist à tout moment.
+                    <h2 className="text-3xl font-semibold mb-4">À qui s’adresse Sonarmo ?</h2>
+                    <p className="text-gray-400 max-w-xl mx-auto mb-4">
+                        Sonarmo est pensé pour tous les lieux qui veulent créer une ambiance musicale unique, sans prise de tête. Que tu gères un bar à cocktails, un café cosy, un restaurant vivant, un coworking créatif ou même un concept store, notre IA adapte la musique à ton univers et à tes clients.
                     </p>
-                    <div className="flex justify-center">
-                        <Image src="/iphone.png" alt="Contrôle mobile" width={300} height={600} />
+                    <p className="text-gray-400 max-w-xl mx-auto mb-8">
+                        <strong>Fini les playlists impersonnelles ou les réglages manuels : Tu choisis l'ambiance, Sonarmo s'occupe du reste.</strong>
+                    </p>
+                </section>
+
+                {/* SECTION - PERSONNALISATION */}
+                <section className="py-16">
+                    <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+                        <div className="md:w-1/2 text-center md:text-left">
+                            <h2 className="text-3xl font-semibold mb-4">Personnalisation en temps réel</h2>
+                            <p className="text-gray-400 mb-8">
+                                Ajustez l’énergie musicale, le volume et l’ambiance selon l’instant. L’interface mobile vous permet de créer ou régénérer une playlist à tout moment.
+                            </p>
+                        </div>
+                        <div className="md:w-1/2 flex justify-center">
+                            <Image src="/iphone.png" alt="Contrôle mobile" width={250} height={500} />
+                        </div>
                     </div>
                 </section>
 
                 {/* SECTION - SUIVI */}
-                <section className="py-16 text-center">
-                    <h2 className="text-3xl font-semibold mb-4">Suivi et optimisation</h2>
-                    <p className="text-gray-400 max-w-xl mx-auto mb-8">
-                        Analysez l’impact de votre ambiance sonore avec des données claires. Repérez les moments où la musique attire le plus l’attention et booste l’expérience client.
-                    </p>
-                    <div className="flex justify-center">
-                        <Image src="/Mockup mac.png" alt="Dashboard Sonarmo" width={800} height={500} />
+                <section className="py-16">
+                    <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+                        <div className="md:w-1/2 flex justify-center">
+                            <Image src="/Mockup mac.png" alt="Dashboard Sonarmo" width={400} height={250} />
+                        </div>
+                        <div className="md:w-1/2 text-center md:text-left">
+                            <h2 className="text-3xl font-semibold mb-4">Suivi et optimisation</h2>
+                            <p className="text-gray-400 mb-8">
+                                Analysez l’impact de votre ambiance sonore avec des données claires. Repérez les moments où la musique attire le plus l’attention et booste l’expérience client.
+                            </p>
+                        </div>
                     </div>
                 </section>
 
