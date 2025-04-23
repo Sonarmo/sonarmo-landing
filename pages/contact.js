@@ -16,12 +16,12 @@ export default function Contact() {
             </Head>
             <main className="bg-[#121212] text-white font-[Poppins] min-h-screen">
                 {/* HEADER */}
-                <header className="flex justify-between items-center px-6 py-4">
+                <header className="flex flex-col sm:flex-row justify-between items-center px-6 py-4">
                     <div className="flex items-center gap-2">
                         <Image src="/favicon.png" alt="Logo" width={32} height={32} />
                         <span className="text-white text-lg font-semibold">Sonarmo</span>
                     </div>
-                    <nav className="flex gap-6 text-sm items-center">
+                    <nav className="flex flex-col sm:flex-row gap-2 sm:gap-6 text-sm items-center mt-2 sm:mt-0">
                         <Link href="/#services" className="hover:text-gray-300">NOTRE SERVICE</Link>
                         <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
                         <Link href="#login" className="hover:text-gray-300 flex items-center gap-1">
