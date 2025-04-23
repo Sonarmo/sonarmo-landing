@@ -91,12 +91,12 @@ export default function Experience() {
 
                 {/* SECTION - CIBLE - À QUI S'ADRESSE SONARMO */}
                 <section className="py-16 text-center">
-                    <h2 className="text-3xl font-semibold mb-4">À qui s’adresse Sonarmo ?</h2>
+                    <h2 className="text-3xl font-semibold mb-4">À qui s&apos;adresse Sonarmo ?</h2>
                     <p className="text-gray-400 max-w-xl mx-auto mb-4">
                         Sonarmo est pensé pour tous les lieux qui veulent créer une ambiance musicale unique, sans prise de tête. Que tu gères un bar à cocktails, un café cosy, un restaurant vivant, un coworking créatif ou même un concept store, notre IA adapte la musique à ton univers et à tes clients.
                     </p>
                     <p className="text-gray-400 max-w-xl mx-auto mb-8">
-                        <strong>Fini les playlists impersonnelles ou les réglages manuels : Tu choisis l'ambiance, Sonarmo s'occupe du reste.</strong>
+                        <strong>Fini les playlists impersonnelles ou les réglages manuels : Tu choisis l&apos;ambiance, Sonarmo s'occupe du reste.</strong>
                     </p>
                 </section>
 
@@ -106,7 +106,7 @@ export default function Experience() {
                         <div className="md:w-1/2 text-center md:text-left">
                             <h2 className="text-3xl font-semibold mb-4">Personnalisation en temps réel</h2>
                             <p className="text-gray-400 mb-8">
-                                Ajustez l’énergie musicale, le volume et l’ambiance selon l’instant. L’interface mobile vous permet de créer ou régénérer une playlist à tout moment.
+                                Ajustez l&apos;énergie musicale, le volume et l&apos;ambiance selon l&apos;instant. L&apos;interface mobile vous permet de créer ou régénérer une playlist à tout moment.
                             </p>
                         </div>
                         <div className="md:w-1/2 flex justify-center">
@@ -124,7 +124,7 @@ export default function Experience() {
                         <div className="md:w-1/2 text-center md:text-left">
                             <h2 className="text-3xl font-semibold mb-4">Suivi et optimisation</h2>
                             <p className="text-gray-400 mb-8">
-                                Analysez l’impact de votre ambiance sonore avec des données claires. Repérez les moments où la musique attire le plus l’attention et booste l’expérience client.
+                                Analysez l&apos;impact de votre ambiance sonore avec des données claires. Repérez les moments où la musique attire le plus l&apos;attention et booste l&apos;expérience client.
                             </p>
                         </div>
                     </div>
@@ -142,7 +142,7 @@ export default function Experience() {
                         <div className="text-left max-w-md">
                             <h4 className="text-white font-semibold text-lg mb-2">Accédez à toute la musique de Spotify</h4>
                             <p className="text-gray-400">
-                                Connectez votre compte en un clic et profitez de l’intégralité du catalogue Spotify, directement intégré à la plateforme Sonarmo.
+                                Connectez votre compte en un clic et profitez de l&apos;intégralité du catalogue Spotify, directement intégré à la plateforme Sonarmo.
                             </p>
                         </div>
                     </div>
