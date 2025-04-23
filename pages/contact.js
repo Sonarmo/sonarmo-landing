@@ -16,9 +16,9 @@ export default function Contact() {
                     rel="stylesheet"
                 />
             </Head>
-            <main className="bg-[#121212] text-white font-[Poppins] min-h-screen">
+            <main className="bg-[#121212] text-white font-[Poppins] min-h-screen relative overflow-x-hidden">
                 {/* HEADER */}
-                <header className="flex justify-between items-center px-6 py-4">
+                <header className="flex justify-between items-center px-6 py-4 z-20 relative">
                     <Link href="/">
                         <div className="flex items-center gap-2 cursor-pointer">
                             <Image src="/Logo-app-header.png" alt="Logo" width={140} height={30} />
@@ -58,7 +58,7 @@ export default function Contact() {
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
+                            className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50 relative"
                         >
                             <Link href="/experience" className="hover:text-gray-300">L’EXPÉRIENCE SONARMO</Link>
                             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
@@ -71,7 +71,7 @@ export default function Contact() {
                 </AnimatePresence>
 
                 {/* CONTACT FORM ONLY */}
-                <section className="relative px-4 py-20 flex justify-center">
+                <section className="relative px-4 py-20 flex justify-center min-h-screen">
                     <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-gradient-to-br from-[#F28500] to-[#FF00FF] rounded-full blur-3xl opacity-30 translate-x-1/3 translate-y-1/3 z-0" />
 
                     <div className="relative z-10 flex flex-col items-center w-full max-w-md">
