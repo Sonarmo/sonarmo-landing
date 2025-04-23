@@ -10,7 +10,7 @@ export default function Experience() {
     return (
         <>
             <Head>
-                <title>L’expérience Sonarmo</title>
+                <title>L'expérience Sonarmo</title>
                 <link
                     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
                     rel="stylesheet"
@@ -27,7 +27,7 @@ export default function Experience() {
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex gap-6 text-sm items-center">
-                        <Link href="/experience" className="hover:text-gray-300">L’EXPÉRIENCE SONARMO</Link>
+                        <Link href="/experience" className="hover:text-gray-300">L'EXPÉRIENCE SONARMO</Link>
                         <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
                         <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
                             <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
@@ -60,7 +60,7 @@ export default function Experience() {
                             exit={{ opacity: 0, y: -10 }}
                             className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
                         >
-                            <Link href="/experience" className="hover:text-gray-300">L’EXPÉRIENCE SONARMO</Link>
+                            <Link href="/experience" className="hover:text-gray-300">L'EXPÉRIENCE SONARMO</Link>
                             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
                             <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
                                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
@@ -75,28 +75,28 @@ export default function Experience() {
                     <h2 className="text-3xl font-semibold text-center mb-12">Le concept</h2>
                     <div className="space-y-10 max-w-5xl mx-auto">
                         <div className="flex items-center gap-6">
-                            <Image src="/icons/AI.png" alt="AI" width={92} height={92} />
-                            <p className="text-gray-300">Ambiance propulsée par IA : sélection musicale en fonction du lieu, de l’heure, du type de clientèle…</p>
+                            <Image src="/icons/AI.png" alt="IA" width={92} height={92} />
+                            <p className="text-gray-300">Ambiance propulsée par IA : sélection musicale selon le lieu, l’heure, le type de clientèle…</p>
                         </div>
                         <div className="flex items-center gap-6">
                             <Image src="/icons/cible.png" alt="Cible" width={92} height={92} />
-                            <p className="text-gray-300">Identité sonore sur mesure : la musique reflète la personnalité du lieu et son univers.</p>
+                            <p className="text-gray-300">Identité sonore sur mesure : une musique qui reflète la personnalité et l’univers du lieu.</p>
                         </div>
                         <div className="flex items-center gap-6">
                             <Image src="/icons/pouce.png" alt="Pouce" width={92} height={92} />
-                            <p className="text-gray-300">Facile à utiliser : Contrôles complet depuis un tableau de bord simple et intuitif.</p>
+                            <p className="text-gray-300">Facile à utiliser : contrôles complets depuis un tableau de bord simple et intuitif.</p>
                         </div>
                     </div>
                 </section>
 
-                {/* SECTION - CIBLE - À QUI S'ADRESSE SONARMO */}
+                {/* SECTION - CIBLE */}
                 <section className="py-16 text-center">
-                    <h2 className="text-3xl font-semibold mb-4">À qui s&apos;adresse Sonarmo ?</h2>
+                    <h2 className="text-3xl font-semibold mb-4">À qui s'adresse Sonarmo ?</h2>
                     <p className="text-gray-400 max-w-xl mx-auto mb-4">
-                        Sonarmo est pensé pour tous les lieux qui veulent créer une ambiance musicale unique, sans prise de tête. Que tu gères un bar à cocktails, un café cosy, un restaurant vivant, un coworking créatif ou même un concept store, notre IA adapte la musique à ton univers et à tes clients.
+                        Sonarmo est conçu pour tous les lieux qui souhaitent créer une ambiance musicale unique, sans prise de tête. Que tu gères un bar à cocktails, un café cosy, un restaurant vivant, un coworking créatif ou un concept store, notre IA adapte la musique à ton univers et à tes clients.
                     </p>
                     <p className="text-gray-400 max-w-xl mx-auto mb-8">
-                        <strong>Fini les playlists impersonnelles ou les réglages manuels : Tu choisis l&apos;ambiance, Sonarmo s'occupe du reste.</strong>
+                        <strong>Fini les playlists impersonnelles ou les réglages manuels : tu choisis l'ambiance, Sonarmo s'occupe du reste.</strong>
                     </p>
                 </section>
 
@@ -106,7 +106,7 @@ export default function Experience() {
                         <div className="md:w-1/2 text-center md:text-left">
                             <h2 className="text-3xl font-semibold mb-4">Personnalisation en temps réel</h2>
                             <p className="text-gray-400 mb-8">
-                                Ajustez l&apos;énergie musicale, le volume et l&apos;ambiance selon l&apos;instant. L&apos;interface mobile vous permet de créer ou régénérer une playlist à tout moment.
+                                Ajuste l'énergie musicale, le volume et l'ambiance selon l’instant. L’interface mobile te permet de créer ou régénérer une playlist à tout moment.
                             </p>
                         </div>
                         <div className="md:w-1/2 flex justify-center">
@@ -124,7 +124,7 @@ export default function Experience() {
                         <div className="md:w-1/2 text-center md:text-left">
                             <h2 className="text-3xl font-semibold mb-4">Suivi et optimisation</h2>
                             <p className="text-gray-400 mb-8">
-                                Analysez l&apos;impact de votre ambiance sonore avec des données claires. Repérez les moments où la musique attire le plus l&apos;attention et booste l&apos;expérience client.
+                                Analyse l'impact de ton ambiance sonore avec des données claires. Repère les moments où la musique capte le plus l'attention et améliore l'expérience client.
                             </p>
                         </div>
                     </div>
@@ -140,9 +140,9 @@ export default function Experience() {
                             <div className="text-gray-300 text-sm">millions de titres accessibles</div>
                         </div>
                         <div className="text-left max-w-md">
-                            <h4 className="text-white font-semibold text-lg mb-2">Accédez à toute la musique de Spotify</h4>
+                            <h4 className="text-white font-semibold text-lg mb-2">Accède à toute la musique de Spotify</h4>
                             <p className="text-gray-400">
-                                Connectez votre compte en un clic et profitez de l&apos;intégralité du catalogue Spotify, directement intégré à la plateforme Sonarmo.
+                                Connecte ton compte en un clic et profite de l’intégralité du catalogue Spotify, directement intégré à la plateforme Sonarmo.
                             </p>
                         </div>
                     </div>
@@ -152,7 +152,7 @@ export default function Experience() {
                 <section className="py-20 text-center">
                     <Link href="/contact">
                         <button className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-8 py-4 rounded-full text-white font-semibold shadow-md">
-                            ON S&apos;APPELLE ?
+                            ON S'APPELLE ?
                         </button>
                     </Link>
                 </section>
@@ -173,13 +173,13 @@ export default function Experience() {
                                 </a>
                             </div>
                             <p>Sonarmo Team</p>
-                            <Link href="/" className="hover:text-white">A propos de nous</Link>
+                            <Link href="/" className="hover:text-white">À propos de nous</Link>
                             <Link href="/contact" className="hover:text-white">Nous contacter</Link>
                         </div>
                         <div className="flex flex-col items-end text-right gap-2">
                             <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-                            <p className="text-xs">&copy;2025 Sonarmo Team. All Rights Reserved</p>
-                            <p className="text-xs">Terms of Use &amp; Privacy Policy</p>
+                            <p className="text-xs">&copy;2025 Sonarmo Team. Tous droits réservés</p>
+                            <p className="text-xs">Conditions d'utilisation &amp; Politique de confidentialité</p>
                         </div>
                     </div>
                 </footer>
