@@ -36,9 +36,9 @@ export default function Login() {
             </header>
 
             {/* LOGIN FORM */}
-            <section className="relative px-4 py-20 flex flex-1 justify-center items-center">
+            <section className="relative px-4 py-20 flex-1 flex justify-center items-center w-full">
                 <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-gradient-to-br from-[#F28500] to-[#FF00FF] rounded-full blur-3xl opacity-30 translate-x-1/3 translate-y-1/3 z-0" />
-                <div className="relative z-10 flex flex-col items-center w-full max-w-md">
+                <div className="relative z-10 flex flex-col items-center w-full max-w-md px-4">
                     <div className="relative w-[220px] h-[100px] mb-8">
                         <Image
                             src="/Logo-app-header.png"
@@ -63,7 +63,7 @@ export default function Login() {
             </section>
 
             {/* FOOTER */}
-            <footer className="bg-[#121212] text-sm text-gray-400 border-t border-gray-700 px-6 py-10">
+            <footer className="bg-[#121212] text-sm text-gray-400 border-t border-gray-700 px-6 py-10 w-full">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div className="flex flex-col gap-2 mb-6 md:mb-0">
                         <div className="flex items-center gap-4">
