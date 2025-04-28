@@ -17,7 +17,7 @@ export default function Analytics() {
     return (
         <main className="bg-[#121212] text-white min-h-screen p-10">
             <h1 className="text-3xl font-bold mb-6">📈 Analyses</h1>
-            <p>Visualise l'impact de ta musique sur l'ambiance de ton lieu.</p>
+            <p>Visualise l&apos;impact de ta musique sur l&apos;ambiance de ton lieu.</p>
         </main>
     );
 }
