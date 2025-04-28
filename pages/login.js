@@ -1,20 +1,31 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebase";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+    const router = useRouter();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                router.push("/dashboard"); // Rediriger automatiquement si déjà connecté
+            }
+        });
+        return () => unsubscribe();
+    }, [router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, email, password);
             console.log("Connexion réussie");
-            // Redirection possible ici vers le dashboard par exemple
+            router.push("/dashboard"); // Rediriger après connexion
         } catch (err) {
             setError("Email ou mot de passe incorrect.");
         }
@@ -78,13 +89,13 @@ export default function Login() {
                             </a>
                         </div>
                         <p>Sonarmo Team</p>
-                        <Link href="/" className="hover:text-white">A propos de nous</Link>
+                        <Link href="/" className="hover:text-white">À propos de nous</Link>
                         <Link href="/contact" className="hover:text-white">Nous contacter</Link>
                     </div>
                     <div className="flex flex-col items-end text-right gap-2">
                         <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-                        <p className="text-xs">&copy;2025 Sonarmo Team. All Rights Reserved</p>
-                        <p className="text-xs">Terms of Use &amp; Privacy Policy</p>
+                        <p className="text-xs">&copy;2025 Sonarmo Team. Tous droits réservés</p>
+                        <p className="text-xs">Conditions d&apos;utilisation &amp; Politique de confidentialité</p>
                     </div>
                 </div>
             </footer>
