@@ -25,7 +25,6 @@ export default function Experience() {
                         </div>
                     </Link>
 
-                    {/* Desktop Nav */}
                     <nav className="hidden md:flex gap-6 text-sm items-center">
                         <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
                         <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
@@ -35,15 +34,14 @@ export default function Experience() {
                         </Link>
                     </nav>
 
-                    {/* Mobile Nav Toggle */}
                     <div className="md:hidden">
                         <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
                             {isMenuOpen ? (
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             ) : (
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                                 </svg>
                             )}
@@ -51,7 +49,6 @@ export default function Experience() {
                     </div>
                 </header>
 
-                {/* Mobile Nav Menu */}
                 <AnimatePresence>
                     {isMenuOpen && (
                         <motion.div
@@ -71,91 +68,163 @@ export default function Experience() {
                 </AnimatePresence>
 
                 {/* SECTION - LE CONCEPT */}
-                <section className="py-16">
-                    <h2 className="text-3xl font-semibold text-center mb-12">Le concept</h2>
-                    <div className="space-y-10 max-w-5xl mx-auto">
-                        <div className="flex items-center gap-6">
-                            <Image src="/icons/AI.png" alt="IA" width={92} height={92} />
-                            <p className="text-gray-300">Ambiance propulsée par IA : sélection musicale selon le lieu, l&apos;heure, le type de clientèle…</p>
-                        </div>
-                        <div className="flex items-center gap-6">
-                            <Image src="/icons/cible.png" alt="Cible" width={92} height={92} />
-                            <p className="text-gray-300">Identité sonore sur mesure : une musique qui reflète la personnalité et l&apos;univers du lieu.</p>
-                        </div>
-                        <div className="flex items-center gap-6">
-                            <Image src="/icons/pouce.png" alt="Pouce" width={92} height={92} />
-                            <p className="text-gray-300">Facile à utiliser : contrôles complets depuis un tableau de bord simple et intuitif.</p>
+                <motion.section
+                    className="py-16"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    <h2 className="text-3xl font-semibold text-center mb-12">
+                        Transformez l'ambiance de votre lieu en un instant avec Sonarmo
+                    </h2>
+                    <div className="max-w-5xl mx-auto space-y-10">
+                        <div className="flex justify-between gap-12">
+                            {/* Premier bloc */}
+                            <div className="flex flex-col items-center gap-4">
+                                <Image src="/icons/AI.png" alt="IA" width={92} height={92} />
+                                <p className="text-gray-300 text-base leading-relaxed text-center">
+                                    <strong className="text-white">Ambiance intelligente</strong> : Notre IA adapte la musique au lieu, à l’heure, à l’énergie et à la clientèle en temps réel.
+                                </p>
+                            </div>
+                            {/* Deuxième bloc */}
+                            <div className="flex flex-col items-center gap-4">
+                                <Image src="/icons/cible.png" alt="Cible" width={92} height={92} />
+                                <p className="text-gray-300 text-base leading-relaxed text-center">
+                                    <strong className="text-white">Identité sonore unique</strong> : chaque lieu dispose d’une ambiance musicale cohérente avec son image et ses clients.
+                                </p>
+                            </div>
+                            {/* Troisième bloc */}
+                            <div className="flex flex-col items-center gap-4">
+                                <Image src="/icons/pouce.png" alt="Pouce" width={92} height={92} />
+                                <p className="text-gray-300 text-base leading-relaxed text-center">
+                                    <strong className="text-white">Contrôle simple</strong> : depuis un tableau de bord intuitif, gère ta musique en quelques clics.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </section>
+                </motion.section>
+
+
 
                 {/* SECTION - CIBLE */}
-                <section className="py-16 text-center">
-                    <h2 className="text-3xl font-semibold mb-4">À qui s&apos;adresse Sonarmo ?</h2>
-                    <p className="text-gray-400 max-w-xl mx-auto mb-4">
-                        Sonarmo est conçu pour tous les lieux qui souhaitent créer une ambiance musicale unique, sans prise de tête. Que tu gères un bar à cocktails, un café cosy, un restaurant vivant, un coworking créatif ou un concept store, notre IA adapte la musique à ton univers et à tes clients.
+                <motion.section
+                    className="py-16 text-center"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    viewport={{ once: true }}
+                >
+                    <h2 className="text-3xl font-semibold text-white mb-8">
+                        À qui s'adresse Sonarmo ?
+                    </h2>
+                    <p className="text-gray-300 text-base leading-relaxed max-w-2xl mx-auto mb-6">
+                        Sonarmo est conçu pour tous les lieux souhaitant créer une ambiance musicale sur mesure, en toute simplicité.
+                        Peu importe l'atmosphère que vous désirez, Sonarmo s'adapte et optimise la musique pour que votre espace prenne vie.
                     </p>
-                    <p className="text-gray-400 max-w-xl mx-auto mb-8">
-                        <strong>Fini les playlists impersonnelles ou les réglages manuels : tu choisis l&apos;ambiance, Sonarmo s&apos;occupe du reste.</strong>
+                    <p className="text-base text-white font-semibold max-w-2xl mx-auto">
+                        Sonarmo s'adapte à votre espace :
+                        <br />
+                        <span className="font-semibold text-[#FCE2BA]">Bars, cafés, restaurants, coworkings, concept stores,</span>
+                        <br />
+                        peu importe votre univers, nous créons l'ambiance idéale. Vous choisissez l’atmosphère, et Sonarmo prend tout en charge.
                     </p>
-                </section>
+
+
+
+                </motion.section>
+
 
                 {/* SECTION - PERSONNALISATION */}
-                <section className="py-16">
+                <motion.section
+                    className="py-10"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    viewport={{ once: true }}
+                >
                     <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
                         <div className="md:w-1/2 text-center md:text-left">
-                            <h2 className="text-3xl font-semibold mb-4">Personnalisation en temps réel</h2>
-                            <p className="text-gray-400 mb-8">
-                                Ajuste l&apos;énergie musicale, le volume et l&apos;ambiance selon l&apos;instant. L&apos;interface mobile te permet de créer ou régénérer une playlist à tout moment.
+                            <h2 className="text-3xl font-semibold mb-4">Contrôle en temps réel</h2>
+                            <p className="text-gray-300 text-base leading-relaxed">
+                                Adapte instantanément l&apos;énergie musicale selon l&apos;heure, la météo ou l&apos;ambiance. Depuis ton téléphone, tu peux générer ou changer de playlist en quelques secondes.
                             </p>
                         </div>
                         <div className="md:w-1/2 flex justify-center">
-                            <Image src="/iphone.png" alt="Contrôle mobile" width={250} height={500} />
+                            <Image src="/iphone.png" alt="Contrôle mobile" width={200} height={450} />
                         </div>
                     </div>
-                </section>
+                </motion.section>
 
                 {/* SECTION - SUIVI */}
-                <section className="py-16">
+                <motion.section
+                    className="py-10"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    viewport={{ once: true }}
+                >
                     <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
                         <div className="md:w-1/2 flex justify-center">
-                            <Image src="/Mockup mac.png" alt="Dashboard Sonarmo" width={400} height={250} />
+                            <Image src="/Mockup mac.png" alt="Dashboard Sonarmo" width={500} height={300} />
                         </div>
                         <div className="md:w-1/2 text-center md:text-left">
-                            <h2 className="text-3xl font-semibold mb-4">Suivi et optimisation</h2>
-                            <p className="text-gray-400 mb-8">
-                                Analyse l&apos;impact de ton ambiance sonore avec des données claires. Repère les moments où la musique capte le plus l&apos;attention et améliore l&apos;expérience client.
+                            <h2 className="text-3xl font-semibold mb-4">Analyse & optimisation</h2>
+                            <p className="text-gray-300 text-base leading-relaxed">
+                                Visualise l&apos;impact de ta programmation sonore grâce à des données claires. Identifie les moments forts et ajuste l&apos;ambiance pour une meilleure fidélisation.
                             </p>
                         </div>
                     </div>
-                </section>
+                </motion.section>
 
                 {/* SECTION - CATALOGUE */}
-                <section className="relative py-16 overflow-hidden">
-                    <div className="absolute left-0 top-0 w-[300px] h-[300px] bg-[#1DB954] rounded-full blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2 z-0" />
+                <motion.section
+                    className="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden py-20"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    viewport={{ once: true }}
+                >
+                    <motion.div
+                        className="absolute left-1/2 top-1/2 w-[300px] h-[300px] bg-[#2FD668] rounded-full blur-3xl opacity-50 -translate-x-1/2 -translate-y-1/2 z-0"
+                        animate={{ scale: [1, 1.1, 1], x: [0, 20, 0], y: [0, -20, 0] }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+                    />
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto px-4">
                         <div className="text-left">
-                            <h3 className="text-2xl font-semibold text-white mb-2">Spotify friendly</h3>
-                            <div className="text-white text-5xl font-light">+ 100</div>
-                            <div className="text-gray-300 text-sm">millions de titres accessibles</div>
+                            <h3 className="text-2xl font-semibold text-white mb-2">Connecté à Spotify</h3>
+                            <div className="text-white text-5xl font-light">+100</div>
+                            <div className="text-gray-300 text-sm">millions de titres disponibles</div>
                         </div>
                         <div className="text-left max-w-md">
-                            <h4 className="text-white font-semibold text-lg mb-2">Accède à toute la musique de Spotify</h4>
-                            <p className="text-gray-400">
-                                Connecte ton compte en un clic et profite de l&apos;intégralité du catalogue Spotify, directement intégré à la plateforme Sonarmo.
+                            <h4 className="text-white font-semibold text-lg mb-2">Toute la musique, sans limite</h4>
+                            <p className="text-gray-300 text-base leading-relaxed">
+                                Connecte ton compte Spotify et accède à l&apos;intégralité de son catalogue, directement depuis la plateforme Sonarmo. Zéro friction, 100% fluide.
                             </p>
                         </div>
                     </div>
-                </section>
+                </motion.section>
 
                 {/* CTA */}
-                <section className="py-20 text-center">
+                <motion.section
+                    className="py-20 text-center"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.5 }}
+                    viewport={{ once: true }}
+                >
                     <Link href="/contact">
-                        <button className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-8 py-4 rounded-full text-white font-semibold shadow-md">
+                        <motion.button
+                            whileHover={{ scale: 1.08 }}
+                            animate={{ scale: [1, 1.02, 1] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                            className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-8 py-4 rounded-full text-white font-semibold shadow-md cursor-pointer"
+                        >
                             ON S&apos;APPELLE ?
-                        </button>
+                        </motion.button>
                     </Link>
-                </section>
+
+                </motion.section>
 
                 {/* FOOTER */}
                 <footer className="bg-[#121212] text-sm text-gray-400 border-t border-gray-700 px-6 py-10">
@@ -163,13 +232,13 @@ export default function Experience() {
                         <div className="flex flex-col gap-2 mb-6 md:mb-0">
                             <div className="flex items-center gap-4">
                                 <a href="https://www.instagram.com/sonarmo_music/?hl=fr" target="_blank" rel="noopener noreferrer">
-                                    <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} className="hover:opacity-70 transition" />
+                                    <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} />
                                 </a>
                                 <a href="https://www.linkedin.com/company/sonarmo/" target="_blank" rel="noopener noreferrer">
-                                    <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24} className="hover:opacity-70 transition" />
+                                    <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24} />
                                 </a>
                                 <a href="https://www.facebook.com/profile.php?id=61574580608705" target="_blank" rel="noopener noreferrer">
-                                    <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} className="hover:opacity-70 transition" />
+                                    <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} />
                                 </a>
                             </div>
                             <p>Sonarmo Team</p>
