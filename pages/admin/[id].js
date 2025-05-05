@@ -1,3 +1,4 @@
+// pages/admin/edit-profile.js
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -12,6 +13,7 @@ export default function AdminEditProfile() {
   const [profile, setProfile] = useState({
     placeName: "",
     email: "",
+    placeCity: "",
     ambianceDefault: "",
     ambianceDetails: {
       mood: "",
@@ -67,6 +69,7 @@ export default function AdminEditProfile() {
             setProfile({
               placeName: data.placeName || "",
               email: data.email || "",
+              placeCity: data.placeCity || "",
               ambianceDefault: data.ambianceDefault || "",
               ambianceDetails: {
                 mood: data.ambianceDetails?.mood || "",
@@ -175,32 +178,32 @@ export default function AdminEditProfile() {
 
         <div className="space-y-6 max-w-xl">
           <input name="placeName" value={profile.placeName} onChange={handleChange} placeholder="Nom du lieu" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
+          <input name="placeCity" value={profile.placeCity} onChange={handleChange} placeholder="Ville du lieu (ex : Paris, Ho Chi Minh)" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="email" value={profile.email} onChange={handleChange} placeholder="Email" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="ambianceDefault" value={profile.ambianceDefault} onChange={handleChange} placeholder="Ambiance par défaut" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
-          <textarea name="ambianceDetails.mood" value={profile.ambianceDetails.mood} onChange={handleChange} placeholder="Humeur musicale souhaitée" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
-          <Select isMulti options={genreOptions} value={genreOptions.filter(opt => profile.ambianceDetails.genres.includes(opt.value))} onChange={opts => handleMultiSelectChange("genres", opts)} className="text-black" />
-          <Select isMulti options={languageOptions} value={languageOptions.filter(opt => profile.ambianceDetails.languages.includes(opt.value))} onChange={opts => handleMultiSelectChange("languages", opts)} className="text-black" />
-          <input name="ambianceDetails.referenceArtists" value={profile.ambianceDetails.referenceArtists} onChange={handleChange} placeholder="Artistes ou morceaux de référence" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
-          <input name="ambianceDetails.tempo" value={profile.ambianceDetails.tempo} onChange={handleChange} placeholder="Tempo souhaité (lent, modéré, rapide)" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
-          <input name="ambianceDetails.vocals" value={profile.ambianceDetails.vocals} onChange={handleChange} placeholder="Présence vocale (instrumental, mixte, vocal)" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
+          <input name="ambianceDetails.mood" value={profile.ambianceDetails.mood} onChange={handleChange} placeholder="Humeur musicale souhaitée" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="ambianceDetails.decoration" value={profile.ambianceDetails.decoration} onChange={handleChange} placeholder="Style de décoration" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="ambianceDetails.clientele" value={profile.ambianceDetails.clientele} onChange={handleChange} placeholder="Type de clientèle" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="ambianceDetails.goal" value={profile.ambianceDetails.goal} onChange={handleChange} placeholder="Objectif de la musique" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
+          <input name="ambianceDetails.happyHourStart" value={profile.ambianceDetails.happyHourStart} onChange={handleChange} type="time" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
+          <input name="ambianceDetails.happyHourEnd" value={profile.ambianceDetails.happyHourEnd} onChange={handleChange} type="time" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
+          <Select isMulti options={genreOptions} value={genreOptions.filter(opt => profile.ambianceDetails.genres.includes(opt.value))} onChange={opts => handleMultiSelectChange("genres", opts)} className="text-black" />
+          <input name="ambianceDetails.referenceArtists" value={profile.ambianceDetails.referenceArtists} onChange={handleChange} placeholder="Artistes ou morceaux de référence" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
+          <input name="ambianceDetails.tempo" value={profile.ambianceDetails.tempo} onChange={handleChange} placeholder="Tempo souhaité (lent, modéré, rapide)" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
+          <input name="ambianceDetails.vocals" value={profile.ambianceDetails.vocals} onChange={handleChange} placeholder="Présence vocale (instrumental, mixte, vocal)" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
+          <Select isMulti options={languageOptions} value={languageOptions.filter(opt => profile.ambianceDetails.languages.includes(opt.value))} onChange={opts => handleMultiSelectChange("languages", opts)} className="text-black" />
           <input name="ambianceDetails.type" value={profile.ambianceDetails.type} onChange={handleChange} placeholder="Type de lieu" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="ambianceDetails.size" value={profile.ambianceDetails.size} onChange={handleChange} placeholder="Taille du lieu" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="ambianceDetails.hours" value={profile.ambianceDetails.hours} onChange={handleChange} placeholder="Horaires d'ouverture" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="ambianceDetails.affluence" value={profile.ambianceDetails.affluence} onChange={handleChange} placeholder="Affluence moyenne" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="ambianceDetails.specialMoments" value={profile.ambianceDetails.specialMoments} onChange={handleChange} placeholder="Moments clés à souligner" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
           <input name="ambianceDetails.identityNotes" value={profile.ambianceDetails.identityNotes} onChange={handleChange} placeholder="Éléments identitaires sonores" className="w-full bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded" />
-          <div className="flex gap-4">
-            <input name="ambianceDetails.happyHourStart" value={profile.ambianceDetails.happyHourStart} onChange={handleChange} type="time" className="bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded w-1/2" />
-            <input name="ambianceDetails.happyHourEnd" value={profile.ambianceDetails.happyHourEnd} onChange={handleChange} type="time" className="bg-[#1c1c1c] border border-gray-600 px-4 py-2 rounded w-1/2" />
-          </div>
 
-          <div className="flex flex-col md:flex-row gap-4 mt-6">
-            <button onClick={handleSave} className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-2 rounded text-white font-semibold">Enregistrer les modifications</button>
-            <button onClick={handleGeneratePlaylist} className="bg-blue-600 px-6 py-2 rounded text-white font-semibold">Générer une playlist</button>
-          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-4 mt-6">
+          <button onClick={handleSave} className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-2 rounded text-white font-semibold">Enregistrer les modifications</button>
+          <button onClick={handleGeneratePlaylist} className="bg-blue-600 px-6 py-2 rounded text-white font-semibold">Générer une playlist</button>
         </div>
       </main>
     </div>

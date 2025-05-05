@@ -2,10 +2,26 @@
 import { db } from "../../lib/firebaseAdmin";
 import { getSpotifyAccessToken } from "../../lib/spotifyTokens";
 import OpenAI from "openai";
+import axios from "axios";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
+
+const safeArray = (val) => Array.isArray(val) ? val : [];
+
+async function getWeatherFromCity(city) {
+  const apiKey = process.env.WEATHERAPI_KEY;
+  const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(city)}&lang=fr`;
+
+  const response = await axios.get(url);
+  const data = response.data;
+
+  const meteo = data.current.condition.text;
+  const heureLocale = data.location.localtime.split(" ")[1]; // HH:MM
+
+  return { meteo, heureLocale };
+}
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -27,24 +43,40 @@ export default async function handler(req, res) {
 
     const profile = docSnap.data();
     const ambiance = profile.ambianceDetails || {};
+    const city = profile.placeCity || "Paris";
 
-    const safeArray = (val) => Array.isArray(val) ? val : [];
+    const { meteo, heureLocale } = await getWeatherFromCity(city);
 
-    const prompt = `Tu es un expert en design sonore pour les lieux publics. Génère une playlist cohérente de 40 titres Spotify adaptés à l’ambiance suivante :\n
-    Heure : ${ambiance.hours}\n
-    Mood : ${ambiance.mood}\n
-    Décoration : ${ambiance.decoration}\n
-    Clientèle : ${ambiance.clientele}\n
-    Objectif : ${ambiance.goal}\n
-    Genres préférés : ${safeArray(ambiance.genres).join(", ")}\n
-    Artistes de référence : ${safeArray(ambiance.referenceArtists).join(", ")}\n
-    Langues préférées : ${safeArray(ambiance.languages).join(", ")}\n
-    Tempo : ${ambiance.tempo}\n
-    Taille du lieu : ${ambiance.size}\n
-    Type de lieu : ${ambiance.type}\n
-    Spécificités : ${ambiance.specialMoments}\n
-    Élément identitaire : ${ambiance.identityNotes}\n
-    Donne la réponse sous forme de liste JSON d’objets avec \"name\" et \"artist\".`;
+    const prompt = `
+Tu es un expert en design sonore pour lieux publics.
+Génère une playlist cohérente de 40 morceaux Spotify pour un établissement avec les caractéristiques suivantes :
+
+Ville : ${city}
+Heure locale : ${heureLocale}
+Météo actuelle : ${meteo}
+Heure : ${ambiance.hours}
+Ambiance générale : ${ambiance.mood}
+Décoration du lieu : ${ambiance.decoration}
+Clientèle visée : ${ambiance.clientele}
+Objectif musical : ${ambiance.goal}
+Genres musicaux préférés : ${safeArray(ambiance.genres).join(", ")}
+Artistes de référence : ${safeArray(ambiance.referenceArtists).join(", ")}
+Langues musicales préférées : ${safeArray(ambiance.languages).join(", ")}
+Tempo souhaité : ${ambiance.tempo}
+Taille du lieu : ${ambiance.size}
+Type de lieu : ${ambiance.type}
+Spécificités ou moments particuliers : ${ambiance.specialMoments}
+Éléments identitaires du lieu : ${ambiance.identityNotes}
+
+Ta mission : proposer une playlist cohérente, fluide, non répétitive, adaptée à cette ambiance sonore. Tu dois varier les morceaux tout en respectant une atmosphère homogène.
+
+Donne ta réponse sous forme d’une liste JSON contenant uniquement les 40 morceaux, au format suivant :
+[
+  { "artist": "Nom de l’artiste", "name": "Titre du morceau" },
+  ...
+]
+Ne fais aucun commentaire. Ne donne aucune explication. Juste la liste.
+`;
 
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
