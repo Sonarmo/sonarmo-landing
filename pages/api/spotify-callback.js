@@ -1,9 +1,10 @@
 // pages/api/spotify-callback.js
+
 export default async function handler(req, res) {
     const code = req.query.code || null;
 
     if (!code) {
-        return res.status(400).send("Code manquant.");
+        return res.status(400).send("❌ Code manquant.");
     }
 
     const client_id = process.env.SPOTIFY_CLIENT_ID;
@@ -29,17 +30,19 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (data.error) {
-            console.error("Erreur OAuth:", data);
+            console.error("❌ Erreur Spotify callback:", data);
             return res.status(500).json({ error: data });
         }
 
-        // 🔐 Affiche les tokens dans la console pour les sauvegarder à la main
         console.log("✅ Access token:", data.access_token);
         console.log("🔁 Refresh token:", data.refresh_token);
 
-        res.status(200).send("Authentification réussie ! Copie les tokens affichés en console pour les utiliser.");
+        res.status(200).send(
+            `<h2>Authentification réussie ✅</h2>
+      <p>Tu peux maintenant copier le <strong>refresh_token</strong> affiché dans ta console serveur et le coller dans ton <code>.env.local</code>.</p>`
+        );
     } catch (err) {
-        console.error("Erreur callback Spotify:", err);
+        console.error("❌ Erreur lors de l'échange de token:", err);
         res.status(500).send("Erreur serveur.");
     }
 }
