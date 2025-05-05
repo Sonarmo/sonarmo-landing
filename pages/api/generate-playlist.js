@@ -33,11 +33,16 @@ export default async function handler(req, res) {
     ];
 
     const seedGenresArray = (ambiance.genres || []).filter(genre => allowedGenres.includes(genre)).slice(0, 5);
+
+    console.log("🎵 Genres sélectionnés :", ambiance.genres);
+    console.log("✅ Genres valides pour Spotify :", seedGenresArray);
+
     if (seedGenresArray.length === 0) {
       return res.status(400).json({ error: "Aucun genre valide fourni pour Spotify" });
     }
 
     const seedGenres = seedGenresArray.join(",");
+    console.log("🧪 URL Spotify testée :", `https://api.spotify.com/v1/recommendations?seed_genres=${seedGenres}&limit=40`);
 
     const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${seedGenres}&limit=40`, {
       headers: {
