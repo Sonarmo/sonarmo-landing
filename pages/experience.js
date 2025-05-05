@@ -76,7 +76,7 @@ export default function Experience() {
                     viewport={{ once: true }}
                 >
                     <h2 className="text-3xl font-semibold text-center mb-12">
-                        Transformez l'ambiance de votre lieu en un instant avec Sonarmo
+                        Transformez l&apos;ambiance de votre lieu en un instant avec Sonarmo
                     </h2>
                     <div className="max-w-5xl mx-auto space-y-10">
                         <div className="flex justify-between gap-12">
@@ -84,14 +84,14 @@ export default function Experience() {
                             <div className="flex flex-col items-center gap-4">
                                 <Image src="/icons/AI.png" alt="IA" width={92} height={92} />
                                 <p className="text-gray-300 text-base leading-relaxed text-center">
-                                    <strong className="text-white">Ambiance intelligente</strong> : Notre IA adapte la musique au lieu, à l’heure, à l’énergie et à la clientèle en temps réel.
+                                    <strong className="text-white">Ambiance intelligente</strong> : Notre IA adapte la musique au lieu, à l&apos;heure, à l&apos;énergie et à la clientèle en temps réel.
                                 </p>
                             </div>
                             {/* Deuxième bloc */}
                             <div className="flex flex-col items-center gap-4">
                                 <Image src="/icons/cible.png" alt="Cible" width={92} height={92} />
                                 <p className="text-gray-300 text-base leading-relaxed text-center">
-                                    <strong className="text-white">Identité sonore unique</strong> : chaque lieu dispose d’une ambiance musicale cohérente avec son image et ses clients.
+                                    <strong className="text-white">Identité sonore unique</strong> : chaque lieu dispose d&apos;une ambiance musicale cohérente avec son image et ses clients.
                                 </p>
                             </div>
                             {/* Troisième bloc */}
