@@ -46,11 +46,14 @@ export default async function handler(req, res) {
     });
 
     if (!recommendationsResponse.ok) {
+      const status = recommendationsResponse.status;
       const errorText = await recommendationsResponse.text();
-      console.error("Erreur Spotify API:", errorText);
+      console.error("❌ Erreur Spotify API (reco) – status :", status);
+      console.error("❌ Corps de réponse :", errorText);
       return res.status(500).json({
         error: "Erreur lors de la récupération des recommandations Spotify",
-        spotifyResponse: errorText
+        spotifyStatus: status,
+        spotifyBody: errorText
       });
     }
 
