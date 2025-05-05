@@ -25,7 +25,7 @@ export default function Home() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex gap-6 text-sm items-center">
-            <Link href="/experience" className="hover:text-gray-300">L’EXPÉRIENCE SONARMO</Link>
+            <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
             <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
@@ -58,7 +58,7 @@ export default function Home() {
               exit={{ opacity: 0, y: -10 }}
               className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
             >
-              <Link href="/experience" className="hover:text-gray-300">L’EXPÉRIENCE SONARMO</Link>
+              <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
               <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
               <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
@@ -90,7 +90,7 @@ export default function Home() {
               <span className="text-[#FCE2BA]">Atmosphérique</span>
             </h1>
             <p className="max-w-xl text-gray-400 text-base sm:text-lg mb-8">
-              Chaque lieu à une histoire, une identité unique. Sonarmo crée une ambiance sonore personnalisée, pensée spécialement pour refléter l'âme de votre espace et offrir une expérience immersive incomparable.
+              Chaque lieu à une histoire, une identité unique. Sonarmo crée une ambiance sonore personnalisée, pensée spécialement pour refléter l&apos;âme de votre espace et offrir une expérience immersive incomparable.
             </p>
             <Link href="/experience" legacyBehavior><a className="inline-block bg-gradient-to-r from-[#FF9400] to-[#FF0BED] px-6 py-3 rounded-full text-white font-semibold shadow-md transform transition-transform duration-300 hover:scale-105 active:scale-95">
               Découvrir
@@ -104,7 +104,7 @@ export default function Home() {
         <section className="relative text-center px-6 py-20 overflow-hidden bg-gradient-to-br from-[#2a0a00] via-[#1a0015] to-[#120d0d]">
           <div className="absolute left-0 top-0 w-[600px] h-[600px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-20 -translate-x-1/3 -translate-y-1/3 z-0 " />
           <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-4">
-            La musique n’est pas un fond sonore… c’est un levier d’ambiance
+            La musique n&apos;est pas un fond sonore… c’est un levier d&apos;ambiance
           </p>
 
           <motion.div
@@ -114,7 +114,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="relative z-10"
           >
-            <h2 className="text-3xl font-semibold mb-10">L'impact de la musique sur l'expérience client</h2>
+            <h2 className="text-3xl font-semibold mb-10">L&apos;impact de la musique sur l&apos;expérience client</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-6xl mx-auto text-gray-300">
               {[{
                 value: "+15%",
@@ -148,7 +148,7 @@ export default function Home() {
             <p className="text-gray-400 mb-8 max-w-md">
               Une question, une idée, ou juste envie d'en parler ? Faites-nous signe, on adore discuter !
             </p>
-            <Link href="/contact" legacyBehavior><a className="inline-block bg-gradient-to-r from-[#FF9400] to-[#FF0BED] px-6 py-3 rounded-full text-white font-semibold shadow-md transform transition-transform duration-300 hover:scale-105 active:scale-95">ON S'APPELLE ?
+            <Link href="/contact" legacyBehavior><a className="inline-block bg-gradient-to-r from-[#FF9400] to-[#FF0BED] px-6 py-3 rounded-full text-white font-semibold shadow-md transform transition-transform duration-300 hover:scale-105 active:scale-95">ON S&apos;APPELLE ?
             </a>
             </Link>
           </div>
