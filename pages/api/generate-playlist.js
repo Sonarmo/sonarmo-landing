@@ -110,8 +110,13 @@ Ne fais aucun commentaire. Ne donne aucune explication. Juste la liste.
 
     const filteredUris = resolvedTracks.filter(uri => uri);
 
-    const adminUserId = process.env.SPOTIFY_ADMIN_USER_ID;
-    const playlistRes = await fetch(`https://api.spotify.com/v1/users/${adminUserId}/playlists`, {
+    const userRes = await fetch("https://api.spotify.com/v1/me", {
+      headers: { Authorization: `Bearer ${access_token}` },
+    });
+    const userData = await userRes.json();
+    const userId = userData.id;
+
+    const playlistRes = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${access_token}`,
