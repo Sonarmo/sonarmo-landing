@@ -1,6 +1,5 @@
 // pages/api/generate-playlist.js
 import { db } from "../../lib/firebaseAdmin";
-import { doc, getDoc, setDoc } from "firebase-admin/firestore";
 import { getSpotifyAccessToken } from "../../lib/spotifyTokens";
 
 export default async function handler(req, res) {
@@ -14,10 +13,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    const docRef = doc(db, "profiles", id);
-    const docSnap = await getDoc(docRef);
+    const docRef = db.collection("profiles").doc(id);
+    const docSnap = await docRef.get();
 
-    if (!docSnap.exists()) {
+    if (!docSnap.exists) {
       return res.status(404).json({ error: "Profil non trouvé" });
     }
 
@@ -102,7 +101,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Erreur ajout morceaux à la playlist" });
     }
 
-    await setDoc(doc(db, "profiles", id), {
+    await db.collection("profiles").doc(id).set({
       playlistUrl: playlistData.external_urls.spotify,
       lastGenerated: new Date().toISOString()
     }, { merge: true });
@@ -118,4 +117,4 @@ export default async function handler(req, res) {
     console.error("Erreur API playlist:", error);
     return res.status(500).json({ error: "Erreur serveur" });
   }
-}
+} 
