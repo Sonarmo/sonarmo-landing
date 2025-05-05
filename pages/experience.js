@@ -116,18 +116,18 @@ export default function Experience() {
                     viewport={{ once: true }}
                 >
                     <h2 className="text-3xl font-semibold text-white mb-8">
-                        À qui s'adresse Sonarmo ?
+                        À qui s&apos;adresse Sonarmo ?
                     </h2>
                     <p className="text-gray-300 text-base leading-relaxed max-w-2xl mx-auto mb-6">
                         Sonarmo est conçu pour tous les lieux souhaitant créer une ambiance musicale sur mesure, en toute simplicité.
-                        Peu importe l'atmosphère que vous désirez, Sonarmo s'adapte et optimise la musique pour que votre espace prenne vie.
+                        Peu importe l&apos;atmosphère que vous désirez, Sonarmo s&apos;adapte et optimise la musique pour que votre espace prenne vie.
                     </p>
                     <p className="text-base text-white font-semibold max-w-2xl mx-auto">
-                        Sonarmo s'adapte à votre espace :
+                        Sonarmo s&apos;adapte à votre espace :
                         <br />
                         <span className="font-semibold text-[#FCE2BA]">Bars, cafés, restaurants, coworkings, concept stores,</span>
                         <br />
-                        peu importe votre univers, nous créons l'ambiance idéale. Vous choisissez l’atmosphère, et Sonarmo prend tout en charge.
+                        peu importe votre univers, nous créons l&apos;ambiance idéale. Vous choisissez l&apos;atmosphère, et Sonarmo prend tout en charge.
                     </p>
 
 
