@@ -1,11 +1,11 @@
 // pages/api/generate-playlist.js
 import { db } from "../../lib/firebaseAdmin";
 import { getSpotifyAccessToken } from "../../lib/spotifyTokens";
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
-const openai = new OpenAIApi(new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
-}));
+});
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -44,13 +44,13 @@ export default async function handler(req, res) {
     Élément identitaire : ${ambiance.identityNotes}\n
     Donne la réponse sous forme de liste JSON d’objets avec \"name\" et \"artist\".`;
 
-    const completion = await openai.createChatCompletion({
+    const completion = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.8,
     });
 
-    const jsonResponse = completion.data.choices[0].message.content;
+    const jsonResponse = completion.choices[0].message.content;
     let tracks;
     try {
       tracks = JSON.parse(jsonResponse);
