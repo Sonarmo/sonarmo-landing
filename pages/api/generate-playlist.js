@@ -49,7 +49,7 @@ export default async function handler(req, res) {
 
     const prompt = `
 Tu es un expert en design sonore pour lieux publics.
-Génère une playlist cohérente de 40 morceaux Spotify pour un établissement avec les caractéristiques suivantes :
+Génère une playlist cohérente de 20 morceaux Spotify pour un établissement avec les caractéristiques suivantes :
 
 Ville : ${city}
 Heure locale : ${heureLocale}
@@ -70,7 +70,7 @@ Spécificités ou moments particuliers : ${ambiance.specialMoments}
 
 Ta mission : proposer une playlist cohérente, fluide, non répétitive, adaptée à cette ambiance sonore. Tu dois varier les morceaux tout en respectant une atmosphère homogène.
 
-Donne ta réponse sous forme d’une liste JSON contenant uniquement les 40 morceaux, au format suivant :
+Donne ta réponse sous forme d’une liste JSON contenant uniquement les 20 morceaux, au format suivant :
 [
   { "artist": "Nom de l’artiste", "name": "Titre du morceau" },
   ...
@@ -95,19 +95,20 @@ Ne fais aucun commentaire. Ne donne aucune explication. Juste la liste.
 
     const access_token = await getSpotifyAccessToken();
 
-    const resolvedTracks = [];
-    for (const track of tracks) {
-      const query = encodeURIComponent(`${track.name} ${track.artist}`);
-      const searchRes = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`, {
-        headers: { Authorization: `Bearer ${access_token}` },
-      });
+    const resolvedTracks = await Promise.all(
+      tracks.map(async (track) => {
+        const query = encodeURIComponent(`${track.name} ${track.artist}`);
+        const searchRes = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`, {
+          headers: { Authorization: `Bearer ${access_token}` },
+        });
 
-      const searchData = await searchRes.json();
-      const found = searchData.tracks.items[0];
-      if (found) {
-        resolvedTracks.push(found.uri);
-      }
-    }
+        const searchData = await searchRes.json();
+        const found = searchData.tracks.items[0];
+        return found ? found.uri : null;
+      })
+    );
+
+    const filteredUris = resolvedTracks.filter(uri => uri);
 
     const adminUserId = process.env.SPOTIFY_ADMIN_USER_ID;
     const playlistRes = await fetch(`https://api.spotify.com/v1/users/${adminUserId}/playlists`, {
@@ -131,7 +132,7 @@ Ne fais aucun commentaire. Ne donne aucune explication. Juste la liste.
         Authorization: `Bearer ${access_token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ uris: resolvedTracks }),
+      body: JSON.stringify({ uris: filteredUris }),
     });
 
     await db.collection("profiles").doc(id).set({
@@ -143,7 +144,7 @@ Ne fais aucun commentaire. Ne donne aucune explication. Juste la liste.
       playlist: {
         url: playlistData.external_urls.spotify,
         message: "✅ Playlist générée par IA avec succès",
-        total: resolvedTracks.length
+        total: filteredUris.length
       }
     });
 
