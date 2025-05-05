@@ -28,15 +28,17 @@ export default async function handler(req, res) {
     const profile = docSnap.data();
     const ambiance = profile.ambianceDetails || {};
 
+    const safeArray = (val) => Array.isArray(val) ? val : [];
+
     const prompt = `Tu es un expert en design sonore pour les lieux publics. Génère une playlist cohérente de 40 titres Spotify adaptés à l’ambiance suivante :\n
     Heure : ${ambiance.hours}\n
     Mood : ${ambiance.mood}\n
     Décoration : ${ambiance.decoration}\n
     Clientèle : ${ambiance.clientele}\n
     Objectif : ${ambiance.goal}\n
-    Genres préférés : ${(ambiance.genres || []).join(", ")}\n
-    Artistes de référence : ${(ambiance.referenceArtists || []).join(", ")}\n
-    Langues préférées : ${(ambiance.languages || []).join(", ")}\n
+    Genres préférés : ${safeArray(ambiance.genres).join(", ")}\n
+    Artistes de référence : ${safeArray(ambiance.referenceArtists).join(", ")}\n
+    Langues préférées : ${safeArray(ambiance.languages).join(", ")}\n
     Tempo : ${ambiance.tempo}\n
     Taille du lieu : ${ambiance.size}\n
     Type de lieu : ${ambiance.type}\n
