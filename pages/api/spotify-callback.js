@@ -11,20 +11,24 @@ export default async function handler(req, res) {
     const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
     const redirect_uri = process.env.SPOTIFY_REDIRECT_URI;
 
+    if (!client_id || !client_secret || !redirect_uri) {
+        return res.status(500).send("❌ Variables d'environnement Spotify manquantes.");
+    }
+
     const authHeader = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 
     try {
         const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
             headers: {
-                Authorization: `Basic ${authHeader}`,
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": `Basic ${authHeader}`,
+                "Content-Type": "application/x-www-form-urlencoded"
             },
             body: new URLSearchParams({
                 grant_type: "authorization_code",
                 code,
-                redirect_uri,
-            }),
+                redirect_uri
+            })
         });
 
         const data = await response.json();
@@ -37,12 +41,12 @@ export default async function handler(req, res) {
         console.log("✅ Access token:", data.access_token);
         console.log("🔁 Refresh token:", data.refresh_token);
 
-        res.status(200).send(
-            `<h2>Authentification réussie ✅</h2>
-      <p>Tu peux maintenant copier le <strong>refresh_token</strong> affiché dans ta console serveur et le coller dans ton <code>.env.local</code>.</p>`
-        );
+        res.status(200).send(`
+      <h2>Authentification réussie ✅</h2>
+      <p>Copie le <strong>refresh_token</strong> affiché dans ta console pour le coller dans ton .env.local</p>
+    `);
     } catch (err) {
-        console.error("❌ Erreur lors de l'échange de token:", err);
+        console.error("❌ Erreur réseau Spotify:", err);
         res.status(500).send("Erreur serveur.");
     }
 }
