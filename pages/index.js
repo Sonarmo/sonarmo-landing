@@ -146,7 +146,7 @@ export default function Home() {
           <div className="relative z-10 flex flex-col items-center">
             <h2 className="text-4xl font-semibold mb-4">Nous contacter</h2>
             <p className="text-gray-400 mb-8 max-w-md">
-              Une question, une idée, ou juste envie d'en parler ? Faites-nous signe, on adore discuter !
+              Une question, une idée, ou juste envie d&apos;en parler ? Faites-nous signe, on adore discuter !
             </p>
             <Link href="/contact" legacyBehavior><a className="inline-block bg-gradient-to-r from-[#FF9400] to-[#FF0BED] px-6 py-3 rounded-full text-white font-semibold shadow-md transform transition-transform duration-300 hover:scale-105 active:scale-95">ON S&apos;APPELLE ?
             </a>
