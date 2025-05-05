@@ -126,6 +126,11 @@ Ne fais aucun commentaire. Ne donne aucune explication. Juste la liste.
 
     const playlistData = await playlistRes.json();
 
+    if (!playlistData || !playlistData.external_urls || !playlistData.external_urls.spotify) {
+      console.error("Erreur : la création de la playlist Spotify a échoué", playlistData);
+      return res.status(500).json({ error: "Échec de la création de la playlist Spotify" });
+    }
+
     await fetch(`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`, {
       method: "POST",
       headers: {
