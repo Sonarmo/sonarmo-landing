@@ -1,6 +1,11 @@
 // pages/api/generate-playlist.js
 import { db } from "../../lib/firebaseAdmin";
 import { getSpotifyAccessToken } from "../../lib/spotifyTokens";
+import { Configuration, OpenAIApi } from "openai";
+
+const openai = new OpenAIApi(new Configuration({
+  apiKey: process.env.OPENAI_API_KEY
+}));
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -23,106 +28,93 @@ export default async function handler(req, res) {
     const profile = docSnap.data();
     const ambiance = profile.ambianceDetails || {};
 
-    const access_token = await getSpotifyAccessToken();
+    const prompt = `Tu es un expert en design sonore pour les lieux publics. Génère une playlist cohérente de 40 titres Spotify adaptés à l’ambiance suivante :\n
+    Heure : ${ambiance.hours}\n
+    Mood : ${ambiance.mood}\n
+    Décoration : ${ambiance.decoration}\n
+    Clientèle : ${ambiance.clientele}\n
+    Objectif : ${ambiance.goal}\n
+    Genres préférés : ${(ambiance.genres || []).join(", ")}\n
+    Artistes de référence : ${(ambiance.referenceArtists || []).join(", ")}\n
+    Langues préférées : ${(ambiance.languages || []).join(", ")}\n
+    Tempo : ${ambiance.tempo}\n
+    Taille du lieu : ${ambiance.size}\n
+    Type de lieu : ${ambiance.type}\n
+    Spécificités : ${ambiance.specialMoments}\n
+    Élément identitaire : ${ambiance.identityNotes}\n
+    Donne la réponse sous forme de liste JSON d’objets avec \"name\" et \"artist\".`;
 
-    const allowedGenres = [
-      "acoustic", "afrobeat", "alt-rock", "alternative", "ambient", "chill",
-      "classical", "dance", "deep-house", "disco", "electronic", "folk",
-      "french", "house", "indie", "jazz", "latin", "lo-fi", "pop", "rock",
-      "soul", "techno", "trance", "trip-hop"
-    ];
-
-    const seedGenresArray = (ambiance.genres || []).filter(genre => allowedGenres.includes(genre)).slice(0, 5);
-
-    console.log("🎵 Genres sélectionnés :", ambiance.genres);
-    console.log("✅ Genres valides pour Spotify :", seedGenresArray);
-
-    if (seedGenresArray.length === 0) {
-      return res.status(400).json({ error: "Aucun genre valide fourni pour Spotify" });
-    }
-
-    const seedGenres = seedGenresArray.join(",");
-    console.log("🧪 URL Spotify testée :", `https://api.spotify.com/v1/recommendations?seed_genres=${seedGenres}&limit=40`);
-
-    const recommendationsResponse = await fetch(`https://api.spotify.com/v1/recommendations?seed_genres=${seedGenres}&limit=40`, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
+    const completion = await openai.createChatCompletion({
+      model: "gpt-4",
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.8,
     });
 
-    if (!recommendationsResponse.ok) {
-      const status = recommendationsResponse.status;
-      const errorText = await recommendationsResponse.text();
-      console.error("❌ Erreur Spotify API (reco) – status :", status);
-      console.error("❌ Corps de réponse :", errorText);
-      return res.status(500).json({
-        error: "Erreur lors de la récupération des recommandations Spotify",
-        spotifyStatus: status,
-        spotifyBody: errorText
-      });
+    const jsonResponse = completion.data.choices[0].message.content;
+    let tracks;
+    try {
+      tracks = JSON.parse(jsonResponse);
+    } catch (e) {
+      console.error("Erreur de parsing GPT:", e);
+      return res.status(500).json({ error: "Erreur de parsing GPT" });
     }
 
-    const recommendationsData = await recommendationsResponse.json();
-    const tracks = recommendationsData.tracks.map(track => ({
-      name: track.name,
-      artist: track.artists.map(a => a.name).join(', '),
-      url: track.external_urls.spotify,
-      uri: track.uri
-    }));
+    const access_token = await getSpotifyAccessToken();
+
+    const resolvedTracks = [];
+    for (const track of tracks) {
+      const query = encodeURIComponent(`${track.name} ${track.artist}`);
+      const searchRes = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`, {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
+
+      const searchData = await searchRes.json();
+      const found = searchData.tracks.items[0];
+      if (found) {
+        resolvedTracks.push(found.uri);
+      }
+    }
 
     const adminUserId = process.env.SPOTIFY_ADMIN_USER_ID;
-    const playlistName = `Sonarmo – ${profile.placeName || "Lieu"}`;
-
-    const createPlaylistRes = await fetch(`https://api.spotify.com/v1/users/${adminUserId}/playlists`, {
+    const playlistRes = await fetch(`https://api.spotify.com/v1/users/${adminUserId}/playlists`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${access_token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: playlistName,
-        description: `Playlist Sonarmo générée automatiquement pour ${profile.placeName || "un lieu"}`,
+        name: `Sonarmo – ${profile.placeName || "Lieu"}`,
+        description: "Playlist générée par IA avec Sonarmo",
         public: false
       }),
     });
 
-    if (!createPlaylistRes.ok) {
-      const errorText = await createPlaylistRes.text();
-      console.error("Erreur création playlist:", errorText);
-      return res.status(500).json({ error: "Erreur création playlist" });
-    }
+    const playlistData = await playlistRes.json();
 
-    const playlistData = await createPlaylistRes.json();
-
-    const addTracksRes = await fetch(`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`, {
+    await fetch(`https://api.spotify.com/v1/playlists/${playlistData.id}/tracks`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${access_token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ uris: tracks.map(t => t.uri) }),
+      body: JSON.stringify({ uris: resolvedTracks }),
     });
-
-    if (!addTracksRes.ok) {
-      const errorText = await addTracksRes.text();
-      console.error("Erreur ajout morceaux:", errorText);
-      return res.status(500).json({ error: "Erreur ajout morceaux à la playlist" });
-    }
 
     await db.collection("profiles").doc(id).set({
       playlistUrl: playlistData.external_urls.spotify,
-      lastGenerated: new Date().toISOString()
+      lastGenerated: new Date().toISOString(),
     }, { merge: true });
 
     return res.status(200).json({
       playlist: {
         url: playlistData.external_urls.spotify,
-        tracks,
-        message: "✅ Playlist Spotify créée avec succès"
+        message: "✅ Playlist générée par IA avec succès",
+        total: resolvedTracks.length
       }
     });
+
   } catch (error) {
-    console.error("Erreur API playlist:", error);
+    console.error("Erreur API GPT playlist:", error);
     return res.status(500).json({ error: "Erreur serveur" });
   }
-} 
+}
