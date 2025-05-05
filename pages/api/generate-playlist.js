@@ -47,7 +47,7 @@ export default async function handler(req, res) {
     Donne la réponse sous forme de liste JSON d’objets avec \"name\" et \"artist\".`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.8,
     });
