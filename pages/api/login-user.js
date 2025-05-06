@@ -1,6 +1,8 @@
+// pages/api/login-user.js
+
 export default function handler(req, res) {
     const scopes = process.env.NEXT_PUBLIC_SPOTIFY_SCOPES;
-    const redirectUri = process.env.SPOTIFY_REDIRECT_URI_ADMIN;
+    const redirectUri = process.env.SPOTIFY_REDIRECT_URI_USER;
     const clientId = process.env.SPOTIFY_CLIENT_ID;
 
     const spotifyAuthUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${encodeURIComponent(

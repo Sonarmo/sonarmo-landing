@@ -25,7 +25,7 @@ export default function Settings() {
                 <p className="mb-4 text-gray-300">
                     Relie ton compte Spotify pour permettre à Sonarmo de lire, créer et gérer tes playlists musicales en temps réel.
                 </p>
-                <Link href="/api/login">
+                <Link href="/api/login-user">
                     <button className="bg-green-500 hover:bg-green-600 transition px-5 py-2 rounded-lg font-semibold text-white shadow-md">
                         Se connecter à Spotify
                     </button>
