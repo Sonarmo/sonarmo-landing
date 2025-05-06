@@ -225,7 +225,8 @@ export default function Dashboard() {
                                     onClick={handlePlay}
                                     className="bg-green-500 hover:bg-green-600 transition px-5 py-2 rounded-lg font-semibold text-white shadow"
                                 >
-                                    ▶️ Lancer l&apos;ambiance '{ambiance}'
+                                    ▶️ Lancer l&apos;ambiance &quot;{ambiance}&quot;
+
                                 </button>
 
                             <div className="flex items-center gap-4">
