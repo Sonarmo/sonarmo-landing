@@ -221,12 +221,12 @@ export default function Dashboard() {
                         <p className="text-gray-400">Chargement du lecteur Spotify...</p>
                     ) : (
                         <div className="flex flex-col gap-6">
-                            <button
-                                onClick={handlePlay}
-                                className="bg-green-500 hover:bg-green-600 transition px-5 py-2 rounded-lg font-semibold text-white shadow"
-                            >
-                                ▶️ Lancer l&apos;ambiance "{ambiance}"
-                            </button>
+                                <button
+                                    onClick={handlePlay}
+                                    className="bg-green-500 hover:bg-green-600 transition px-5 py-2 rounded-lg font-semibold text-white shadow"
+                                >
+                                    ▶️ Lancer l&apos;ambiance '{ambiance}'
+                                </button>
 
                             <div className="flex items-center gap-4">
                                 <button
