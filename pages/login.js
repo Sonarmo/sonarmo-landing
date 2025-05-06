@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebase";
+import nookies from "nookies"; // ← ajouté ici
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -12,8 +13,14 @@ export default function Login() {
     const router = useRouter();
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // 🔐 Ajoute le token dans un cookie pour les API routes
+                const token = await user.getIdToken();
+                nookies.set(undefined, "token", token, {
+                    maxAge: 60 * 60 * 24, // 1 jour
+                    path: "/",
+                });
                 router.push("/dashboard"); // Rediriger automatiquement si déjà connecté
             }
         });
@@ -23,7 +30,16 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // 🔐 Récupère le token Firebase et le stocke en cookie
+            const token = await user.getIdToken();
+            nookies.set(undefined, "token", token, {
+                maxAge: 60 * 60 * 24, // 1 jour
+                path: "/",
+            });
+
             console.log("Connexion réussie");
             router.push("/dashboard"); // Rediriger après connexion
         } catch (err) {
