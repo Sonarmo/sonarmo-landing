@@ -1,11 +1,13 @@
-import { dbAdmin } from "@/lib/firebaseAdmin";
-import { getAuth } from "firebase-admin/auth";
+import { db, authAdmin } from "@/lib/firebaseAdmin";
 import cookie from "cookie";
 
 export default async function handler(req, res) {
     const code = req.query.code || null;
 
-    if (!code) return res.status(400).send("❌ Code manquant.");
+    if (!code) {
+        console.error("❌ Code manquant dans la requête Spotify");
+        return res.status(400).send("❌ Code manquant.");
+    }
 
     const client_id = process.env.SPOTIFY_CLIENT_ID;
     const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -30,23 +32,26 @@ export default async function handler(req, res) {
         const data = await tokenRes.json();
 
         if (data.error) {
-            console.error("❌ Spotify error:", data);
+            console.error("❌ Erreur Spotify :", data);
             return res.status(500).json({ error: data });
         }
 
-        // 🔐 Récupère l'utilisateur Firebase via cookie (authToken)
+        // 🔍 Étape 2 : Vérifie le cookie
         const cookies = cookie.parse(req.headers.cookie || "");
-        const idToken = cookies.token || null;
+        const idToken = cookies.token;
 
         if (!idToken) {
+            console.error("❌ Cookie 'token' manquant ou invalide");
             return res.status(401).json({ error: "Utilisateur non authentifié" });
         }
 
-        const decodedToken = await getAuth().verifyIdToken(idToken);
+        const decodedToken = await authAdmin.verifyIdToken(idToken);
         const uid = decodedToken.uid;
 
-        // ✅ Stocke le token dans Firestore
-        await dbAdmin.collection("users").doc(uid).set(
+        console.log("✅ Utilisateur Firebase identifié :", uid);
+
+        // 🔧 Stocke dans Firestore
+        await db.collection("users").doc(uid).set(
             {
                 spotifyAccessToken: data.access_token,
                 updatedAt: new Date(),
@@ -54,10 +59,11 @@ export default async function handler(req, res) {
             { merge: true }
         );
 
-        // Redirige vers dashboard proprement
+        console.log("✅ Token Spotify enregistré avec succès pour", uid);
         res.redirect("/dashboard/settings");
+
     } catch (err) {
-        console.error("❌ Erreur réseau Spotify:", err);
+        console.error("❌ Erreur serveur Spotify-user-callback :", err);
         res.status(500).send("Erreur serveur.");
     }
 }
