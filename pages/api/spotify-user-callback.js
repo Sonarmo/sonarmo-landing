@@ -47,6 +47,8 @@ export default async function handler(req, res) {
         // 🔐 Récupère l'utilisateur Firebase via cookie (authToken)
         const cookies = cookie.parse(req.headers.cookie || "");
         const idToken = cookies.token || null;
+        console.log("🍪 Cookies reçus :", cookies);
+
 
         if (!idToken) {
             return res.status(401).json({ error: "Utilisateur non authentifié" });
@@ -56,7 +58,7 @@ export default async function handler(req, res) {
         const uid = decodedToken.uid;
 
         // ✅ Stocke le token dans Firestore
-        await dbAdmin.collection("users").doc(uid).set(
+        await db.collection("users").doc(uid).set(
             {
                 spotifyAccessToken: data.access_token,
                 updatedAt: new Date(),
