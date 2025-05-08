@@ -1,17 +1,5 @@
-import admin from "firebase-admin";
-import { getAuth } from "firebase-admin/auth";
+import { db, authAdmin } from "@/lib/firebaseAdmin"; // ✅ utilise ton fichier centralisé
 import cookie from "cookie";
-
-// Initialisation sécurisée de Firebase Admin
-if (!admin.apps.length) {
-    admin.initializeApp({
-        credential: admin.credential.cert(
-            JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-        ),
-    });
-}
-
-const db = admin.firestore();
 
 export default async function handler(req, res) {
     const code = req.query.code || null;
@@ -68,7 +56,7 @@ export default async function handler(req, res) {
             return res.status(401).json({ error: "Utilisateur non authentifié" });
         }
 
-        const decodedToken = await getAuth().verifyIdToken(idToken);
+        const decodedToken = await authAdmin.verifyIdToken(idToken);
         const uid = decodedToken.uid;
 
         console.log("👤 UID Firebase vérifié :", uid);
