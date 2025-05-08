@@ -5,17 +5,23 @@ import cookie from "cookie";
 // Initialisation sécurisée de Firebase Admin
 if (!admin.apps.length) {
     admin.initializeApp({
-        credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)),
+        credential: admin.credential.cert(
+            JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
+        ),
     });
 }
 
-const dbAdmin = admin.firestore();
-
+const db = admin.firestore();
 
 export default async function handler(req, res) {
     const code = req.query.code || null;
 
-    if (!code) return res.status(400).send("❌ Code manquant.");
+    if (!code) {
+        console.warn("❌ Aucun code reçu depuis Spotify.");
+        return res.status(400).send("❌ Code manquant.");
+    }
+
+    console.log("▶️ Code reçu :", code);
 
     const client_id = process.env.SPOTIFY_CLIENT_ID;
     const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -40,24 +46,34 @@ export default async function handler(req, res) {
         const data = await tokenRes.json();
 
         if (data.error) {
-            console.error("❌ Spotify error:", data);
+            console.error("❌ Erreur de récupération token Spotify :", data);
             return res.status(500).json({ error: data });
         }
 
+        console.log("✅ Token Spotify reçu :", {
+            access_token: data.access_token?.slice(0, 10) + "...",
+            expires_in: data.expires_in,
+            scope: data.scope,
+        });
+
         // 🔐 Récupère l'utilisateur Firebase via cookie (authToken)
         const cookies = cookie.parse(req.headers.cookie || "");
-        const idToken = cookies.token || null;
         console.log("🍪 Cookies reçus :", cookies);
 
+        const idToken = cookies.token || null;
+        console.log("🔑 ID Token extrait :", idToken ? idToken.slice(0, 10) + "..." : null);
 
         if (!idToken) {
+            console.warn("⚠️ Aucun token Firebase trouvé dans les cookies.");
             return res.status(401).json({ error: "Utilisateur non authentifié" });
         }
 
         const decodedToken = await getAuth().verifyIdToken(idToken);
         const uid = decodedToken.uid;
 
-        // ✅ Stocke le token dans Firestore
+        console.log("👤 UID Firebase vérifié :", uid);
+
+        // ✅ Stocke le token Spotify dans Firestore
         await db.collection("users").doc(uid).set(
             {
                 spotifyAccessToken: data.access_token,
@@ -66,10 +82,12 @@ export default async function handler(req, res) {
             { merge: true }
         );
 
-        // Redirige vers dashboard proprement
+        console.log("📦 Token stocké pour UID :", uid);
+
+        // Redirige proprement vers le dashboard
         res.redirect("/dashboard/settings");
     } catch (err) {
-        console.error("❌ Erreur réseau Spotify:", err);
+        console.error("❌ Erreur réseau ou Firebase :", err);
         res.status(500).send("Erreur serveur.");
     }
 }
