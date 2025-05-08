@@ -1,4 +1,4 @@
-// dashboard.js avec sidebar + lecteur Spotify amélioré + refresh automatique du token
+// dashboard.js avec sidebar + lecteur Spotify amélioré + refresh automatique du token + sélection de playlists utilisateur
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -30,6 +30,7 @@ export default function Dashboard() {
     const [deviceId, setDeviceId] = useState(null);
     const [player, setPlayer] = useState(null);
     const [currentTrack, setCurrentTrack] = useState(null);
+    const [userPlaylists, setUserPlaylists] = useState([]);
 
     const handleAmbianceChange = (e) => {
         setShowAmbiance(false);
@@ -103,13 +104,39 @@ export default function Dashboard() {
         };
     }, [accessToken, player]);
 
+    const fetchUserPlaylists = async () => {
+        if (!accessToken) return;
+        try {
+            const res = await fetch("https://api.spotify.com/v1/me/playlists", {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            const data = await res.json();
+            setUserPlaylists(data.items || []);
+        } catch (err) {
+            console.error("❌ Erreur récupération des playlists utilisateur:", err);
+        }
+    };
+
+    useEffect(() => {
+        if (accessToken) {
+            fetchUserPlaylists();
+        }
+    }, [accessToken]);
+
     const handlePlay = async () => {
         if (!deviceId || !accessToken) return;
         setIsPlaying(true);
 
-        const uri = playlistUrls[ambiance]
-            .replace("https://open.spotify.com/playlist/", "spotify:playlist:")
-            .replace("/embed", "");
+        let uri = "";
+        if (ambiance.startsWith("spotify:playlist:")) {
+            uri = ambiance;
+        } else {
+            uri = playlistUrls[ambiance]
+                .replace("https://open.spotify.com/playlist/", "spotify:playlist:")
+                .replace("/embed", "");
+        }
 
         const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: "PUT",
@@ -148,6 +175,12 @@ export default function Dashboard() {
 
             if (res.status === 204) {
                 setCurrentTrack(null);
+                return;
+            }
+
+            if (res.status === 401) {
+                console.warn("🔐 Token expiré pendant fetchCurrentTrack, refresh...");
+                await refreshAccessToken();
                 return;
             }
 
