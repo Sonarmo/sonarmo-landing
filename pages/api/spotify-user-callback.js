@@ -1,6 +1,16 @@
-import { db, authAdmin } from "@/lib/firebaseAdmin";
+import admin from "firebase-admin";
 import { getAuth } from "firebase-admin/auth";
 import cookie from "cookie";
+
+// Initialisation sécurisée de Firebase Admin
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)),
+    });
+}
+
+const dbAdmin = admin.firestore();
+
 
 export default async function handler(req, res) {
     const code = req.query.code || null;
