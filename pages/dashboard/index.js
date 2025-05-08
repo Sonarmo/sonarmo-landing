@@ -1,3 +1,5 @@
+// dashboard.js avec sidebar + lecteur Spotify amélioré + refresh automatique du token
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "../../lib/firebase";
@@ -22,6 +24,7 @@ export default function Dashboard() {
     const [ambiance, setAmbiance] = useState("Lounge Chill 🌙");
     const [showAmbiance, setShowAmbiance] = useState(true);
     const [showToast, setShowToast] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const [accessToken, setAccessToken] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
@@ -36,6 +39,19 @@ export default function Dashboard() {
             setShowToast(true);
             setTimeout(() => setShowToast(false), 2000);
         }, 300);
+    };
+
+    const refreshAccessToken = async () => {
+        try {
+            const res = await fetch("/api/refresh-spotify-token");
+            const data = await res.json();
+            if (data.access_token) {
+                console.log("🔁 Nouveau token Spotify récupéré");
+                setAccessToken(data.access_token);
+            }
+        } catch (err) {
+            console.error("❌ Erreur lors du refresh token:", err);
+        }
     };
 
     useEffect(() => {
@@ -54,10 +70,13 @@ export default function Dashboard() {
     useEffect(() => {
         if (!accessToken || player) return;
 
-        const script = document.createElement("script");
-        script.src = "https://sdk.scdn.co/spotify-player.js";
-        script.async = true;
-        document.body.appendChild(script);
+        if (!document.getElementById("spotify-sdk")) {
+            const script = document.createElement("script");
+            script.id = "spotify-sdk";
+            script.src = "https://sdk.scdn.co/spotify-player.js";
+            script.async = true;
+            document.body.appendChild(script);
+        }
 
         window.onSpotifyWebPlaybackSDKReady = () => {
             const newPlayer = new window.Spotify.Player({
@@ -71,6 +90,14 @@ export default function Dashboard() {
                 setDeviceId(device_id);
             });
 
+            newPlayer.addListener("initialization_error", ({ message }) => console.error("❌ Init error:", message));
+            newPlayer.addListener("authentication_error", async ({ message }) => {
+                console.error("❌ Auth error:", message);
+                await refreshAccessToken();
+            });
+            newPlayer.addListener("account_error", ({ message }) => console.error("❌ Account error:", message));
+            newPlayer.addListener("playback_error", ({ message }) => console.error("❌ Playback error:", message));
+
             newPlayer.connect();
             setPlayer(newPlayer);
         };
@@ -78,6 +105,7 @@ export default function Dashboard() {
 
     const handlePlay = async () => {
         if (!deviceId || !accessToken) return;
+        setIsPlaying(true);
 
         const uri = playlistUrls[ambiance]
             .replace("https://open.spotify.com/playlist/", "spotify:playlist:")
@@ -96,8 +124,13 @@ export default function Dashboard() {
             }),
         });
 
+        setIsPlaying(false);
+
         if (res.status === 204) {
             console.log("▶️ Lecture lancée !");
+        } else if (res.status === 401) {
+            console.warn("🔐 Token expiré, tentative de refresh...");
+            await refreshAccessToken();
         } else {
             console.error("❌ Erreur lecture :", await res.json());
         }
@@ -137,6 +170,7 @@ export default function Dashboard() {
         }, 5000);
         return () => clearInterval(interval);
     }, [accessToken]);
+
     if (loading) {
         return <div className="text-white min-h-screen flex items-center justify-center">Chargement...</div>;
     }
@@ -148,7 +182,6 @@ export default function Dashboard() {
                 <Link href="/dashboard" className="flex items-center gap-3 mb-8">
                     <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={140} height={40} />
                 </Link>
-
                 <nav className="flex flex-col gap-6 text-sm">
                     <Link href="/dashboard" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard" ? "text-white" : ""}`}>
                         <Image src="/icons/home.png" alt="Home" width={24} height={24} />
@@ -165,10 +198,6 @@ export default function Dashboard() {
                     <Link href="/dashboard/settings" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/settings" ? "text-white" : ""}`}>
                         <Image src="/icons/settings.png" alt="Settings" width={24} height={24} />
                         Réglages
-                    </Link>
-                    <Link href="/dashboard/profile" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/profile" ? "text-white" : ""}`}>
-                        <Image src="/icons/profile.png" alt="Profile" width={24} height={24} />
-                        Profil
                     </Link>
                     <Link href="/logout" className="flex items-center gap-4 hover:text-white mt-8">
                         <Image src="/icons/logout.png" alt="Logout" width={24} height={24} />
@@ -216,18 +245,17 @@ export default function Dashboard() {
                 {/* Player */}
                 <section className="bg-[#1c1c1c] rounded-xl p-6 md:p-8 shadow-lg">
                     <h2 className="text-2xl font-semibold mb-4">Lecteur Spotify connecté 🎧</h2>
-
                     {!deviceId ? (
                         <p className="text-gray-400">Chargement du lecteur Spotify...</p>
                     ) : (
                         <div className="flex flex-col gap-6">
-                                <button
-                                    onClick={handlePlay}
-                                    className="bg-green-500 hover:bg-green-600 transition px-5 py-2 rounded-lg font-semibold text-white shadow"
-                                >
-                                    ▶️ Lancer l&apos;ambiance &quot;{ambiance}&quot;
-
-                                </button>
+                            <button
+                                onClick={handlePlay}
+                                disabled={isPlaying}
+                                className="bg-green-500 hover:bg-green-600 transition px-5 py-2 rounded-lg font-semibold text-white shadow"
+                            >
+                                {isPlaying ? "Chargement..." : `▶️ Lancer l'ambiance "${ambiance}"`}
+                            </button>
 
                             <div className="flex items-center gap-4">
                                 <button
@@ -247,7 +275,6 @@ export default function Dashboard() {
                                 />
                             </div>
 
-                            {/* Now Playing */}
                             {currentTrack && (
                                 <div className="flex items-center gap-4 bg-[#2a2a2a] p-4 rounded-lg animate-wave">
                                     {currentTrack.image && (
@@ -262,12 +289,6 @@ export default function Dashboard() {
                                     <div>
                                         <p className="text-white font-medium">{currentTrack.name}</p>
                                         <p className="text-gray-400 text-sm">{currentTrack.artist}</p>
-                                    </div>
-                                    <div className="flex ml-auto gap-[3px] h-10 items-end">
-                                        <div className="bg-green-500 w-1 animate-wave-bar [animation-delay:.1s]"></div>
-                                        <div className="bg-green-500 w-1 animate-wave-bar [animation-delay:.2s]"></div>
-                                        <div className="bg-green-500 w-1 animate-wave-bar [animation-delay:.3s]"></div>
-                                        <div className="bg-green-500 w-1 animate-wave-bar [animation-delay:.4s]"></div>
                                     </div>
                                 </div>
                             )}
@@ -292,17 +313,6 @@ export default function Dashboard() {
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            <style jsx global>{`
-        @keyframes waveBar {
-          0% { height: 20%; }
-          50% { height: 100%; }
-          100% { height: 20%; }
-        }
-        .animate-wave-bar {
-          animation: waveBar 1s infinite ease-in-out;
-        }
-      `}</style>
         </div>
     );
 }
