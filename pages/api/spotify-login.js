@@ -1,19 +1,25 @@
-// pages/api/spotify-login.js
-
 export default function handler(req, res) {
-    // Vérification en console des variables d'environnement
-    console.log("🔑 SPOTIFY_CLIENT_ID:", process.env.SPOTIFY_CLIENT_ID);
-    console.log("🔁 SPOTIFY_REDIRECT_URI:", process.env.SPOTIFY_REDIRECT_URI);
+    const client_id = process.env.SPOTIFY_CLIENT_ID;
+    const redirect_uri = process.env.SPOTIFY_REDIRECT_URI;
 
     const scopes = [
-        "playlist-modify-public",
-        "playlist-modify-private",
-        "user-read-private"
-    ].join(" ");
+        "user-read-email",
+        "user-read-private",
+        "streaming",
+        "user-modify-playback-state",
+        "user-read-playback-state",
+        "user-read-currently-playing",
+        "playlist-read-private",
+        "playlist-read-collaborative"
+    ];
 
-    const url = `https://accounts.spotify.com/authorize?response_type=code&client_id=${encodeURIComponent(
-        process.env.SPOTIFY_CLIENT_ID
-    )}&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(process.env.SPOTIFY_REDIRECT_URI)}`;
+    const queryParams = new URLSearchParams({
+        response_type: "code",
+        client_id,
+        scope: scopes.join(" "),
+        redirect_uri,
+    });
 
-    res.redirect(url);
+    const redirectUrl = `https://accounts.spotify.com/authorize?${queryParams.toString()}`;
+    res.redirect(redirectUrl);
 }
