@@ -132,6 +132,14 @@ export default function Dashboard() {
             });
             newPlayer.addListener("account_error", ({ message }) => console.error(message));
             newPlayer.addListener("playback_error", ({ message }) => console.error(message));
+
+            newPlayer.addListener("player_state_changed", (state) => {
+                if (!state) return;
+                setIsPlaying(!state.paused);
+                setPosition(state.position);
+                setDuration(state.duration);
+            });
+
             newPlayer.connect();
             setPlayer(newPlayer);
         };
@@ -151,14 +159,12 @@ export default function Dashboard() {
 
     const handlePlay = async () => {
         if (!deviceId || !accessToken) return;
-        setIsPlaying(true);
         let uri = ambianceUri || (ambiance.startsWith("spotify:playlist:") ? ambiance : convertToSpotifyUri(playlistUrls[ambiance]));
         const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: "PUT",
             headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
             body: JSON.stringify({ context_uri: uri, offset: { position: 0 }, position_ms: 0 })
         });
-        setIsPlaying(false);
         if (res.status === 401) await refreshAccessToken();
     };
 
