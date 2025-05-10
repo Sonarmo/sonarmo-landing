@@ -1,4 +1,4 @@
-// dashboard.js avec correction pour lancer la playlist sélectionnée
+// dashboard.js avec correction complète pour lancer la playlist sélectionnée
 
 import EnhancedPlayer from "@/components/builder/EnhancedPlayer";
 import { useEffect, useState } from "react";
@@ -17,22 +17,11 @@ const playlistUrls = {
     "Café Cosy ☕": "https://open.spotify.com/playlist/37i9dQZF1DX6VdMW310YC7"
 };
 
-useEffect(() => {
-    if (router.query.uri) {
-        const uri = convertToSpotifyUri(router.query.uri);
-        setAmbianceUri(uri);
-        updateDoc(doc(db, "users", auth.currentUser.uid), {
-            selectedPlaylistUri: uri,
-        }).catch(console.error);
-    }
-}, [router.query.uri]);
-
-useEffect(() => {
-    if (accessToken && deviceId && ambianceUri) {
-        handlePlay();
-    }
-}, [accessToken, deviceId, ambianceUri]);
-
+const convertToSpotifyUri = (url) => {
+    if (!url.includes("spotify.com/playlist/")) return url;
+    const id = url.split("/playlist/")[1].split("?")[0];
+    return `spotify:playlist:${id}`;
+};
 
 export default function Dashboard() {
     const router = useRouter();
@@ -63,7 +52,7 @@ export default function Dashboard() {
         setShowAmbiance(false);
         setTimeout(() => {
             setAmbiance(e.target.value);
-            setAmbianceUri(null); // reset URI in case of preset switch
+            setAmbianceUri(null);
             setShowAmbiance(true);
             setShowToast(true);
             setTimeout(() => setShowToast(false), 2000);
@@ -86,13 +75,7 @@ export default function Dashboard() {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 setAccessToken(data.spotifyAccessToken);
-                const queryUri = router.query.uri;
-                if (queryUri) {
-                    setAmbianceUri(queryUri);
-                    await updateDoc(doc(db, "users", user.uid), { selectedPlaylistUri: queryUri });
-                } else if (data.selectedPlaylistUri) {
-                    setAmbianceUri(data.selectedPlaylistUri);
-                }
+                if (data.selectedPlaylistUri) setAmbianceUri(data.selectedPlaylistUri);
                 const testRes = await fetch("https://api.spotify.com/v1/me", {
                     headers: { Authorization: `Bearer ${data.spotifyAccessToken}` },
                 });
@@ -101,6 +84,16 @@ export default function Dashboard() {
         });
         return () => unsubscribe();
     }, [router]);
+
+    useEffect(() => {
+        if (router.query.uri) {
+            const uri = convertToSpotifyUri(router.query.uri);
+            setAmbianceUri(uri);
+            updateDoc(doc(db, "users", auth.currentUser.uid), {
+                selectedPlaylistUri: uri,
+            }).catch(console.error);
+        }
+    }, [router.query.uri]);
 
     useEffect(() => {
         if (!accessToken || player) return;
@@ -168,6 +161,12 @@ export default function Dashboard() {
         setIsPlaying(false);
         if (res.status === 401) await refreshAccessToken();
     };
+
+    useEffect(() => {
+        if (accessToken && deviceId && ambianceUri) {
+            handlePlay();
+        }
+    }, [accessToken, deviceId, ambianceUri]);
 
     const fetchCurrentTrack = async () => {
         if (!accessToken) return;
