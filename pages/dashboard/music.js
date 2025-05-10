@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { db } from "../../lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { auth } from "../../lib/firebase";
 import Link from "next/link";
@@ -6,48 +8,62 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
-const playlists = [
-    {
-        name: "Lounge Chill 🌙",
-        description: "Ambiance feutrée pour soirées douces.",
-        image: "/images/lounge.jpg",
-        url: "https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6"
-    },
-    {
-        name: "Apéro Festif 🍹",
-        description: "Idéal pour lancer une soirée entre amis.",
-        image: "/images/apero.jpg",
-        url: "https://open.spotify.com/playlist/37i9dQZF1DWZwtERXCS82H"
-    },
-    {
-        name: "Night Club 🔥",
-        description: "Des beats puissants pour faire monter l'énergie.",
-        image: "/images/night.jpg",
-        url: "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n"
-    },
-    {
-        name: "Café Cosy ☕",
-        description: "Une vibe douce et relax pour les moments calmes.",
-        image: "/images/cafe.jpg",
-        url: "https://open.spotify.com/playlist/37i9dQZF1DX6VdMW310YC7"
-    }
-];
-
 export default function MusicPage() {
     const router = useRouter();
     const pathname = usePathname();
     const [loading, setLoading] = useState(true);
+    const [userPlaylists, setUserPlaylists] = useState([]);
+    const [accessToken, setAccessToken] = useState(null);
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (!user) {
                 router.push("/login");
             } else {
+
+                const docSnap = await getDoc(doc(db, "users", user.uid));
+                if (docSnap.exists()) {
+                    const token = docSnap.data().spotifyAccessToken;
+                    setAccessToken(token);
+                }
                 setLoading(false);
             }
         });
         return () => unsubscribe();
     }, [router]);
+
+    useEffect(() => {
+        const fetchUserPlaylists = async () => {
+            if (!accessToken) return;
+            try {
+                const res = await fetch("https://api.spotify.com/v1/me/playlists", {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                const data = await res.json();
+                setUserPlaylists(data.items || []);
+            } catch (err) {
+                console.error("❌ Erreur récupération playlists Spotify:", err);
+            }
+        };
+        fetchUserPlaylists();
+    }, [accessToken]);
+
+    const launchInDashboard = async (playlistUri) => {
+        try {
+            await fetch("/api/launch-playlist", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ uri: playlistUri }),
+            });
+            router.push("/dashboard");
+        } catch (error) {
+            console.error("❌ Erreur lancement playlist:", error);
+        }
+    };
 
     if (loading) {
         return <div className="text-white min-h-screen flex items-center justify-center">Chargement...</div>;
@@ -91,19 +107,17 @@ export default function MusicPage() {
 
             {/* Main Content */}
             <main className="flex-1 p-6 md:p-10 text-white">
-                <h1 className="text-3xl font-bold mb-8">Sélection de Playlists 🎵</h1>
+                <h1 className="text-3xl font-bold mb-8">Vos Playlists Spotify</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {playlists.map((playlist) => (
-                        <motion.a
-                            href={playlist.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            key={playlist.name}
+                    {userPlaylists.map((playlist) => (
+                        <motion.div
+                            key={playlist.id}
                             whileHover={{ scale: 1.05 }}
-                            className="bg-[#1c1c1c] rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition"
+                            className="bg-[#1c1c1c] rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition cursor-pointer"
+                            onClick={() => launchInDashboard(playlist.uri)}
                         >
                             <Image
-                                src={playlist.image}
+                                src={playlist.images[0]?.url || "/images/default.jpg"}
                                 alt={playlist.name}
                                 width={400}
                                 height={300}
@@ -111,12 +125,12 @@ export default function MusicPage() {
                             />
                             <div className="p-4">
                                 <h2 className="text-xl font-semibold mb-1">{playlist.name}</h2>
-                                <p className="text-gray-400 text-sm">{playlist.description}</p>
+                                <p className="text-gray-400 text-sm truncate">{playlist.description || ""}</p>
                             </div>
-                        </motion.a>
+                        </motion.div>
                     ))}
                 </div>
             </main>
         </div>
     );
-}
+} 
