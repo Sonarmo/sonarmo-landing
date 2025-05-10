@@ -254,7 +254,7 @@ export default function Dashboard() {
                     onSeek={onSeek}
                 />
 
-                <p className="mt-10">Commence à explorer l'univers de ton ambiance musicale personnalisée.</p>
+                <p className="mt-10">Commence à explorer l&apos;univers de ton ambiance musicale personnalisée.</p>
             </main>
 
 
