@@ -2,12 +2,19 @@ import { useEffect, useState } from "react";
 import { auth, db } from "../../lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
+import Image from "next/image";
+import { Play, Pause } from "lucide-react";
 
 export default function SpotifyPlayer() {
     const router = useRouter();
     const [player, setPlayer] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
     const [accessToken, setAccessToken] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [currentTrack, setCurrentTrack] = useState(null);
+    const [position, setPosition] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [volume, setVolume] = useState(0.5);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -23,7 +30,7 @@ export default function SpotifyPlayer() {
     }, [router]);
 
     useEffect(() => {
-        if (!accessToken) return;
+        if (!accessToken || player) return;
 
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -31,60 +38,123 @@ export default function SpotifyPlayer() {
         document.body.appendChild(script);
 
         window.onSpotifyWebPlaybackSDKReady = () => {
-            const player = new window.Spotify.Player({
+            const newPlayer = new window.Spotify.Player({
                 name: "Sonarmo Player",
                 getOAuthToken: cb => cb(accessToken),
-                volume: 0.5,
+                volume,
             });
 
-            player.addListener("ready", ({ device_id }) => {
+            newPlayer.addListener("ready", ({ device_id }) => {
                 console.log("✅ Player prêt avec ID :", device_id);
                 setDeviceId(device_id);
             });
 
-            player.addListener("not_ready", ({ device_id }) => {
-                console.warn("🛑 Player non prêt :", device_id);
+            newPlayer.addListener("player_state_changed", (state) => {
+                if (!state) return;
+                setIsPlaying(!state.paused);
+                setPosition(state.position);
+                setDuration(state.duration);
+                if (state.track_window?.current_track) {
+                    const track = state.track_window.current_track;
+                    setCurrentTrack({
+                        name: track.name,
+                        artist: track.artists.map(a => a.name).join(", "),
+                        image: track.album.images[0]?.url,
+                    });
+                }
             });
 
-            player.connect();
-            setPlayer(player);
+            newPlayer.connect();
+            setPlayer(newPlayer);
         };
-    }, [accessToken]);
+    }, [accessToken, player]);
 
-    const handlePlay = async () => {
-        if (!deviceId || !accessToken) return;
+    const handlePlayPause = async () => {
+        if (!player) return;
+        player.togglePlay();
+    };
 
-        const playEndpoint = `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`;
-        const res = await fetch(playEndpoint, {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                context_uri: "spotify:playlist:37i9dQZF1DX4WYpdgoIcn6", // Exemple : Lounge Chill
-                offset: { position: 0 },
-                position_ms: 0,
-            }),
-        });
+    const handleVolumeChange = (value) => {
+        const v = parseFloat(value);
+        setVolume(v);
+        player?.setVolume(v);
+    };
 
-        if (res.status === 204) {
-            console.log("▶️ Lecture lancée !");
-        } else {
-            console.error("❌ Échec lecture :", await res.json());
-        }
+    const handleSeek = (value) => {
+        const ms = Number(value);
+        setPosition(ms);
+        player?.seek(ms);
+    };
+
+    const formatTime = (ms) => {
+        if (!ms) return "0:00";
+        const minutes = Math.floor(ms / 60000);
+        const seconds = Math.floor((ms % 60000) / 1000).toString().padStart(2, "0");
+        return `${minutes}:${seconds}`;
     };
 
     return (
         <main className="bg-[#121212] text-white font-[Poppins] min-h-screen p-10">
             <h1 className="text-3xl font-bold mb-6">🎛️ Lecteur Personnel Spotify</h1>
-            <p className="mb-4">Lecture directe depuis ton compte Spotify connecté.</p>
-            <button
-                onClick={handlePlay}
-                className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-semibold"
-            >
-                ▶️ Lancer la lecture
-            </button>
+
+            {currentTrack && (
+                <div className="bg-[#1c1c1c] rounded-2xl p-6 shadow-lg max-w-xl mx-auto flex flex-col items-center gap-6">
+                    <div className="w-48 h-48 relative rounded-lg overflow-hidden">
+                        <Image
+                            src={currentTrack.image}
+                            alt="Pochette"
+                            layout="fill"
+                            objectFit="cover"
+                        />
+                    </div>
+                    <div className="text-center">
+                        <h2 className="text-xl font-semibold">{currentTrack.name}</h2>
+                        <p className="text-gray-400 text-sm">{currentTrack.artist}</p>
+                    </div>
+
+                    <div className="flex items-center gap-6">
+                        <button
+                            onClick={handlePlayPause}
+                            className="hover:scale-105 transition text-white"
+                        >
+                            {isPlaying ? <Pause size={36} /> : <Play size={36} />}
+                        </button>
+                    </div>
+
+                    <div className="w-full">
+                        <input
+                            type="range"
+                            min="0"
+                            max={duration}
+                            value={position}
+                            onChange={(e) => handleSeek(e.target.value)}
+                            className="w-full accent-[#F28500] h-2 rounded-lg bg-[#333]"
+                        />
+                        <div className="flex justify-between text-xs text-gray-400 mt-1">
+                            <span>{formatTime(position)}</span>
+                            <span>{formatTime(duration)}</span>
+                        </div>
+                    </div>
+
+                    <div className="w-full">
+                        <label htmlFor="volume" className="block text-sm mb-1 text-gray-400">Volume</label>
+                        <input
+                            id="volume"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value={volume}
+                            onChange={(e) => handleVolumeChange(e.target.value)}
+                            className="w-full accent-[#F28500] h-2 rounded-lg bg-[#333]"
+                        />
+                    </div>
+                </div>
+            )}
+
+            {!currentTrack && (
+                <p className="text-gray-400 text-center mt-10">Aucune lecture en cours</p>
+            )}
         </main>
     );
 }

@@ -1,3 +1,5 @@
+// dashboard.js avec correction pour lancer la playlist sélectionnée
+
 import EnhancedPlayer from "@/components/builder/EnhancedPlayer";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -6,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const playlistUrls = {
     "Lounge Chill 🌙": "https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6",
@@ -50,6 +52,7 @@ export default function Dashboard() {
         setShowAmbiance(false);
         setTimeout(() => {
             setAmbiance(e.target.value);
+            setAmbianceUri(null); // reset URI in case of preset switch
             setShowAmbiance(true);
             setShowToast(true);
             setTimeout(() => setShowToast(false), 2000);
@@ -72,7 +75,13 @@ export default function Dashboard() {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 setAccessToken(data.spotifyAccessToken);
-                if (data.selectedPlaylistUri) setAmbianceUri(data.selectedPlaylistUri);
+                const queryUri = router.query.uri;
+                if (queryUri) {
+                    setAmbianceUri(queryUri);
+                    await updateDoc(doc(db, "users", user.uid), { selectedPlaylistUri: queryUri });
+                } else if (data.selectedPlaylistUri) {
+                    setAmbianceUri(data.selectedPlaylistUri);
+                }
                 const testRes = await fetch("https://api.spotify.com/v1/me", {
                     headers: { Authorization: `Bearer ${data.spotifyAccessToken}` },
                 });
@@ -156,6 +165,10 @@ export default function Dashboard() {
                 headers: { Authorization: `Bearer ${accessToken}` },
             });
             const text = await res.text();
+            if (!text || res.status === 204) {
+                setCurrentTrack(null);
+                return;
+            }
             try {
                 const data = JSON.parse(text);
                 if (data && data.item) {
