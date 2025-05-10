@@ -102,10 +102,24 @@ export default function Dashboard() {
                 volume: 0.5,
             });
 
-            newPlayer.addListener("ready", ({ device_id }) => {
+            newPlayer.addListener("ready", async ({ device_id }) => {
                 console.log("✅ Player prêt :", device_id);
                 setDeviceId(device_id);
+
+                // 🔁 Transfert de la lecture vers le Web Playback SDK
+                await fetch("https://api.spotify.com/v1/me/player", {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        device_ids: [device_id],
+                        play: false // ne lance pas automatiquement
+                    })
+                });
             });
+
 
             newPlayer.addListener("initialization_error", ({ message }) => console.error("❌ Init error:", message));
             newPlayer.addListener("authentication_error", async ({ message }) => {
@@ -189,6 +203,28 @@ export default function Dashboard() {
                     Authorization: `Bearer ${accessToken}`,
                 },
             });
+
+            console.log("🔍 Résultat res.status :", res.status);
+
+            // 💡 on essaye de lire le contenu brut (même s’il n’est pas JSON)
+            const text = await res.text();
+            console.log("🧾 Réponse brute Spotify :", text);
+
+            // 🧪 on tente de parser en JSON seulement si possible
+            try {
+                const data = JSON.parse(text);
+                console.log("✅ Réponse JSON :", data);
+                if (data && data.item) {
+                    setCurrentTrack({
+                        name: data.item.name,
+                        artist: data.item.artists.map(a => a.name).join(", "),
+                        image: data.item.album.images[0]?.url,
+                    });
+                }
+            } catch (err) {
+                console.warn("⚠️ Réponse Spotify n’est pas du JSON :", err);
+            }
+
 
             if (res.status === 204) {
                 setCurrentTrack(null);
