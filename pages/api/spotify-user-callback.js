@@ -65,10 +65,13 @@ export default async function handler(req, res) {
         await db.collection("users").doc(uid).set(
             {
                 spotifyAccessToken: data.access_token,
+                spotifyRefreshToken: data.refresh_token, // ✅ on le stocke aussi
+                expiresIn: data.expires_in,
                 updatedAt: new Date(),
             },
             { merge: true }
         );
+
 
         console.log("📦 Token stocké pour UID :", uid);
 

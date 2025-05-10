@@ -10,7 +10,8 @@ export default function handler(req, res) {
         "user-read-playback-state",
         "user-read-currently-playing",
         "playlist-read-private",
-        "playlist-read-collaborative"
+        "playlist-read-collaborative",
+        "app-remote-control"
     ];
 
     const queryParams = new URLSearchParams({

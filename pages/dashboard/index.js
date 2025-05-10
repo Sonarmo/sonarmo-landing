@@ -62,8 +62,20 @@ export default function Dashboard() {
 
             const docSnap = await getDoc(doc(db, "users", user.uid));
             if (docSnap.exists()) {
-                setAccessToken(docSnap.data().spotifyAccessToken);
+                const token = docSnap.data().spotifyAccessToken;
+                setAccessToken(token);
+
+                // Test rapide du token
+                const testRes = await fetch("https://api.spotify.com/v1/me", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (testRes.status === 401) {
+                    console.warn("🔁 Token expiré à la connexion, on le refresh");
+                    await refreshAccessToken();
+                }
             }
+
         });
         return () => unsubscribe();
     }, [router]);
@@ -71,12 +83,16 @@ export default function Dashboard() {
     useEffect(() => {
         if (!accessToken || player) return;
 
-        if (!document.getElementById("spotify-sdk")) {
+        const scriptId = "spotify-sdk";
+        if (!document.getElementById(scriptId)) {
             const script = document.createElement("script");
-            script.id = "spotify-sdk";
+            script.id = scriptId;
             script.src = "https://sdk.scdn.co/spotify-player.js";
             script.async = true;
             document.body.appendChild(script);
+        } else if (window.Spotify) {
+            // Si le SDK est déjà chargé
+            window.onSpotifyWebPlaybackSDKReady();
         }
 
         window.onSpotifyWebPlaybackSDKReady = () => {
@@ -103,6 +119,7 @@ export default function Dashboard() {
             setPlayer(newPlayer);
         };
     }, [accessToken, player]);
+
 
     const fetchUserPlaylists = async () => {
         if (!accessToken) return;
