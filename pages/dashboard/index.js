@@ -17,11 +17,22 @@ const playlistUrls = {
     "Café Cosy ☕": "https://open.spotify.com/playlist/37i9dQZF1DX6VdMW310YC7"
 };
 
-const convertToSpotifyUri = (url) => {
-    if (!url.includes("spotify.com/playlist/")) return url;
-    const id = url.split("/playlist/")[1].split("?")[0];
-    return `spotify:playlist:${id}`;
-};
+useEffect(() => {
+    if (router.query.uri) {
+        const uri = convertToSpotifyUri(router.query.uri);
+        setAmbianceUri(uri);
+        updateDoc(doc(db, "users", auth.currentUser.uid), {
+            selectedPlaylistUri: uri,
+        }).catch(console.error);
+    }
+}, [router.query.uri]);
+
+useEffect(() => {
+    if (accessToken && deviceId && ambianceUri) {
+        handlePlay();
+    }
+}, [accessToken, deviceId, ambianceUri]);
+
 
 export default function Dashboard() {
     const router = useRouter();
