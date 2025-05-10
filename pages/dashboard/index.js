@@ -15,6 +15,12 @@ const playlistUrls = {
     "Café Cosy ☕": "https://open.spotify.com/playlist/37i9dQZF1DX6VdMW310YC7"
 };
 
+const convertToSpotifyUri = (url) => {
+    if (!url.includes("spotify.com/playlist/")) return url;
+    const id = url.split("/playlist/")[1].split("?")[0];
+    return `spotify:playlist:${id}`;
+};
+
 export default function Dashboard() {
     const router = useRouter();
     const pathname = usePathname();
@@ -133,7 +139,7 @@ export default function Dashboard() {
     const handlePlay = async () => {
         if (!deviceId || !accessToken) return;
         setIsPlaying(true);
-        let uri = ambianceUri || (ambiance.startsWith("spotify:playlist:") ? ambiance : playlistUrls[ambiance].replace("https://open.spotify.com/playlist/", "spotify:playlist:").replace("/embed", ""));
+        let uri = ambianceUri || (ambiance.startsWith("spotify:playlist:") ? ambiance : convertToSpotifyUri(playlistUrls[ambiance]));
         const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: "PUT",
             headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },

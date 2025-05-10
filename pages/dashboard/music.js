@@ -1,12 +1,12 @@
+import EnhancedPlayer from "@/components/builder/EnhancedPlayer";
 import { useEffect, useState } from "react";
-import { db } from "../../lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { auth } from "../../lib/firebase";
+import { auth, db } from "../../lib/firebase";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 export default function MusicPage() {
     const router = useRouter();
@@ -14,13 +14,14 @@ export default function MusicPage() {
     const [loading, setLoading] = useState(true);
     const [userPlaylists, setUserPlaylists] = useState([]);
     const [accessToken, setAccessToken] = useState(null);
+    const [uid, setUid] = useState(null);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (!user) {
                 router.push("/login");
             } else {
-
+                setUid(user.uid);
                 const docSnap = await getDoc(doc(db, "users", user.uid));
                 if (docSnap.exists()) {
                     const token = docSnap.data().spotifyAccessToken;
@@ -52,12 +53,9 @@ export default function MusicPage() {
 
     const launchInDashboard = async (playlistUri) => {
         try {
-            await fetch("/api/launch-playlist", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ uri: playlistUri }),
+            if (!uid) return;
+            await updateDoc(doc(db, "users", uid), {
+                selectedPlaylistUri: playlistUri,
             });
             router.push("/dashboard");
         } catch (error) {
@@ -133,4 +131,4 @@ export default function MusicPage() {
             </main>
         </div>
     );
-} 
+}
