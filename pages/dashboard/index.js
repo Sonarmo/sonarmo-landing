@@ -160,19 +160,21 @@ export default function Dashboard() {
     const handlePlay = async () => {
         if (!deviceId || !accessToken) return;
         let uri = ambianceUri || (ambiance.startsWith("spotify:playlist:") ? ambiance : convertToSpotifyUri(playlistUrls[ambiance]));
+        console.log("▶️ Tentative de lecture URI:", uri);
         const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: "PUT",
             headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
             body: JSON.stringify({ context_uri: uri, offset: { position: 0 }, position_ms: 0 })
         });
+        console.log("➡️ Statut de la requête play:", res.status);
         if (res.status === 401) await refreshAccessToken();
     };
 
     useEffect(() => {
-        if (accessToken && deviceId && ambianceUri) {
+        if (accessToken && deviceId && ambianceUri && player) {
             handlePlay();
         }
-    }, [accessToken, deviceId, ambianceUri]);
+    }, [accessToken, deviceId, ambianceUri, player]);
 
     const fetchCurrentTrack = async () => {
         if (!accessToken) return;
