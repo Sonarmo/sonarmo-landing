@@ -114,6 +114,11 @@ export default function Dashboard() {
                 getOAuthToken: cb => cb(accessToken),
                 volume: 0.5,
             });
+
+            document.body.addEventListener("click", () => {
+                newPlayer.activateElement().catch(console.error);
+            }, { once: true });
+
             newPlayer.addListener("ready", async ({ device_id }) => {
                 setDeviceId(device_id);
                 await fetch("https://api.spotify.com/v1/me/player", {
@@ -122,9 +127,10 @@ export default function Dashboard() {
                         Authorization: `Bearer ${accessToken}`,
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ device_ids: [device_id], play: false })
+                    body: JSON.stringify({ device_ids: [device_id], play: true })
                 });
             });
+
             newPlayer.addListener("initialization_error", ({ message }) => console.error(message));
             newPlayer.addListener("authentication_error", async ({ message }) => {
                 console.error(message);
@@ -168,6 +174,7 @@ export default function Dashboard() {
         });
         console.log("➡️ Statut de la requête play:", res.status);
         if (res.status === 401) await refreshAccessToken();
+        setTimeout(() => fetchCurrentTrack(), 1000);
     };
 
     useEffect(() => {
