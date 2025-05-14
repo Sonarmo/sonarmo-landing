@@ -127,7 +127,7 @@ export default function Dashboard() {
                         Authorization: `Bearer ${accessToken}`,
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ device_ids: [device_id], play: true })
+                    body: JSON.stringify({ device_ids: [device_id], play: false })
                 });
             });
 
@@ -165,14 +165,26 @@ export default function Dashboard() {
 
     const handlePlay = async () => {
         if (!deviceId || !accessToken) return;
+
         let uri = ambianceUri || (ambiance.startsWith("spotify:playlist:") ? ambiance : convertToSpotifyUri(playlistUrls[ambiance]));
-        console.log("▶️ Tentative de lecture URI:", uri);
+
+        // Forcer le transfert de device
+        await fetch("https://api.spotify.com/v1/me/player", {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ device_ids: [deviceId], play: false }),
+        });
+
+        // Lecture
         const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
             method: "PUT",
             headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
             body: JSON.stringify({ context_uri: uri, offset: { position: 0 }, position_ms: 0 })
         });
-        console.log("➡️ Statut de la requête play:", res.status);
+
         if (res.status === 401) await refreshAccessToken();
         setTimeout(() => fetchCurrentTrack(), 1000);
     };
