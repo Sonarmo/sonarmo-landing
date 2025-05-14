@@ -252,6 +252,10 @@ export default function Dashboard() {
                         <Image src="/icons/settings.png" alt="Settings" width={24} height={24} />
                         Réglages
                     </Link>
+                    <Link href="/dashboard/profile" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/profile" ? "text-white" : ""}`}>
+                                            <Image src="/icons/profile.png" alt="Profile" width={24} height={24} />
+                                            Profil
+                                        </Link>
                     <Link href="/logout" className="flex items-center gap-4 hover:text-white mt-8">
                         <Image src="/icons/logout.png" alt="Logout" width={24} height={24} />
                         Déconnexion
