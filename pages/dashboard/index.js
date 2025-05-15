@@ -106,63 +106,52 @@ export default function Dashboard() {
 
     // dashboard.js – version corrigée avec SDK chargé de façon fiable et gestion d'erreur renforcée
 
-    // ... (imports identiques)
-
     useEffect(() => {
         if (!accessToken || player) return;
         const scriptId = "spotify-sdk";
         const existingScript = document.getElementById(scriptId);
 
-        const initializePlayer = () => {
-            window.onSpotifyWebPlaybackSDKReady = () => {
-                const newPlayer = new window.Spotify.Player({
-                    name: "Sonarmo Player",
-                    getOAuthToken: cb => cb(accessToken),
-                    volume: 0.5,
-                });
+        // On définit le handler global AVANT de charger le SDK
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            const newPlayer = new window.Spotify.Player({
+                name: "Sonarmo Player",
+                getOAuthToken: cb => cb(accessToken),
+                volume: 0.5,
+            });
 
-                document.body.addEventListener(
-                    "click",
-                    () => {
-                        newPlayer.activateElement().catch(console.error);
-                    },
-                    { once: true }
-                );
+            document.body.addEventListener("click", () => {
+                newPlayer.activateElement().catch(console.error);
+            }, { once: true });
 
-                newPlayer.addListener("ready", async ({ device_id }) => {
-                    console.log("✅ Player prêt avec ID :", device_id);
-                    setDeviceId(device_id);
-                    setPlayer(newPlayer);
-                });
+            newPlayer.addListener("ready", ({ device_id }) => {
+                console.log("✅ Player prêt avec ID :", device_id);
+                setDeviceId(device_id);
+                setPlayer(newPlayer);
+            });
 
-                newPlayer.addListener("player_state_changed", (state) => {
-                    if (!state) return;
-                    setIsPlaying(!state.paused);
-                    setPosition(state.position);
-                    setDuration(state.duration);
-                    if (state.track_window?.current_track) {
-                        setCurrentTrack({
-                            name: state.track_window.current_track.name,
-                            artist: state.track_window.current_track.artists.map(a => a.name).join(", "),
-                            image: state.track_window.current_track.album.images[0]?.url,
-                        });
-                    }
-                });
+            newPlayer.addListener("player_state_changed", (state) => {
+                if (!state) return;
+                setIsPlaying(!state.paused);
+                setPosition(state.position);
+                setDuration(state.duration);
+                if (state.track_window?.current_track) {
+                    setCurrentTrack({
+                        name: state.track_window.current_track.name,
+                        artist: state.track_window.current_track.artists.map(a => a.name).join(", "),
+                        image: state.track_window.current_track.album.images[0]?.url,
+                    });
+                }
+            });
 
-                newPlayer.addListener("initialization_error", ({ message }) => console.error(message));
-                newPlayer.addListener("authentication_error", async ({ message }) => {
-                    console.error(message);
-                    await refreshAccessToken();
-                });
-                newPlayer.addListener("account_error", ({ message }) => console.error(message));
-                newPlayer.addListener("playback_error", ({ message }) => console.error(message));
+            newPlayer.addListener("initialization_error", ({ message }) => console.error(message));
+            newPlayer.addListener("authentication_error", async ({ message }) => {
+                console.error(message);
+                await refreshAccessToken();
+            });
+            newPlayer.addListener("account_error", ({ message }) => console.error(message));
+            newPlayer.addListener("playback_error", ({ message }) => console.error(message));
 
-                newPlayer.connect();
-            };
-
-            if (window.Spotify) {
-                window.onSpotifyWebPlaybackSDKReady();
-            }
+            newPlayer.connect();
         };
 
         if (!existingScript) {
@@ -170,17 +159,30 @@ export default function Dashboard() {
             script.id = scriptId;
             script.src = "https://sdk.scdn.co/spotify-player.js";
             script.async = true;
-            script.onload = initializePlayer;
             document.body.appendChild(script);
-        } else {
-            initializePlayer();
+        } else if (window.Spotify) {
+            window.onSpotifyWebPlaybackSDKReady();
         }
     }, [accessToken, player]);
 
+    // ⏯ Relancer automatiquement si ambiance change (ou selectedPlaylistUri mis à jour)
     useEffect(() => {
-        if (accessToken && deviceId && ambianceUri && player) {
-            const uri = convertToSpotifyUri(playlistUrls[ambiance]);
+        if (accessToken && deviceId && player) {
             const play = async () => {
+                const uri = ambianceUri || convertToSpotifyUri(playlistUrls[ambiance]);
+
+                // 🔄 Mettre à jour Firestore avec la nouvelle ambiance sélectionnée
+                try {
+                    const user = auth.currentUser;
+                    if (user) {
+                        await updateDoc(doc(db, "users", user.uid), {
+                            selectedPlaylistUri: uri,
+                        });
+                    }
+                } catch (error) {
+                    console.error("❌ Erreur mise à jour Firestore ambiance:", error);
+                }
+
                 try {
                     const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
                         method: "PUT",
@@ -201,7 +203,31 @@ export default function Dashboard() {
             };
             play();
         }
-    }, [accessToken, deviceId, ambianceUri, player]);
+    }, [accessToken, deviceId, ambiance, player]);
+
+    // 🔊 Appliquer le volume dès qu'il change
+    useEffect(() => {
+        if (player && typeof volume === "number" && volume >= 0 && volume <= 1) {
+            player.setVolume(volume).catch((err) =>
+                console.error("Erreur lors du réglage du volume :", err)
+            );
+        }
+    }, [volume, player]);
+
+    // ⏱️ Mise à jour position/track régulière
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (player) {
+                player.getCurrentState().then((state) => {
+                    if (state) {
+                        setPosition(state.position);
+                        setDuration(state.duration);
+                    }
+                });
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [player]);
 
     return (
         <div className="min-h-screen bg-[#121212] flex flex-col md:flex-row font-[Poppins]">
