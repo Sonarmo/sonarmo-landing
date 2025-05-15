@@ -104,86 +104,85 @@ export default function Dashboard() {
         }
     }, [router.query.uri]);
 
+    // dashboard.js – version corrigée avec SDK chargé de façon fiable et gestion d'erreur renforcée
+
+    // ... (imports identiques)
+
     useEffect(() => {
         if (!accessToken || player) return;
         const scriptId = "spotify-sdk";
-        if (!document.getElementById(scriptId)) {
+        const existingScript = document.getElementById(scriptId);
+
+        const initializePlayer = () => {
+            window.onSpotifyWebPlaybackSDKReady = () => {
+                const newPlayer = new window.Spotify.Player({
+                    name: "Sonarmo Player",
+                    getOAuthToken: cb => cb(accessToken),
+                    volume: 0.5,
+                });
+
+                document.body.addEventListener(
+                    "click",
+                    () => {
+                        newPlayer.activateElement().catch(console.error);
+                    },
+                    { once: true }
+                );
+
+                newPlayer.addListener("ready", async ({ device_id }) => {
+                    console.log("✅ Player prêt avec ID :", device_id);
+                    setDeviceId(device_id);
+                    setPlayer(newPlayer);
+                });
+
+                newPlayer.addListener("player_state_changed", (state) => {
+                    if (!state) return;
+                    setIsPlaying(!state.paused);
+                    setPosition(state.position);
+                    setDuration(state.duration);
+                    if (state.track_window?.current_track) {
+                        setCurrentTrack({
+                            name: state.track_window.current_track.name,
+                            artist: state.track_window.current_track.artists.map(a => a.name).join(", "),
+                            image: state.track_window.current_track.album.images[0]?.url,
+                        });
+                    }
+                });
+
+                newPlayer.addListener("initialization_error", ({ message }) => console.error(message));
+                newPlayer.addListener("authentication_error", async ({ message }) => {
+                    console.error(message);
+                    await refreshAccessToken();
+                });
+                newPlayer.addListener("account_error", ({ message }) => console.error(message));
+                newPlayer.addListener("playback_error", ({ message }) => console.error(message));
+
+                newPlayer.connect();
+            };
+
+            if (window.Spotify) {
+                window.onSpotifyWebPlaybackSDKReady();
+            }
+        };
+
+        if (!existingScript) {
             const script = document.createElement("script");
             script.id = scriptId;
             script.src = "https://sdk.scdn.co/spotify-player.js";
             script.async = true;
+            script.onload = initializePlayer;
             document.body.appendChild(script);
-        } else if (window.Spotify) {
-            window.onSpotifyWebPlaybackSDKReady();
+        } else {
+            initializePlayer();
         }
-
-        window.onSpotifyWebPlaybackSDKReady = () => {
-            const newPlayer = new window.Spotify.Player({
-                name: "Sonarmo Player",
-                getOAuthToken: (cb) => cb(accessToken),
-                volume: 0.5,
-            });
-
-            document.body.addEventListener(
-                "click",
-                () => {
-                    newPlayer.activateElement().catch(console.error);
-                },
-                { once: true }
-            );
-
-            newPlayer.addListener("ready", async ({ device_id }) => {
-                setDeviceId(device_id);
-                await fetch("https://api.spotify.com/v1/me/player", {
-                    method: "PUT",
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ device_ids: [device_id], play: false }),
-                });
-            });
-
-            newPlayer.addListener("player_state_changed", (state) => {
-                if (!state) return;
-                setIsPlaying(!state.paused);
-                setPosition(state.position);
-                setDuration(state.duration);
-            });
-
-            newPlayer.addListener("initialization_error", ({ message }) => console.error(message));
-            newPlayer.addListener("authentication_error", async ({ message }) => {
-                console.error(message);
-                await refreshAccessToken();
-            });
-            newPlayer.addListener("account_error", ({ message }) => console.error(message));
-            newPlayer.addListener("playback_error", ({ message }) => console.error(message));
-
-            newPlayer.connect();
-            setPlayer(newPlayer);
-        };
     }, [accessToken, player]);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (player) {
-                player.getCurrentState().then((state) => {
-                    if (state) {
-                        setPosition(state.position);
-                        setDuration(state.duration);
-                    }
-                });
-            }
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [player]);
-
-    useEffect(() => {
         if (accessToken && deviceId && ambianceUri && player) {
+            const uri = convertToSpotifyUri(playlistUrls[ambiance]);
             const play = async () => {
-                const uri = convertToSpotifyUri(playlistUrls[ambiance]);
                 try {
-                    await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+                    const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
                         method: "PUT",
                         headers: {
                             Authorization: `Bearer ${accessToken}`,
@@ -191,8 +190,13 @@ export default function Dashboard() {
                         },
                         body: JSON.stringify({ context_uri: uri, offset: { position: 0 }, position_ms: 0 }),
                     });
+
+                    if (!res.ok) {
+                        const err = await res.json();
+                        console.error("Erreur lecture Spotify:", err);
+                    }
                 } catch (err) {
-                    console.error("Erreur lors du play Spotify:", err);
+                    console.error("Erreur lors de l'appel /play Spotify:", err);
                 }
             };
             play();
