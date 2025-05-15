@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { Analytics } from "@vercel/analytics/next"
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
