@@ -47,7 +47,6 @@ export default function SpotifyPlayer() {
                 console.log("✅ Player prêt avec ID :", device_id);
                 setDeviceId(device_id);
 
-                // Synchronise volume initial
                 newPlayer.getVolume().then(initialVolume => {
                     setVolume(initialVolume);
                 });
@@ -73,29 +72,51 @@ export default function SpotifyPlayer() {
         };
     }, [accessToken, player]);
 
-    // Appliquer le volume dès qu'il change
     useEffect(() => {
         if (player) {
-            player.setVolume(volume).catch((err) =>
-                console.error("Erreur lors du réglage du volume :", err)
-            );
+            if (typeof volume === 'number' && volume >= 0 && volume <= 1) {
+                player.setVolume(volume).catch((err) =>
+                    console.error("Erreur lors du réglage du volume :", err)
+                );
+            }
         }
     }, [volume, player]);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (player) {
+                player.getCurrentState().then(state => {
+                    if (state) {
+                        setPosition(state.position);
+                        setDuration(state.duration);
+                    }
+                });
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [player]);
+
     const handlePlayPause = async () => {
         if (!player) return;
-        player.togglePlay();
+        try {
+            await player.togglePlay();
+        } catch (err) {
+            console.error("Erreur lors du togglePlay :", err);
+        }
     };
 
     const handleVolumeChange = (value) => {
         const v = parseFloat(value);
-        setVolume(v);
+        if (!isNaN(v)) setVolume(v);
     };
 
     const handleSeek = (value) => {
         const ms = Number(value);
-        setPosition(ms);
-        player?.seek(ms);
+        if (player && !isNaN(ms)) {
+            player.seek(ms);
+            setPosition(ms);
+        }
     };
 
     const formatTime = (ms) => {
@@ -134,7 +155,6 @@ export default function SpotifyPlayer() {
                         </button>
                     </div>
 
-                    {/* Barre de progression */}
                     <div className="w-full">
                         <input
                             type="range"
@@ -150,7 +170,6 @@ export default function SpotifyPlayer() {
                         </div>
                     </div>
 
-                    {/* Slider Volume animé */}
                     <div className="w-full">
                         <label htmlFor="volume" className="block text-sm mb-1 text-gray-400">
                             Volume : {(volume * 100).toFixed(0)}%
