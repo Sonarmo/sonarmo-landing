@@ -19,7 +19,6 @@ export default function SpotifyPlayer() {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (!user) return router.push("/login");
-
             const docSnap = await getDoc(doc(db, "users", user.uid));
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -41,12 +40,17 @@ export default function SpotifyPlayer() {
             const newPlayer = new window.Spotify.Player({
                 name: "Sonarmo Player",
                 getOAuthToken: cb => cb(accessToken),
-                volume,
+                volume: 0.5,
             });
 
             newPlayer.addListener("ready", ({ device_id }) => {
                 console.log("✅ Player prêt avec ID :", device_id);
                 setDeviceId(device_id);
+
+                // Synchronise volume initial
+                newPlayer.getVolume().then(initialVolume => {
+                    setVolume(initialVolume);
+                });
             });
 
             newPlayer.addListener("player_state_changed", (state) => {
@@ -69,6 +73,15 @@ export default function SpotifyPlayer() {
         };
     }, [accessToken, player]);
 
+    // Appliquer le volume dès qu'il change
+    useEffect(() => {
+        if (player) {
+            player.setVolume(volume).catch((err) =>
+                console.error("Erreur lors du réglage du volume :", err)
+            );
+        }
+    }, [volume, player]);
+
     const handlePlayPause = async () => {
         if (!player) return;
         player.togglePlay();
@@ -77,7 +90,6 @@ export default function SpotifyPlayer() {
     const handleVolumeChange = (value) => {
         const v = parseFloat(value);
         setVolume(v);
-        player?.setVolume(v);
     };
 
     const handleSeek = (value) => {
@@ -97,7 +109,7 @@ export default function SpotifyPlayer() {
         <main className="bg-[#121212] text-white font-[Poppins] min-h-screen p-10">
             <h1 className="text-3xl font-bold mb-6">🎛️ Lecteur Personnel Spotify</h1>
 
-            {currentTrack && (
+            {currentTrack ? (
                 <div className="bg-[#1c1c1c] rounded-2xl p-6 shadow-lg max-w-xl mx-auto flex flex-col items-center gap-6">
                     <div className="w-48 h-48 relative rounded-lg overflow-hidden">
                         <Image
@@ -107,6 +119,7 @@ export default function SpotifyPlayer() {
                             objectFit="cover"
                         />
                     </div>
+
                     <div className="text-center">
                         <h2 className="text-xl font-semibold">{currentTrack.name}</h2>
                         <p className="text-gray-400 text-sm">{currentTrack.artist}</p>
@@ -121,6 +134,7 @@ export default function SpotifyPlayer() {
                         </button>
                     </div>
 
+                    {/* Barre de progression */}
                     <div className="w-full">
                         <input
                             type="range"
@@ -136,8 +150,11 @@ export default function SpotifyPlayer() {
                         </div>
                     </div>
 
+                    {/* Slider Volume animé */}
                     <div className="w-full">
-                        <label htmlFor="volume" className="block text-sm mb-1 text-gray-400">Volume</label>
+                        <label htmlFor="volume" className="block text-sm mb-1 text-gray-400">
+                            Volume : {(volume * 100).toFixed(0)}%
+                        </label>
                         <input
                             id="volume"
                             type="range"
@@ -146,13 +163,14 @@ export default function SpotifyPlayer() {
                             step="0.01"
                             value={volume}
                             onChange={(e) => handleVolumeChange(e.target.value)}
-                            className="w-full accent-[#F28500] h-2 rounded-lg bg-[#333]"
+                            className="w-full h-2 bg-[#333] rounded-lg appearance-none transition-all duration-300 accent-[#F28500]"
+                            style={{
+                                background: `linear-gradient(to right, #F28500 ${volume * 100}%, #333 ${volume * 100}%)`,
+                            }}
                         />
                     </div>
                 </div>
-            )}
-
-            {!currentTrack && (
+            ) : (
                 <p className="text-gray-400 text-center mt-10">Aucune lecture en cours</p>
             )}
         </main>
