@@ -45,9 +45,15 @@ export default function Dashboard() {
     const onNext = () => player?.nextTrack();
     const onPrevious = () => player?.previousTrack();
     const onVolumeChange = (v) => {
-        setVolume(v);
-        if (player) player.setVolume(v).catch(console.error);
+        const parsed = Math.min(1, Math.max(0, parseFloat(v)));
+        setVolume(parsed);
+        if (player && !isNaN(parsed)) {
+            player.setVolume(parsed).catch((err) =>
+                console.error("Erreur setVolume:", err)
+            );
+        }
     };
+
     const onSeek = (value) => {
         if (player) {
             player.seek(value).catch(console.error);
