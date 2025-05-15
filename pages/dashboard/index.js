@@ -1,4 +1,4 @@
-// dashboard.js avec correction complète pour lancer la playlist sélectionnée
+// dashboard.js – version corrigée et propre avec EnhancedPlayer
 
 import EnhancedPlayer from "@/components/builder/EnhancedPlayer";
 import { useEffect, useState } from "react";
@@ -36,7 +36,6 @@ export default function Dashboard() {
     const [deviceId, setDeviceId] = useState(null);
     const [player, setPlayer] = useState(null);
     const [currentTrack, setCurrentTrack] = useState(null);
-    const [userPlaylists, setUserPlaylists] = useState([]);
     const [volume, setVolume] = useState(0.5);
     const [position, setPosition] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -45,8 +44,16 @@ export default function Dashboard() {
     const onPlayPause = () => player?.togglePlay();
     const onNext = () => player?.nextTrack();
     const onPrevious = () => player?.previousTrack();
-    const onVolumeChange = (v) => { setVolume(v); player?.setVolume(v); };
-    const onSeek = (value) => { player?.seek(value); setPosition(value); };
+    const onVolumeChange = (v) => {
+        setVolume(v);
+        if (player) player.setVolume(v).catch(console.error);
+    };
+    const onSeek = (value) => {
+        if (player) {
+            player.seek(value).catch(console.error);
+            setPosition(value);
+        }
+    };
 
     const handleAmbianceChange = (e) => {
         setShowAmbiance(false);
@@ -64,7 +71,9 @@ export default function Dashboard() {
             const res = await fetch("/api/refresh-spotify-token");
             const data = await res.json();
             if (data.access_token) setAccessToken(data.access_token);
-        } catch (err) { console.error("❌ Erreur lors du refresh token:", err); }
+        } catch (err) {
+            console.error("❌ Erreur lors du refresh token:", err);
+        }
     };
 
     useEffect(() => {
@@ -111,13 +120,17 @@ export default function Dashboard() {
         window.onSpotifyWebPlaybackSDKReady = () => {
             const newPlayer = new window.Spotify.Player({
                 name: "Sonarmo Player",
-                getOAuthToken: cb => cb(accessToken),
+                getOAuthToken: (cb) => cb(accessToken),
                 volume: 0.5,
             });
 
-            document.body.addEventListener("click", () => {
-                newPlayer.activateElement().catch(console.error);
-            }, { once: true });
+            document.body.addEventListener(
+                "click",
+                () => {
+                    newPlayer.activateElement().catch(console.error);
+                },
+                { once: true }
+            );
 
             newPlayer.addListener("ready", async ({ device_id }) => {
                 setDeviceId(device_id);
@@ -125,10 +138,17 @@ export default function Dashboard() {
                     method: "PUT",
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ device_ids: [device_id], play: false })
+                    body: JSON.stringify({ device_ids: [device_id], play: false }),
                 });
+            });
+
+            newPlayer.addListener("player_state_changed", (state) => {
+                if (!state) return;
+                setIsPlaying(!state.paused);
+                setPosition(state.position);
+                setDuration(state.duration);
             });
 
             newPlayer.addListener("initialization_error", ({ message }) => console.error(message));
@@ -139,94 +159,45 @@ export default function Dashboard() {
             newPlayer.addListener("account_error", ({ message }) => console.error(message));
             newPlayer.addListener("playback_error", ({ message }) => console.error(message));
 
-            newPlayer.addListener("player_state_changed", (state) => {
-                if (!state) return;
-                setIsPlaying(!state.paused);
-                setPosition(state.position);
-                setDuration(state.duration);
-            });
-
             newPlayer.connect();
             setPlayer(newPlayer);
         };
     }, [accessToken, player]);
 
-    useEffect(() => { if (accessToken) fetchUserPlaylists(); }, [accessToken]);
-
-    const fetchUserPlaylists = async () => {
-        try {
-            const res = await fetch("https://api.spotify.com/v1/me/playlists", {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            });
-            const data = await res.json();
-            setUserPlaylists(data.items || []);
-        } catch (err) { console.error("❌ Erreur récupération des playlists utilisateur:", err); }
-    };
-
-    const handlePlay = async () => {
-        if (!deviceId || !accessToken) return;
-
-        let uri = ambianceUri || (ambiance.startsWith("spotify:playlist:") ? ambiance : convertToSpotifyUri(playlistUrls[ambiance]));
-
-        // Forcer le transfert de device
-        await fetch("https://api.spotify.com/v1/me/player", {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ device_ids: [deviceId], play: false }),
-        });
-
-        // Lecture
-        const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-            method: "PUT",
-            headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ context_uri: uri, offset: { position: 0 }, position_ms: 0 })
-        });
-
-        if (res.status === 401) await refreshAccessToken();
-        setTimeout(() => fetchCurrentTrack(), 1000);
-    };
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (player) {
+                player.getCurrentState().then((state) => {
+                    if (state) {
+                        setPosition(state.position);
+                        setDuration(state.duration);
+                    }
+                });
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [player]);
 
     useEffect(() => {
         if (accessToken && deviceId && ambianceUri && player) {
-            handlePlay();
+            const play = async () => {
+                const uri = convertToSpotifyUri(playlistUrls[ambiance]);
+                try {
+                    await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+                        method: "PUT",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ context_uri: uri, offset: { position: 0 }, position_ms: 0 }),
+                    });
+                } catch (err) {
+                    console.error("Erreur lors du play Spotify:", err);
+                }
+            };
+            play();
         }
     }, [accessToken, deviceId, ambianceUri, player]);
-
-    const fetchCurrentTrack = async () => {
-        if (!accessToken) return;
-        try {
-            const res = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            });
-            const text = await res.text();
-            if (!text || res.status === 204) {
-                setCurrentTrack(null);
-                return;
-            }
-            try {
-                const data = JSON.parse(text);
-                if (data && data.item) {
-                    setCurrentTrack({
-                        name: data.item.name,
-                        artist: data.item.artists.map(a => a.name).join(", "),
-                        image: data.item.album.images[0]?.url,
-                    });
-                }
-            } catch {
-                console.warn("⚠️ Réponse Spotify n’est pas du JSON");
-            }
-        } catch (err) { console.error("❌ Erreur lecture en cours:", err); }
-    };
-
-    useEffect(() => {
-        const interval = setInterval(() => fetchCurrentTrack(), 5000);
-        return () => clearInterval(interval);
-    }, [accessToken]);
-
-    if (loading) return <div className="text-white min-h-screen flex items-center justify-center">Chargement...</div>;
 
     return (
         <div className="min-h-screen bg-[#121212] flex flex-col md:flex-row font-[Poppins]">
@@ -267,7 +238,6 @@ export default function Dashboard() {
             <main className="flex-1 p-6 md:p-10 text-white">
                 <h1 className="text-3xl font-bold mb-6">Bienvenue sur ton Dashboard 🎶</h1>
 
-                {/* Ambiance */}
                 <section className="bg-[#1c1c1c] rounded-xl p-6 md:p-8 shadow-lg mb-10">
                     <h2 className="text-2xl font-semibold mb-6">Ambiance actuelle</h2>
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -292,33 +262,29 @@ export default function Dashboard() {
                             onChange={handleAmbianceChange}
                             className="bg-[#121212] border border-gray-600 rounded-full px-6 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#F28500]"
                         >
-                            {Object.keys(playlistUrls).map(key => (
+                            {Object.keys(playlistUrls).map((key) => (
                                 <option key={key} value={key}>{key}</option>
                             ))}
                         </select>
                     </div>
                 </section>
-                
 
-                {/* Enhanced Player */}
-                <EnhancedPlayer
-                    player={player}
-                    currentTrack={currentTrack}
-                    onPlayPause={onPlayPause}
-                    onNext={onNext}
-                    onPrevious={onPrevious}
-                    volume={volume}
-                    onVolumeChange={onVolumeChange}
-                    position={position}
-                    duration={duration}
-                    onSeek={onSeek}
-                />
-
-                <p className="mt-10">Commence à explorer l&apos;univers de ton ambiance musicale personnalisée.</p>
+                {player && (
+                    <EnhancedPlayer
+                        player={player}
+                        currentTrack={currentTrack}
+                        onPlayPause={onPlayPause}
+                        onNext={onNext}
+                        onPrevious={onPrevious}
+                        volume={volume}
+                        onVolumeChange={onVolumeChange}
+                        position={position}
+                        duration={duration}
+                        onSeek={onSeek}
+                    />
+                )}
             </main>
 
-
-            {/* Toast */}
             <AnimatePresence>
                 {showToast && (
                     <motion.div
