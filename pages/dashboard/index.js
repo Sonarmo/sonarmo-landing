@@ -40,6 +40,8 @@ export default function Dashboard() {
     const [position, setPosition] = useState(0);
     const [duration, setDuration] = useState(0);
     const [showAmbiance, setShowAmbiance] = useState(true);
+    const [isShuffling, setIsShuffling] = useState(false);
+
 
     const onPlayPause = () => player?.togglePlay();
     const onNext = () => player?.nextTrack();
@@ -60,6 +62,21 @@ export default function Dashboard() {
             setPosition(value);
         }
     };
+
+    // 👉 Ici : fonction pour activer ou désactiver le mode shuffle
+    const onToggleShuffle = async () => {
+        const newShuffle = !isShuffling;
+        try {
+            await fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${newShuffle}`, {
+                method: "PUT",
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+            setIsShuffling(newShuffle);
+        } catch (err) {
+            console.error("Erreur toggle shuffle:", err);
+        }
+    };
+
 
     const handleAmbianceChange = (e) => {
         setShowAmbiance(false);
@@ -190,6 +207,12 @@ export default function Dashboard() {
                 }
 
                 try {
+                    await fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${isShuffling}`, {
+                        method: "PUT",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    });
                     const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
                         method: "PUT",
                         headers: {
@@ -317,7 +340,10 @@ export default function Dashboard() {
                         position={position}
                         duration={duration}
                         onSeek={onSeek}
+                        isShuffling={isShuffling}
+                        onToggleShuffle={onToggleShuffle}
                     />
+
                 )}
             </main>
 

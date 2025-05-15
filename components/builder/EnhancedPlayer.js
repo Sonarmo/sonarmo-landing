@@ -5,6 +5,7 @@ import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
 export default function EnhancedPlayer({
     player,
     currentTrack,
+    isPlaying,
     onPlayPause,
     onNext,
     onPrevious,
@@ -12,10 +13,11 @@ export default function EnhancedPlayer({
     onVolumeChange,
     position,
     duration,
-    onSeek
+    onSeek,
+    isShuffling,
+    onToggleShuffle
 }) {
     const [progress, setProgress] = useState(position);
-    const [isPaused, setIsPaused] = useState(true);
     const [showVolume, setShowVolume] = useState(false);
 
     useEffect(() => {
@@ -24,24 +26,12 @@ export default function EnhancedPlayer({
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (!isPaused && duration > 0) {
+            if (isPlaying && duration > 0) {
                 setProgress((prev) => Math.min(prev + 1000, duration));
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, [isPaused, duration]);
-
-    useEffect(() => {
-        const updateState = async () => {
-            if (player && player.getCurrentState) {
-                const state = await player.getCurrentState();
-                if (state) {
-                    setIsPaused(state.paused);
-                }
-            }
-        };
-        updateState();
-    }, [player, position]);
+    }, [isPlaying, duration]);
 
     const formatTime = (ms) => {
         if (!ms) return "0:00";
@@ -78,23 +68,31 @@ export default function EnhancedPlayer({
                                         max="1"
                                         step="0.01"
                                         value={volume}
-                                        onChange={(e) => onVolumeChange(Number(e.target.value))}
+                                        onChange={(e) => {
+                                            const v = parseFloat(e.target.value);
+                                            if (!isNaN(v)) onVolumeChange(v);
+                                        }}
                                         className="h-32 w-2 appearance-none bg-gradient-to-t from-[#FF0BED] to-[#333] rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#FF0BED] [&::-moz-range-thumb]:bg-[#FF0BED]"
                                     />
                                 </div>
                             )}
                         </div>
 
-                        <div className="flex items-center justify-center gap-6">
+                        <div className="flex items-center justify-center gap-6\">
+                            <button onClick={onToggleShuffle} className={`hover:scale-110 transition ${isShuffling ? 'text-[#FF0BED]' : 'text-white'}`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4l16 16M4 20l16-16" />
+                                </svg>
+                            </button>
                             <button onClick={onPrevious} className="hover:scale-110 transition">
                                 <SkipBack size={28} className="text-white hover:text-[#FF0BED]" />
                             </button>
 
                             <button onClick={onPlayPause} className="hover:scale-110 transition">
-                                {isPaused ? (
-                                    <Play size={32} className="text-white hover:text-[#FF0BED]" />
-                                ) : (
+                                {isPlaying ? (
                                     <Pause size={32} className="text-white hover:text-[#FF0BED]" />
+                                ) : (
+                                    <Play size={32} className="text-white hover:text-[#FF0BED]" />
                                 )}
                             </button>
 
