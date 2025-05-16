@@ -265,24 +265,37 @@ export default function Dashboard() {
         if (!currentTrack?.id || !accessToken) return;
 
         const fetchAudioFeatures = async () => {
+            console.log("\uD83C\uDF1F [DEBUG] currentTrack:", currentTrack);
+            console.log("\uD83D\uDD11 [DEBUG] accessToken:", accessToken);
+
             try {
                 const res = await fetch(`https://api.spotify.com/v1/audio-features/${currentTrack.id}`, {
                     headers: { Authorization: `Bearer ${accessToken}` },
                 });
+
+                if (res.status === 401 || res.status === 403) {
+                    console.warn("\u26D4\uFE0F Token refus\u00E9. Rafra\u00EEchissement n\u00E9cessaire.");
+                    return;
+                }
+
                 const data = await res.json();
+
                 if (data && data.energy !== undefined) {
-                    console.log("🎧 Audio features for", currentTrack.name);
-                    console.log("➡️ Energy:", data.energy);
-                    console.log("➡️ Tempo:", data.tempo);
-                    console.log("➡️ Valence:", data.valence);
+                    console.log("\uD83C\uDFB5 Audio features for", currentTrack.name);
+                    console.log("\u27A1\uFE0F Energy:", data.energy);
+                    console.log("\u27A1\uFE0F Tempo:", data.tempo);
+                    console.log("\u27A1\uFE0F Valence:", data.valence);
+                } else {
+                    console.warn("\u2753 Aucun audio feature trouv\u00E9 pour ce morceau.");
                 }
             } catch (error) {
-                console.error("Erreur récupération audio features :", error);
+                console.error("\u274C Erreur lors de la r\u00E9cup\u00E9ration des audio features:", error);
             }
         };
 
         fetchAudioFeatures();
     }, [currentTrack?.id, accessToken]);
+
 
 
     return (
