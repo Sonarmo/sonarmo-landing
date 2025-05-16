@@ -158,12 +158,15 @@ export default function Dashboard() {
                 setPosition(state.position);
                 setDuration(state.duration);
                 if (state.track_window?.current_track) {
+                    const track = state.track_window.current_track;
                     setCurrentTrack({
-                        name: state.track_window.current_track.name,
-                        artist: state.track_window.current_track.artists.map(a => a.name).join(", "),
-                        image: state.track_window.current_track.album.images[0]?.url,
+                        id: track.id,
+                        name: track.name,
+                        artist: track.artists.map(a => a.name).join(", "),
+                        image: track.album.images[0]?.url,
                     });
                 }
+
             });
 
             newPlayer.addListener("initialization_error", ({ message }) => console.error(message));
@@ -257,6 +260,30 @@ export default function Dashboard() {
         }, 1000);
         return () => clearInterval(interval);
     }, [player]);
+
+    useEffect(() => {
+        if (!currentTrack?.id || !accessToken) return;
+
+        const fetchAudioFeatures = async () => {
+            try {
+                const res = await fetch(`https://api.spotify.com/v1/audio-features/${currentTrack.id}`, {
+                    headers: { Authorization: `Bearer ${accessToken}` },
+                });
+                const data = await res.json();
+                if (data && data.energy !== undefined) {
+                    console.log("🎧 Audio features for", currentTrack.name);
+                    console.log("➡️ Energy:", data.energy);
+                    console.log("➡️ Tempo:", data.tempo);
+                    console.log("➡️ Valence:", data.valence);
+                }
+            } catch (error) {
+                console.error("Erreur récupération audio features :", error);
+            }
+        };
+
+        fetchAudioFeatures();
+    }, [currentTrack?.id, accessToken]);
+
 
     return (
         <div className="min-h-screen bg-[#121212] flex flex-col md:flex-row font-[Poppins]">
