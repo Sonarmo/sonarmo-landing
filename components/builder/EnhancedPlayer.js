@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function EnhancedPlayer({
     player,
@@ -55,35 +56,17 @@ export default function EnhancedPlayer({
                         </div>
                     )}
 
-                    <div className="flex items-center justify-center gap-6 relative w-full">
-                        <div className="absolute right-4">
-                            <button onClick={() => setShowVolume(!showVolume)} className="hover:scale-110 transition">
-                                <Volume2 size={24} className="text-white hover:text-[#FF0BED]" />
+                    <div className="flex items-center justify-center gap-8 relative w-full">
+                        {/* Contrôles principaux */}
+                        <div className="flex items-center justify-center gap-9">
+                            <button
+                                onClick={onToggleShuffle}
+                                className={`hover:scale-110 transition ${isShuffling ? 'text-[#FF0BED]' : 'text-white'}`}
+                                title="Shuffle"
+                            >
+                                <Shuffle size={24} />
                             </button>
-                            {showVolume && (
-                                <div className="absolute bottom-12 right-0 bg-[#1c1c1c] p-2 rounded-lg shadow-md">
-                                    <input
-                                        type="range"
-                                        min="0"
-                                        max="1"
-                                        step="0.01"
-                                        value={volume}
-                                        onChange={(e) => {
-                                            const v = parseFloat(e.target.value);
-                                            if (!isNaN(v)) onVolumeChange(v);
-                                        }}
-                                        className="h-32 w-2 appearance-none bg-gradient-to-t from-[#FF0BED] to-[#333] rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#FF0BED] [&::-moz-range-thumb]:bg-[#FF0BED]"
-                                    />
-                                </div>
-                            )}
-                        </div>
 
-                        <div className="flex items-center justify-center gap-6\">
-                            <button onClick={onToggleShuffle} className={`hover:scale-110 transition ${isShuffling ? 'text-[#FF0BED]' : 'text-white'}`}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4l16 16M4 20l16-16" />
-                                </svg>
-                            </button>
                             <button onClick={onPrevious} className="hover:scale-110 transition">
                                 <SkipBack size={28} className="text-white hover:text-[#FF0BED]" />
                             </button>
@@ -99,9 +82,55 @@ export default function EnhancedPlayer({
                             <button onClick={onNext} className="hover:scale-110 transition">
                                 <SkipForward size={28} className="text-white hover:text-[#FF0BED]" />
                             </button>
+
+                            {/* Volume control */}
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowVolume(!showVolume)}
+                                    className="hover:scale-110 transition"
+                                    title="Volume"
+                                >
+                                    <Volume2 size={24} className="text-white hover:text-[#FF0BED]" />
+                                </button>
+
+                                <AnimatePresence>
+                                    {showVolume && (
+                                        <motion.div
+                                            initial={{ opacity: 0, scaleY: 0, transformOrigin: "bottom" }}
+                                            animate={{ opacity: 1, scaleY: 1 }}
+                                            exit={{ opacity: 0, scaleY: 0 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute bottom-full right-0 mb-2 bg-[#1c1c1c] p-3 rounded-xl shadow-lg origin-bottom"
+                                        >
+                                            <input
+                                                type="range"
+                                                min="0"
+                                                max="1"
+                                                step="0.01"
+                                                value={volume}
+                                                onChange={(e) => {
+                                                    const newVolume = parseFloat(e.target.value);
+                                                    if (!isNaN(newVolume)) {
+                                                        onVolumeChange(newVolume);
+                                                    }
+                                                }}
+                                                className="h-24 w-2 appearance-none rounded-lg [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#FF0BED]"
+                                                style={{
+                                                    writingMode: "vertical-lr",
+                                                    transform: "rotate(180deg)",
+                                                    background: `linear-gradient(to bottom, #FF0BED ${volume * 100}%, #333 ${volume * 100}%)`
+                                                }}
+                                            />
+                                        </motion.div>
+                                    )}
+
+                                </AnimatePresence>
+
+                            </div>
                         </div>
                     </div>
 
+                    {/* Barre de progression */}
                     <div className="w-full max-w-[80%] mt-4">
                         <input
                             type="range"
