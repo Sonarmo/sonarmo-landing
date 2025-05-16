@@ -46,13 +46,18 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: "Échec du rafraîchissement du token." });
         }
 
-        // ✅ met à jour Firestore avec le nouveau token
+        const { access_token, expires_in } = data;
+
+        // 🔄 Met à jour Firestore avec le nouveau token
         await db.collection("users").doc(uid).set({
-            spotifyAccessToken: data.access_token,
+            spotifyAccessToken: access_token,
+            tokenExpiresAt: Date.now() + expires_in * 1000,
             updatedAt: new Date(),
         }, { merge: true });
 
-        return res.status(200).json({ access_token: data.access_token });
+        // ✅ Renvoie le token fraîchement obtenu directement
+        return res.status(200).json({ access_token });
+
     } catch (err) {
         console.error("❌ Erreur serveur:", err);
         return res.status(500).json({ error: "Erreur serveur pendant le refresh token" });
