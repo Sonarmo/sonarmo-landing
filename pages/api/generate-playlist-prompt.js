@@ -2,6 +2,10 @@
 import OpenAI from "openai";
 import { getSpotifyAccessToken } from "@/lib/spotifyTokens";
 
+export const config = {
+    runtime: "nodejs", // ✅ pour éviter le timeout des edge functions sur Vercel
+};
+
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
@@ -19,7 +23,7 @@ export default async function handler(req, res) {
     try {
         const systemPrompt = `
 Tu es un expert en curation musicale.
-En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist de 20 morceaux Spotify cohérente, originale et fluide.
+En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist de 15 morceaux Spotify cohérente, originale et fluide.
 
 Prompt utilisateur : """${prompt}"""
 
@@ -28,13 +32,12 @@ Réponds avec une liste JSON stricte, format :
   { "artist": "Nom artiste", "name": "Titre du morceau" },
   ...
 ]
-Aucun commentaire. Aucun texte. Seulement la liste JSON.
-`;
+Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
 
         const completion = await openai.chat.completions.create({
             model: "gpt-4",
             messages: [{ role: "user", content: systemPrompt }],
-            temperature: 0.9,
+            temperature: 0.7,
         });
 
         const raw = completion.choices[0].message.content;
