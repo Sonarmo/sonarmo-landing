@@ -1,7 +1,7 @@
 // dashboard.js – version corrigée et propre avec EnhancedPlayer
 
 import EnhancedPlayer from "@/components/builder/EnhancedPlayer";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "../../lib/firebase";
 import Link from "next/link";
