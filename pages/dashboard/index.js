@@ -41,6 +41,7 @@ export default function Dashboard() {
     const [duration, setDuration] = useState(0);
     const [showAmbiance, setShowAmbiance] = useState(true);
     const [isShuffling, setIsShuffling] = useState(false);
+    const justRefreshed = useRef(false);
 
 
     const onPlayPause = () => player?.togglePlay();
@@ -95,7 +96,10 @@ export default function Dashboard() {
             const data = await res.json();
             if (data.access_token) {
                 console.log("✅ Nouveau access_token reçu :", data.access_token);
-                setAccessToken(data.access_token); // ← c’est ça qui met à jour le token utilisé
+                setAccessToken(data.access_token);
+
+                // ✅ Ajoute cette ligne juste ici :
+                justRefreshed.current = true;
             } else {
                 console.warn("⚠️ Aucun token reçu lors du refresh");
             }
@@ -103,6 +107,7 @@ export default function Dashboard() {
             console.error("❌ Erreur lors du refresh token:", err);
         }
     };
+
 
 
     useEffect(() => {
@@ -271,6 +276,13 @@ export default function Dashboard() {
     useEffect(() => {
         if (!currentTrack?.id || !accessToken) return;
 
+        // ⚠️ Si on vient de faire un refresh, on ignore ce tour
+        if (justRefreshed.current) {
+            console.log("⏸️ On saute ce fetch juste après un refresh.");
+            justRefreshed.current = false; // réinitialise
+            return;
+        }
+
         const fetchAudioFeatures = async () => {
             console.log("🌟 [DEBUG] currentTrack:", currentTrack);
             console.log("🔑 [DEBUG] accessToken:", accessToken);
@@ -282,7 +294,7 @@ export default function Dashboard() {
 
                 if (res.status === 401 || res.status === 403) {
                     console.warn("⛔️ Token refusé. Rafraîchissement nécessaire.");
-                    await refreshAccessToken(); // ✅ essaie de rafraîchir le token
+                    await refreshAccessToken(); // va déclencher le prochain tour
                     return;
                 }
 
@@ -303,6 +315,7 @@ export default function Dashboard() {
 
         fetchAudioFeatures();
     }, [currentTrack?.id, accessToken]);
+
 
 
 
