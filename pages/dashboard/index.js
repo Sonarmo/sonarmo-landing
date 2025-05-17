@@ -9,6 +9,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import Slider from "@mui/material/Slider";
+import Box from "@mui/material/Box";
 
 const playlistUrls = {
     "Lounge Chill 🌙": "https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6",
