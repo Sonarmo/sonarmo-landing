@@ -135,17 +135,17 @@ export default function MusicPage() {
 
             {/* Main Content */}
             <main className="flex-1 p-6 md:p-10 text-white">
-                <h1 className="text-3xl font-bold mb-8">Vos Playlists Spotify</h1>
+                <h1 className="text-3xl font-bold mb-8">Vos Playlists</h1>
 
                 {/* Prompt Input Section */}
                 <section className="bg-[#1c1c1c] p-6 rounded-xl shadow-lg mb-10">
-                    <h2 className="text-2xl font-semibold mb-4">🎧 Générer une playlist personnalisée</h2>
+                    <h2 className="text-2xl font-semibold mb-4">Intelligence Atmospherique</h2>
                     <textarea
                         ref={promptRef}
                         value={promptText}
                         onChange={(e) => setPromptText(e.target.value)}
                         rows={4}
-                        placeholder="Ex: une ambiance lounge électronique pour un bar rooftop au coucher du soleil"
+                        placeholder="Ex: Ce soir c'est football, met moi une ambiance de stade"
                         className="w-full bg-[#121212] border border-gray-600 text-white p-4 rounded-lg mb-4"
                     />
                     <button
@@ -165,7 +165,7 @@ export default function MusicPage() {
                                 rel="noopener noreferrer"
                                 className="underline text-[#1DB954]"
                             >
-                                Écouter la playlist sur Spotify
+                                Lancer la playlist
                             </a>
                         </div>
                     )}
