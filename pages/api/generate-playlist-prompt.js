@@ -1,9 +1,12 @@
 // pages/api/generate-playlist-prompt.js
 import OpenAI from "openai";
 import { getSpotifyAccessToken } from "@/lib/spotifyTokens";
+import { db } from "@/lib/firebaseAdmin"; // 🔥 Ajout Firestore
+import { authAdmin } from "@/lib/firebaseAdmin";
+import cookie from "cookie";
 
 export const config = {
-    runtime: "nodejs", // ✅ pour éviter le timeout des edge functions sur Vercel
+    runtime: "nodejs",
 };
 
 const openai = new OpenAI({
@@ -92,6 +95,25 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
             },
             body: JSON.stringify({ uris }),
         });
+
+        // 🔥 Sauvegarde dans Firestore
+        const cookies = cookie.parse(req.headers.cookie || "");
+        const idToken = cookies.token;
+
+        if (idToken) {
+            try {
+                const decodedToken = await authAdmin.verifyIdToken(idToken);
+                const uid = decodedToken.uid;
+                await db.collection("promptHistory").add({
+                    uid,
+                    prompt,
+                    playlistUrl: playlist.external_urls.spotify,
+                    createdAt: new Date(),
+                });
+            } catch (err) {
+                console.warn("⚠️ Impossible d'enregistrer l'historique du prompt:", err);
+            }
+        }
 
         return res.status(200).json({
             url: playlist.external_urls.spotify,

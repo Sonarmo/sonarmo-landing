@@ -44,7 +44,9 @@ export default function Dashboard() {
     const justRefreshed = useRef(false);
     const hasPlayedOnce = useRef(false);
 
-
+    // 🔶 Démo données énergie (graph temporaire)
+    const [energy, setEnergy] = useState(0.65);
+    const fakeEnergyData = Array.from({ length: 15 }, (_, i) => ({ name: `T${i + 1}`, energy: Math.random() * 0.5 + 0.4 }));
     const onPlayPause = () => player?.togglePlay();
     const onNext = () => player?.nextTrack();
     const onPrevious = () => player?.previousTrack();
@@ -395,21 +397,47 @@ export default function Dashboard() {
                 </section>
 
                 {player && (
-                    <EnhancedPlayer
-                        player={player}
-                        currentTrack={currentTrack}
-                        onPlayPause={onPlayPause}
-                        onNext={onNext}
-                        onPrevious={onPrevious}
-                        volume={volume}
-                        onVolumeChange={onVolumeChange}
-                        position={position}
-                        duration={duration}
-                        onSeek={onSeek}
-                        isShuffling={isShuffling}
-                        onToggleShuffle={onToggleShuffle}
-                    />
+                    <div className="grid md:grid-cols-2 gap-6 items-start">
+                        <EnhancedPlayer
+                            player={player}
+                            currentTrack={currentTrack}
+                            onPlayPause={onPlayPause}
+                            onNext={onNext}
+                            onPrevious={onPrevious}
+                            volume={volume}
+                            onVolumeChange={onVolumeChange}
+                            position={position}
+                            duration={duration}
+                            onSeek={onSeek}
+                            isShuffling={isShuffling}
+                            onToggleShuffle={onToggleShuffle}
+                        />
 
+                        <div className="bg-[#1c1c1c] p-4 rounded-2xl shadow-lg">
+                            <h3 className="text-lg font-semibold mb-2">Énergie musicale 🔋</h3>
+                            <ResponsiveContainer width="100%" height={150}>
+                                <LineChart data={fakeEnergyData}>
+                                    <XAxis dataKey="name" stroke="#888" />
+                                    <YAxis domain={[0, 1]} stroke="#888" />
+                                    <Tooltip />
+                                    <Line type="monotone" dataKey="energy" stroke="#F28500" strokeWidth={2} dot={false} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                            <Box mt={4}>
+                                <Slider
+                                    value={energy}
+                                    min={0}
+                                    max={1}
+                                    step={0.01}
+                                    onChange={(e, val) => setEnergy(val)}
+                                    sx={{
+                                        color: "#F28500",
+                                    }}
+                                />
+                                <p className="text-sm text-center mt-2 text-gray-400">Énergie cible : {(energy * 100).toFixed(0)}%</p>
+                            </Box>
+                        </div>
+                    </div>
                 )}
             </main>
 
