@@ -1,5 +1,5 @@
 import EnhancedPlayer from "@/components/builder/EnhancedPlayer";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "../../lib/firebase";
 import Link from "next/link";
@@ -15,6 +15,10 @@ export default function MusicPage() {
     const [userPlaylists, setUserPlaylists] = useState([]);
     const [accessToken, setAccessToken] = useState(null);
     const [uid, setUid] = useState(null);
+    const [promptText, setPromptText] = useState("");
+    const [playlistUrl, setPlaylistUrl] = useState(null);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const promptRef = useRef();
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -63,6 +67,32 @@ export default function MusicPage() {
         }
     };
 
+    const generatePlaylistFromPrompt = async () => {
+        if (!promptText || promptText.length < 10) return;
+        setIsGenerating(true);
+        setPlaylistUrl(null);
+
+        try {
+            const res = await fetch("/api/generate-playlist-prompt", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: promptText }),
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                setPlaylistUrl(data.url);
+            } else {
+                console.error("Erreur génération:", data.error);
+                alert("Erreur: " + data.error);
+            }
+        } catch (err) {
+            console.error("Erreur fetch:", err);
+        }
+
+        setIsGenerating(false);
+    };
+
     if (loading) {
         return <div className="text-white min-h-screen flex items-center justify-center">Chargement...</div>;
     }
@@ -106,6 +136,41 @@ export default function MusicPage() {
             {/* Main Content */}
             <main className="flex-1 p-6 md:p-10 text-white">
                 <h1 className="text-3xl font-bold mb-8">Vos Playlists Spotify</h1>
+
+                {/* Prompt Input Section */}
+                <section className="bg-[#1c1c1c] p-6 rounded-xl shadow-lg mb-10">
+                    <h2 className="text-2xl font-semibold mb-4">🎧 Générer une playlist personnalisée</h2>
+                    <textarea
+                        ref={promptRef}
+                        value={promptText}
+                        onChange={(e) => setPromptText(e.target.value)}
+                        rows={4}
+                        placeholder="Ex: une ambiance lounge électronique pour un bar rooftop au coucher du soleil"
+                        className="w-full bg-[#121212] border border-gray-600 text-white p-4 rounded-lg mb-4"
+                    />
+                    <button
+                        onClick={generatePlaylistFromPrompt}
+                        disabled={isGenerating}
+                        className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] text-white px-6 py-2 rounded-full font-semibold hover:opacity-90"
+                    >
+                        {isGenerating ? "Génération en cours..." : "Générer la playlist"}
+                    </button>
+
+                    {playlistUrl && (
+                        <div className="mt-6">
+                            <p className="text-green-400 mb-2">✅ Playlist générée avec succès !</p>
+                            <a
+                                href={playlistUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline text-[#1DB954]"
+                            >
+                                Écouter la playlist sur Spotify
+                            </a>
+                        </div>
+                    )}
+                </section>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {userPlaylists.map((playlist) => (
                         <motion.div
