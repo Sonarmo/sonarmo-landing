@@ -42,6 +42,7 @@ export default function Dashboard() {
     const [showAmbiance, setShowAmbiance] = useState(true);
     const [isShuffling, setIsShuffling] = useState(false);
     const justRefreshed = useRef(false);
+    const hasPlayedOnce = useRef(false);
 
 
     const onPlayPause = () => player?.togglePlay();
@@ -204,12 +205,13 @@ export default function Dashboard() {
     }, [accessToken, player]);
 
     // ⏯ Relancer automatiquement si ambiance change (ou selectedPlaylistUri mis à jour)
+    // À placer dans Dashboard() — après avoir déclaré : const hasPlayedOnce = useRef(false);
+
     useEffect(() => {
-        if (accessToken && deviceId && player) {
+        if (accessToken && deviceId && player && !hasPlayedOnce.current) {
             const play = async () => {
                 const uri = ambianceUri || convertToSpotifyUri(playlistUrls[ambiance]);
 
-                // 🔄 Mettre à jour Firestore avec la nouvelle ambiance sélectionnée
                 try {
                     const user = auth.currentUser;
                     if (user) {
@@ -217,17 +219,14 @@ export default function Dashboard() {
                             selectedPlaylistUri: uri,
                         });
                     }
-                } catch (error) {
-                    console.error("❌ Erreur mise à jour Firestore ambiance:", error);
-                }
 
-                try {
                     await fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${isShuffling}`, {
                         method: "PUT",
                         headers: {
                             Authorization: `Bearer ${accessToken}`,
                         },
                     });
+
                     const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
                         method: "PUT",
                         headers: {
@@ -240,14 +239,19 @@ export default function Dashboard() {
                     if (!res.ok) {
                         const err = await res.json();
                         console.error("Erreur lecture Spotify:", err);
+                    } else {
+                        hasPlayedOnce.current = true; // ✅ Ne joue qu’une seule fois
                     }
+
                 } catch (err) {
                     console.error("Erreur lors de l'appel /play Spotify:", err);
                 }
             };
+
             play();
         }
-    }, [accessToken, deviceId, ambiance, player]);
+    }, [accessToken, deviceId, player]); // ✅ ambiance retiré ici pour éviter les relances
+
 
     // 🔊 Appliquer le volume dès qu'il change
     useEffect(() => {
