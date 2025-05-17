@@ -35,7 +35,7 @@ Réponds avec une liste JSON stricte, format :
 Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
 
         const completion = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: "gpt-3.5-turbo",
             messages: [{ role: "user", content: systemPrompt }],
             temperature: 0.7,
         });
