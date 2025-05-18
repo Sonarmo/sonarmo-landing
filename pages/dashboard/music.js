@@ -8,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function MusicPage() {
     const router = useRouter();
@@ -69,20 +69,9 @@ export default function MusicPage() {
         position,
         duration,
         isShuffling,
-        toggleShuffle
+        toggleShuffle,
+        playPlaylist
     } = useSpotifyPlayer(accessToken);
-
-    const launchInDashboard = async (playlistUri) => {
-        try {
-            if (!uid) return;
-            await updateDoc(doc(db, "users", uid), {
-                selectedPlaylistUri: playlistUri,
-            });
-            router.push("/dashboard");
-        } catch (error) {
-            console.error("❌ Erreur lancement playlist:", error);
-        }
-    };
 
     const generatePlaylistFromPrompt = async () => {
         if (!promptText || promptText.length < 10) return;
@@ -194,7 +183,7 @@ export default function MusicPage() {
                             key={playlist.id}
                             whileHover={{ scale: 1.05 }}
                             className="bg-[#1c1c1c] rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition cursor-pointer"
-                            onClick={() => launchInDashboard(playlist.uri)}
+                            onClick={() => playPlaylist(playlist.uri)}
                         >
                             <Image
                                 src={playlist.images[0]?.url || "/images/default.jpg"}

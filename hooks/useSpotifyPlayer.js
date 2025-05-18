@@ -140,6 +140,24 @@ export default function useSpotifyPlayer(accessToken) {
         }
     };
 
+    const playPlaylist = async (playlistUri) => {
+        if (!accessToken) return;
+        try {
+            await fetch("https://api.spotify.com/v1/me/player/play", {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    context_uri: playlistUri,
+                }),
+            });
+        } catch (error) {
+            console.error("Erreur lecture playlist:", error);
+        }
+    };
+
     return {
         player,
         deviceId,
@@ -155,5 +173,6 @@ export default function useSpotifyPlayer(accessToken) {
         changeVolume,
         isShuffling,
         toggleShuffle,
+        playPlaylist,
     };
 }
