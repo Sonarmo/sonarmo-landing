@@ -42,7 +42,6 @@ export default function useSpotifyPlayer(accessToken) {
         setupPlayer();
     }, [accessToken]);
 
-    // Fallback: get current state if player already running from elsewhere
     useEffect(() => {
         if (!accessToken || player) return;
 
@@ -67,27 +66,61 @@ export default function useSpotifyPlayer(accessToken) {
         fetchCurrentPlayback();
     }, [accessToken, player]);
 
-    const playPause = () => {
-        if (!player) return;
-        player.togglePlay();
+    const callWebAPI = async (endpoint, method = "PUT", body = null) => {
+        if (!accessToken) return;
+        try {
+            await fetch(`https://api.spotify.com/v1/me/player/${endpoint}`, {
+                method,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: body ? JSON.stringify(body) : null,
+            });
+        } catch (error) {
+            console.error(`Erreur Spotify API - ${endpoint}:`, error);
+        }
     };
 
-    const nextTrack = () => {
-        if (player) player.nextTrack();
+    const playPause = async () => {
+        if (player) {
+            player.togglePlay();
+        } else {
+            const endpoint = isPlaying ? "pause" : "play";
+            await callWebAPI(endpoint);
+        }
     };
 
-    const previousTrack = () => {
-        if (player) player.previousTrack();
+    const nextTrack = async () => {
+        if (player) {
+            player.nextTrack();
+        } else {
+            await callWebAPI("next");
+        }
     };
 
-    const seek = (seconds) => {
-        if (player) player.seek(seconds * 1000);
+    const previousTrack = async () => {
+        if (player) {
+            player.previousTrack();
+        } else {
+            await callWebAPI("previous");
+        }
     };
 
-    const changeVolume = (val) => {
+    const seek = async (seconds) => {
+        if (player) {
+            player.seek(seconds * 1000);
+        } else {
+            await callWebAPI(`seek?position_ms=${seconds * 1000}`);
+        }
+    };
+
+    const changeVolume = async (val) => {
+        setVolume(val);
         if (player) {
             player.setVolume(val);
-            setVolume(val);
+        } else {
+            await callWebAPI(`volume?volume_percent=${Math.round(val * 100)}`);
         }
     };
 
