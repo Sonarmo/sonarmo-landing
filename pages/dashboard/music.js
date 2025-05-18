@@ -1,4 +1,6 @@
 import EnhancedPlayer from "@/components/builder/EnhancedPlayer";
+import MiniPlayer from "@/components/builder/MiniPlayer";
+import useSpotifyPlayer from "@/hooks/useSpotifyPlayer";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "../../lib/firebase";
@@ -55,6 +57,21 @@ export default function MusicPage() {
         fetchUserPlaylists();
     }, [accessToken]);
 
+    const {
+        currentTrack,
+        isPlaying,
+        playPause,
+        nextTrack,
+        previousTrack,
+        seek,
+        changeVolume,
+        volume,
+        position,
+        duration,
+        isShuffling,
+        toggleShuffle
+    } = useSpotifyPlayer(accessToken);
+
     const launchInDashboard = async (playlistUri) => {
         try {
             if (!uid) return;
@@ -94,18 +111,18 @@ export default function MusicPage() {
     };
 
     if (loading) {
-        return <div className="text-white min-h-screen flex items-center justify-center">Chargement...</div>;
+        return <div className="text-white min-h-screen flex items-center justify-center font-poppins">Chargement...</div>;
     }
 
     return (
-        <div className="min-h-screen bg-[#121212] flex flex-col md:flex-row">
+        <div className="min-h-screen bg-[#121212] flex flex-col md:flex-row font-poppins pb-24">
             {/* Sidebar */}
-            <aside className="w-full md:w-64 bg-[#1c1c1c] text-gray-300 p-6 flex flex-col gap-8">
+            <aside className="w-full md:w-64 bg-[#1c1c1c] text-gray-300 p-6 flex flex-col gap-8 font-poppins">
                 <Link href="/dashboard" className="flex items-center gap-3 mb-8">
                     <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={140} height={40} />
                 </Link>
 
-                <nav className="flex flex-col gap-6 text-sm">
+                <nav className="flex flex-col gap-6 text-sm font-poppins">
                     <Link href="/dashboard" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard" ? "text-white" : ""}`}>
                         <Image src="/icons/home.png" alt="Home" width={24} height={24} />
                         Dashboard
@@ -134,7 +151,7 @@ export default function MusicPage() {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-6 md:p-10 text-white">
+            <main className="flex-1 p-6 md:p-10 text-white font-poppins">
                 <h1 className="text-3xl font-bold mb-8">Vos Playlists</h1>
 
                 {/* Prompt Input Section */}
@@ -194,6 +211,22 @@ export default function MusicPage() {
                     ))}
                 </div>
             </main>
+
+            {/* MiniPlayer */}
+            <MiniPlayer
+                currentTrack={currentTrack}
+                isPlaying={isPlaying}
+                onPlayPause={playPause}
+                onNext={nextTrack}
+                onPrevious={previousTrack}
+                volume={volume}
+                onVolumeChange={changeVolume}
+                position={position}
+                duration={duration}
+                onSeek={seek}
+                isShuffling={isShuffling}
+                onToggleShuffle={toggleShuffle}
+            />
         </div>
     );
 }
