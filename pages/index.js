@@ -73,6 +73,12 @@ export default function Home() {
                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                 SE CONNECTER
               </Link>
+              <div className="flex items-center gap-4">
+                <Link href="/index-en" className="text-sm text-gray-400 hover:text-white border px-2 py-1 rounded">
+                  EN
+                </Link>
+
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
