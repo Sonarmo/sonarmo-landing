@@ -191,7 +191,7 @@ export default function Experience() {
                 <motion.section className="py-5 bg-black" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
                     <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 px-4">
                         <div className="md:w-1/2 flex justify-center">
-                            <Image src="/logo-ia.png" alt="Dashboard Sonarmo" width={500} height={300} />
+                            <Image src="/logoia.png" alt="Logo IA" width={500} height={300} />
                         </div>
                         <div className="md:w-1/2 text-center md:text-left">
                             <h2 className="text-3xl font-semibold mb-4">La bonne musique, au bon moment</h2>
