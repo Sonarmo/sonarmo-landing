@@ -23,6 +23,8 @@ export default function Home() {
             <Image src="/favicon.png" alt="Logo" width={32} height={32} />
             <span className="text-white text-lg font-semibold italic">Sonarmo</span>
           </div>
+        
+
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex gap-6 text-sm items-center">
@@ -32,6 +34,12 @@ export default function Home() {
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
               SE CONNECTER
             </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/index-en" className="text-sm text-gray-400 hover:text-white border px-2 py-1 rounded">
+                EN
+              </Link>
+            
+            </div>
           </nav>
 
           {/* Mobile Nav Toggle */}
