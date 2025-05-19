@@ -88,7 +88,7 @@ return (
                 </p>
                 <Link href="/experience" legacyBehavior><a
                     className="inline-block bg-gradient-to-r from-[#FF9400] to-[#FF0BED] px-6 py-3 rounded-full text-white font-semibold shadow-md transform transition-transform duration-300 hover:scale-105 active:scale-95">
-                    Discover
+                    DISCOVER
                 </a>
                 </Link>
                 <div className="h-24" />
@@ -101,7 +101,7 @@ return (
             <div
                 className="absolute left-0 top-0 w-[600px] h-[600px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-20 -translate-x-1/3 -translate-y-1/3 z-0 " />
             <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-4">
-                    Music is not a background sound... it’s a lever of ambience
+                    Music is not a background sound... it&apos;s a lever of ambience
             </p>
 
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1.2
@@ -136,11 +136,11 @@ return (
             <div className="relative z-10 flex flex-col items-center">
                 <h2 className="text-4xl font-semibold mb-4">Contact Us</h2>
                 <p className="text-gray-400 mb-8 max-w-md">
-                    A question, an idea, or just want to talk about it? Let us know, we love talking!
+                    A question, an idea, or just want to talk about it ? Let us know, we love talking !
                 </p>
-                <Link href="/contact" legacyBehavior><a
+                <Link href="/contact-en" legacyBehavior><a
                     className="inline-block bg-gradient-to-r from-[#FF9400] to-[#FF0BED] px-6 py-3 rounded-full text-white font-semibold shadow-md transform transition-transform duration-300 hover:scale-105 active:scale-95">
-                    Let's talk ?
+                    Let&apos;s talk ?
                 </a>
                 </Link>
             </div>
@@ -167,8 +167,8 @@ return (
                         </a>
                     </div>
                     <p>Sonarmo Team</p>
-                    <Link href="/" className="hover:text-white">A propos de nous</Link>
-                    <Link href="/contact" className="hover:text-white">Nous contacter</Link>
+                    <Link href="/" className="hover:text-white">About us</Link>
+                    <Link href="/contact-en" className="hover:text-white">Contact us</Link>
                 </div>
                 <div className="flex flex-col items-end text-right gap-2">
                     <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
