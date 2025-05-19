@@ -16,7 +16,7 @@ export default function Home() {
           rel="stylesheet"
         />
       </Head>
-      <main className="bg-[#121212] text-white font-[Poppins]">
+      <main className="bg-black text-white font-[Poppins]">
         {/* HEADER */}
         <header className="flex justify-between items-center px-6 py-4">
           <div className="flex items-center gap-2">
