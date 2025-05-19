@@ -86,9 +86,9 @@ return (
                         specially designed to reflect the soul of your space and offer an immersive experience
                         incomparable.
                 </p>
-                <Link href="/experience" legacyBehavior><a
+                <Link href="/experience-en" legacyBehavior><a
                     className="inline-block bg-gradient-to-r from-[#FF9400] to-[#FF0BED] px-6 py-3 rounded-full text-white font-semibold shadow-md transform transition-transform duration-300 hover:scale-105 active:scale-95">
-                    DISCOVER
+                    Discover
                 </a>
                 </Link>
                 <div className="h-24" />
