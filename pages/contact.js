@@ -11,10 +11,12 @@ export default function Contact() {
     return (
         <>
             <Head>
+                <title>Sonarmo - Contact</title>
                 <link
                     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
                     rel="stylesheet"
                 />
+                <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
             </Head>
             <main className="bg-black text-white font-[Poppins] min-h-screen relative overflow-x-hidden">
                 {/* HEADER */}
@@ -77,7 +79,7 @@ export default function Contact() {
                         <div className="absolute w-[300px] h-[300px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-50" />
                     </div>
                     <div className="relative z-10 flex flex-col items-center w-full max-w-md">
-                        <div className="relative w-[270px] h-[150px] mb-8">
+                        <div className="relative w-[350px] h-[194px] mb-0">
                             <Image
                                 src="/Logo-app-header.png"
                                 alt="Sonarmo Logo"

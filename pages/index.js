@@ -11,16 +11,18 @@ export default function Home() {
   return (
     <>
       <Head>
+        <title>Sonarmo</title>
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
+        <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
       </Head>
       <main className="bg-black text-white font-[Poppins]">
         {/* HEADER */}
         <header className="flex justify-between items-center px-6 py-4">
           <div className="flex items-center gap-2">
-            <Image src="/favicon.png" alt="Logo" width={32} height={32} />
+            <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
             <span className="text-white text-lg font-semibold italic">Sonarmo</span>
           </div>
         
@@ -31,7 +33,7 @@ export default function Home() {
             <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
             <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-              <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
+              <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
               SE CONNECTER
             </Link>
             <div className="flex items-center gap-4">
@@ -91,7 +93,7 @@ export default function Home() {
             transition={{ duration: 1.2 }}
             className="relative z-10 flex flex-col items-center"
           >
-            <div className="relative w-[400px] h-[180px] mb-1">
+            <div className="relative w-[500px] h-[225px] mb-0">
               <Image
                 src="/Logo-app-header.png"
                 alt="Sonarmo Logo"

@@ -13,8 +13,12 @@ export default function Experience() {
     return (
         <>
             <Head>
-                <title>L&apos;Expérience Sonarmo</title>
-                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+                <title>L&apos;experience Sonarmo</title>
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+                    rel="stylesheet"
+                />
+                <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
             </Head>
             <main className="bg-black text-white font-[Poppins] min-h-screen px-0">
 
@@ -30,7 +34,7 @@ export default function Experience() {
                         <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
                         <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
                         <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-                            <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
+                            <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
                             SE CONNECTER
                         </Link>
                     </nav>
@@ -80,9 +84,17 @@ export default function Experience() {
                             Une ambiance musicale intelligente, unique à chaque lieu. La bonne musique, au bon moment, pour faire vibrer votre espace.
                         </p>
                     </div>
-                    <div className="mt-12 flex justify-center">
-                        <Image src="/favicon.png" alt="Vague" width={200} height={200} className="shadow-none" />
-                    </div>
+                
+                    <motion.img
+                        src="/sonarmo-experience.png"
+                        alt="Logo Sonarmo"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1 }}
+                        className="mx-auto mt-10 w-50 h-auto drop-shadow-[0_0_15px_rgba(255,0,255,0.4)]"
+                    />
+
+
                 </section>
 
                 <motion.section
@@ -283,7 +295,7 @@ export default function Experience() {
                     <motion.div
                         className="absolute left-1/4 top-1/2 w-[200px] h-[200px] bg-[#2FD668] rounded-full blur-3xl opacity-80 -translate-x-1/2 -translate-y-1/2 z-0"
                         animate={{ scale: [1, 1.1, 1], x: [0, 20, 0], y: [0, -20, 0] }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{ duration: 0, repeat: Infinity, ease: "easeInOut" }}
                     />
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto px-4">
                         <div className="text-left">

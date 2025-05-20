@@ -14,7 +14,11 @@ export default function Experience() {
         <>
             <Head>
                 <title>Sonarmo Experience</title>
-                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+                    rel="stylesheet"
+                />
+                <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
             </Head>
             <main className="bg-black text-white font-[Poppins] min-h-screen px-0">
 
@@ -30,7 +34,7 @@ export default function Experience() {
                         <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
                         <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
                         <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-                            <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
+                            <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
                             LOGIN
                         </Link>
                     </nav>
@@ -80,9 +84,14 @@ export default function Experience() {
                             An intelligent musical atmosphere, unique to each place. The right music at the right time to make your space vibrate.
                         </p>
                     </div>
-                    <div className="mt-12 flex justify-center">
-                        <Image src="/favicon.png" alt="Vague" width={200} height={200} className="shadow-none" />
-                    </div>
+                    <motion.img
+                        src="/sonarmo-experience.png"
+                        alt="Logo Sonarmo"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1 }}
+                        className="mx-auto mt-10 w-50 h-auto drop-shadow-[0_0_15px_rgba(255,0,255,0.4)]"
+                    />
                 </section>
 
                 <motion.section
