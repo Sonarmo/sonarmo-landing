@@ -20,11 +20,10 @@ export default function Contact() {
             </Head>
             <main className="bg-black text-white font-[Poppins] min-h-screen relative overflow-x-hidden">
                 {/* HEADER */}
-                <header className="flex justify-between items-center px-6 py-4 z-20 relative">
-                    <Link href="/">
-                        <div className="flex items-center gap-2 cursor-pointer">
-                            <Image src="/Logo-app-header.png" alt="Logo" width={140} height={30} />
-                        </div>
+                <header className="flex justify-between items-center px-6 py-4">
+                    <Link href="/" className="flex items-center gap-2">
+                        <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+                        <span className="text-white text-lg font-semibold italic">Sonarmo</span>
                     </Link>
 
                     {/* Desktop Nav */}

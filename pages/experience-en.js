@@ -23,12 +23,13 @@ export default function Experience() {
             <main className="bg-black text-white font-[Poppins] min-h-screen px-0">
 
                 {/* HEADER */}
-                <header className="flex justify-between items-center px-6 py-4 bg-black">
-                    <Link href="/index-en">
-                        <div className="flex items-center gap-2 cursor-pointer">
-                            <Image src="/Logo-app-header.png" alt="Logo" width={140} height={30} />
-                        </div>
+                <header className="flex justify-between items-center px-6 py-4">
+                    <Link href="/" className="flex items-center gap-2">
+                        <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+                        <span className="text-white text-lg font-semibold italic">Sonarmo</span>
                     </Link>
+               
+
 
                     <nav className="hidden md:flex gap-6 text-sm items-center">
                         <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
