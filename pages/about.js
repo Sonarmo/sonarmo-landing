@@ -23,17 +23,17 @@ export default function About() {
             <main className="bg-black text-white font-[Poppins]">
               {/* HEADER */}
                       <header className="flex justify-between items-center px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-                          <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-                        </div>
+                    <Link href="/" className="flex items-center gap-2">
+                        <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+                        <span className="text-white text-lg font-semibold italic">Sonarmo</span>
+                    </Link>
                 
                       
               
               
                         {/* Desktop Nav */}
                         <nav className="hidden md:flex gap-6 text-sm items-center">
-                    <Link href="experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
+                    <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
                           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
                           <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
                             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
