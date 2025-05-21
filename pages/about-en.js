@@ -13,14 +13,14 @@ export default function About() {
     return (
         <>
             <Head>
-                    <title>About</title>
+                    <title>Sonarmo - About</title>
                     <link
                       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
                       rel="stylesheet"
                     />
                     <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
             </Head>
-            <main className="bg-black text-white font-[Poppins]">
+            <main className="overflow-x-hidden bg-black text-white font-[Poppins]">
               {/* HEADER */}
                 <header className="relative z-10 flex justify-between items-center px-6 py-4">
                     <Link href="/index-en" className="flex items-center gap-2">

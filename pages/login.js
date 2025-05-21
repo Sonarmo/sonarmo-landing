@@ -48,7 +48,16 @@ export default function Login() {
     };
 
     return (
-        <main className="bg-black text-white font-[Poppins] min-h-screen flex flex-col">
+    <>
+            <Head>
+                <title>Sonarmo - Se connecter</title>
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+                    rel="stylesheet"
+                />
+                <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
+            </Head>
+        <main className="overflow-x-hidden bg-black text-white font-[Poppins] min-h-screen flex flex-col">
             {/* HEADER */}
             <header className="flex justify-between items-center px-6 py-4">
                 <Link href="/" className="flex items-center gap-2">
@@ -118,5 +127,6 @@ export default function Login() {
                 </div>
             </footer>
         </main>
+        </>
     );
 }

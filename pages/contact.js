@@ -11,7 +11,7 @@ export default function Contact() {
     return (
         <>
             <Head>
-                <title>Sonarmo - Contact</title>
+                <title>Sonarmo - Contacte</title>
                 <link
                     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
                     rel="stylesheet"

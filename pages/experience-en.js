@@ -13,7 +13,7 @@ export default function Experience() {
     return (
         <>
             <Head>
-                <title>Sonarmo Experience</title>
+                <title>Sonarmo - Experience</title>
                 <link
                     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
                     rel="stylesheet"
