@@ -48,7 +48,7 @@ export default function Login() {
     };
 
     return (
-        <main className="bg-black text-white font-[Poppins] min-h-screen flex flex-col">
+        <main className="bg-black text-white font-[Poppins] overflow-x-hidden min-h-screen flex flex-col">
             {/* HEADER */}
             <header className="flex justify-between items-center px-6 py-4">
                 <Link href="/" className="flex items-center gap-2">

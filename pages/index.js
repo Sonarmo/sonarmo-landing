@@ -18,7 +18,7 @@ export default function Home() {
         />
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
       </Head>
-      <main className="bg-black text-white font-[Poppins]">
+      <main className="bg-black text-white font-[Poppins] overflow-x-hidden">
         {/* HEADER */}
         <header className="flex justify-between items-center px-6 py-4">
           <div className="flex items-center gap-2">

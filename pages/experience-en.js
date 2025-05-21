@@ -20,7 +20,7 @@ export default function Experience() {
                 />
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
             </Head>
-            <main className="bg-black text-white font-[Poppins] min-h-screen px-0">
+            <main className="bg-black text-white font-[Poppins] overflow-x-hidden min-h-screen px-0">
 
                 {/* HEADER */}
                 <header className="flex justify-between items-center px-6 py-4">
