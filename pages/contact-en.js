@@ -21,7 +21,7 @@ export default function Contact() {
             <main className="bg-black text-white font-[Poppins] min-h-screen relative overflow-x-hidden">
                 {/* HEADER */}
                 <header className="flex justify-between items-center px-6 py-4">
-                    <Link href="/" className="flex items-center gap-2">
+                    <Link href="/index-en" className="flex items-center gap-2">
                         <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
                         <span className="text-white text-lg font-semibold italic">Sonarmo</span>
                     </Link>
@@ -30,7 +30,7 @@ export default function Contact() {
                     <nav className="hidden md:flex gap-6 text-sm items-center">
                         <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
                         <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                        <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+                        <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
                             <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                             LOGIN
                         </Link>
@@ -63,7 +63,7 @@ export default function Contact() {
                         >
                             <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
                             <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                            <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+                            <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
                                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                                 LOGIN
                             </Link>

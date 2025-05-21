@@ -33,7 +33,7 @@ return (
             <nav className="hidden md:flex gap-6 text-sm items-center">
                 <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
                 <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+                <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
                         <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
                 LOGIN
                 </Link>
@@ -66,7 +66,7 @@ return (
                 className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50">
                 <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
                 <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+                <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                 LOGIN
                 </Link>

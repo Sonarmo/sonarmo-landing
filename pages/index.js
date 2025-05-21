@@ -11,13 +11,47 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Sonarmo</title>
+        {/* Titre SEO */}
+        <title>Sonarmo | Ambiance musicale intelligente pour les lieux publics</title>
+
+        {/* Description pour moteurs de recherche */}
+        <meta
+          name="description"
+          content="Créez une atmosphère sonore personnalisée grâce à Sonarmo, la solution d'intelligence musicale pour bars, cafés, hôtels et espaces de vie. IA + émotion + expérience client."
+        />
+
+        {/* Responsive */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Favicon */}
+        <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
+
+        {/* Google Fonts */}
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
-        <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
+
+        {/* Open Graph (LinkedIn, Facebook...) */}
+        <meta property="og:title" content="Sonarmo | Ambiance musicale intelligente" />
+        <meta
+          property="og:description"
+          content="Offrez une ambiance musicale unique et adaptée à vos clients grâce à Sonarmo, une solution basée sur l'IA et la psychologie sonore."
+        />
+        <meta property="og:image" content="https://www.sonarmo.com/images/sonarmo-cover.png" />
+        <meta property="og:url" content="https://www.sonarmo.com/" />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sonarmo | Ambiance musicale intelligente" />
+        <meta
+          name="twitter:description"
+          content="Créez une ambiance musicale unique avec Sonarmo, votre solution IA pour bars et cafés."
+        />
+        <meta name="twitter:image" content="https://www.sonarmo.com/images/sonarmo-cover.png" />
       </Head>
+
       <main className="bg-black text-white font-[Poppins] overflow-x-hidden">
         {/* HEADER */}
         <header className="flex justify-between items-center px-6 py-4">
@@ -102,10 +136,14 @@ export default function Home() {
                 priority
               />
             </div>
-            <h1 className="text-5xl font-semibold mb-4">
+            <h2 className="text-5xl font-semibold mb-4">
               <span className="text-white">Intelligence </span>
               <span className="text-[#FCE2BA]">Atmosphérique</span>
+            </h2>
+            <h1 className="sr-only">
+              Sonarmo : l’intelligence musicale au service de l’expérience client
             </h1>
+
             <p className="max-w-xl text-gray-400 text-base sm:text-lg mb-8">
               Chaque lieu à une histoire, une identité unique. Sonarmo crée une ambiance sonore personnalisée, pensée spécialement pour refléter l&apos;âme de votre espace et offrir une expérience immersive incomparable.
             </p>
