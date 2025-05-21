@@ -22,7 +22,7 @@ export default function About() {
             </Head>
             <main className="bg-black text-white font-[Poppins]">
               {/* HEADER */}
-                      <header className="flex justify-between items-center px-6 py-4">
+                <header className="relative z-10 flex justify-between items-center px-6 py-4">
                     <Link href="/index-en" className="flex items-center gap-2">
                         <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
                         <span className="text-white text-lg font-semibold italic">Sonarmo</span>
@@ -32,7 +32,7 @@ export default function About() {
               
               
                         {/* Desktop Nav */}
-                        <nav className="hidden md:flex gap-6 text-sm items-center">
+                    <nav className="relative z-10 hidden md:flex gap-6 text-sm items-center">
                     <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
                           <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
                           <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
@@ -43,7 +43,7 @@ export default function About() {
                         </nav>
               
                         {/* Mobile Nav Toggle */}
-                        <div className="md:hidden">
+                    <div className="relative z-10 md:hidden">
                           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
                             {isMenuOpen ? (
                               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -65,7 +65,7 @@ export default function About() {
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
+                            className="relative z-10 md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
                           >
                             <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
                             <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>

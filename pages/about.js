@@ -22,7 +22,7 @@ export default function About() {
             </Head>
             <main className="bg-black text-white font-[Poppins] overflow-x-hidden">
               {/* HEADER */}
-                      <header className="flex justify-between items-center px-6 py-4">
+                <header className="relative z-10 flex justify-between items-center px-6 py-4">
                     <Link href="/" className="flex items-center gap-2">
                         <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
                         <span className="text-white text-lg font-semibold italic">Sonarmo</span>
@@ -32,7 +32,7 @@ export default function About() {
               
               
                         {/* Desktop Nav */}
-                        <nav className="hidden md:flex gap-6 text-sm items-center">
+                    <nav className="relative z-10 hidden md:flex gap-6 text-sm items-center">
                     <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
                           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
                           <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
@@ -65,7 +65,7 @@ export default function About() {
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
+                            className="relative z-10 md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
                           >
                             <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
                             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
@@ -144,7 +144,7 @@ export default function About() {
             </main>
             {/* FOOTER */}
             <footer className="bg-black text-sm text-gray-400 border-t border-gray-700 px-6 py-10 w-full">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div className="flex flex-col gap-2 mb-6 md:mb-0">
                         <div className="flex items-center gap-4">
                             <a href="https://www.instagram.com/sonarmo_music/?hl=fr" target="_blank" rel="noopener noreferrer">
