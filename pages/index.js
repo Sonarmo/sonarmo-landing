@@ -11,6 +11,7 @@ export default function Home() {
   return (
     <>
       <Head>
+       
         {/* Titre SEO */}
         <title>Sonarmo | Ambiance musicale intelligente pour les lieux publics</title>
 
@@ -50,6 +51,18 @@ export default function Home() {
           content="Créez une ambiance musicale unique avec Sonarmo, votre solution IA pour bars et cafés."
         />
         <meta name="twitter:image" content="https://www.sonarmo.com/images/sonarmo-cover.png" />
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-PTGDLQ7W2N');
+      `,
+          }}
+        />
       </Head>
 
       <main className="bg-black text-white font-[Poppins] overflow-x-hidden">
