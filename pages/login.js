@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import nookies from "nookies"; // ← ajouté ici
+import Head from "next/head";
+
 
 export default function Login() {
     const [email, setEmail] = useState("");
