@@ -171,7 +171,7 @@ return (
                         </a>
                     </div>
                     <p>Sonarmo Team</p>
-                    <Link href="/" className="hover:text-white">About us</Link>
+                    <Link href="/about-en" className="hover:text-white">About us</Link>
                     <Link href="/contact-en" className="hover:text-white">Contact us</Link>
                 </div>
                 <div className="flex flex-col items-end text-right gap-2">

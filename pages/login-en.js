@@ -56,8 +56,8 @@ export default function Login() {
                     <span className="text-white text-lg font-semibold italic">Sonarmo</span>
                 </Link>
                 <nav className="hidden md:flex gap-6 text-sm items-center">
-                    <Link href="/experience" className="hover:text-gray-300">L’EXPÉRIENCE SONARMO</Link>
-                    <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+                    <Link href="/experience" className="hover:text-gray-300">SONARMO EXPÉRIENCE</Link>
+                    <Link href="/contact" className="hover:text-gray-300">CONTACT US</Link>
                 </nav>
             </header>
 
@@ -80,12 +80,12 @@ export default function Login() {
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full text-left">
                         <label className="text-sm">Email
                             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full px-4 py-2 rounded bg-white/90 text-black mt-1" /></label>
-                        <label className="text-sm">Mot de passe
+                        <label className="text-sm">Password
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full px-4 py-2 rounded bg-white/90 text-black mt-1" /></label>
                         {error && <p className="text-red-500 text-sm">{error}</p>}
-                        <button type="submit" className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-2 rounded text-white font-semibold">Se connecter</button>
+                        <button type="submit" className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-2 rounded text-white font-semibold">Login</button>
                         <div className="text-sm text-gray-400 flex flex-col gap-1 mt-2">
-                            <Link href="#" className="hover:text-white">Mot de passe oublié ?</Link>
+                            <Link href="#" className="hover:text-white">Forget your password ?</Link>
                         </div>
                     </form>
                 </div>
@@ -107,13 +107,13 @@ export default function Login() {
                             </a>
                         </div>
                         <p>Sonarmo Team</p>
-                        <Link href="/about" className="hover:text-white">À propos de nous</Link>
-                        <Link href="/contact" className="hover:text-white">Nous contacter</Link>
+                        <Link href="/about-en" className="hover:text-white">About us</Link>
+                        <Link href="/contact" className="hover:text-white">Contact us</Link>
                     </div>
                     <div className="flex flex-col items-end text-right gap-2">
                         <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-                        <p className="text-xs">&copy;2025 Sonarmo Team. Tous droits réservés</p>
-                        <p className="text-xs">Conditions d&apos;utilisation &amp; Politique de confidentialité</p>
+                        <p className="text-xs">&copy;2025 Sonarmo Team. All right reserved</p>
+                        <p className="text-xs">Terms of Use & Privacy Policy</p>
                     </div>
                 </div>
             </footer>

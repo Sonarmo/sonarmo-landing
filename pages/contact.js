@@ -126,7 +126,7 @@ export default function Contact() {
                                 </a>
                             </div>
                             <p>Sonarmo Team</p>
-                            <Link href="/" className="hover:text-white">A propos de nous</Link>
+                            <Link href="/about" className="hover:text-white">A propos de nous</Link>
                             <Link href="/contact" className="hover:text-white">Nous contacter</Link>
                         </div>
                         <div className="flex flex-col items-end text-right gap-2">
