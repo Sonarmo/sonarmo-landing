@@ -9,7 +9,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { doc, getDoc } from "firebase/firestore";
-import { MainPlaylistBadge } from "../components/builder/MainPlaylistBadge"; // adapte le chemin si besoin
+import { MainPlaylistBadge } from "@/components/builder/MainPlaylistBadge"; // adapte le chemin si besoin
 
 
 export default function MusicPage() {
