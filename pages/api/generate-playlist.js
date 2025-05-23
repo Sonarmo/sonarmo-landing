@@ -148,7 +148,18 @@ Ne fais aucun commentaire. Ne donne aucune explication. Juste la liste.
     await db.collection("profiles").doc(id).set({
       playlistUrl: playlistData.external_urls.spotify,
       lastGenerated: new Date().toISOString(),
+      mainPlaylist: {
+        id: playlistData.id,
+        url: playlistData.external_urls.spotify,
+        isGenerative: true,
+        lastUpdated: new Date().toISOString(),
+        mood: ambiance.mood || "",
+        meteo: meteo,
+        moment: ambiance.hours || "",
+        refreshInterval: 60, // en minutes, ajustable plus tard
+      }
     }, { merge: true });
+
 
     return res.status(200).json({
       playlist: {

@@ -330,9 +330,9 @@ export default function Dashboard() {
 
 
     return (
-        <div className="min-h-screen bg-[#121212] flex flex-col md:flex-row font-[Poppins]">
+        <div className="min-h-screen bg-black flex flex-col md:flex-row font-[Poppins]">
             {/* Sidebar */}
-            <aside className="w-full md:w-64 bg-[#1c1c1c] text-gray-300 p-6 flex flex-col gap-8">
+            <aside className="w-full md:w-64 bg-black text-gray-300 p-6 flex flex-col gap-8">
                 <Link href="/dashboard" className="flex items-center gap-3 mb-8">
                     <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={140} height={40} />
                 </Link>
@@ -343,7 +343,7 @@ export default function Dashboard() {
                     </Link>
                     <Link href="/dashboard/music" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/music" ? "text-white" : ""}`}>
                         <Image src="/icons/music.png" alt="Music" width={24} height={24} />
-                        Musique
+                        Musiques
                     </Link>
                     <Link href="/dashboard/analytics" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/analytics" ? "text-white" : ""}`}>
                         <Image src="/icons/analytics.png" alt="Analytics" width={24} height={24} />
@@ -366,7 +366,7 @@ export default function Dashboard() {
 
             {/* Main content */}
             <main className="flex-1 p-6 md:p-10 text-white">
-                <h1 className="text-3xl font-bold mb-6">Bienvenue sur ton Dashboard 🎶</h1>
+                <h1 className="text-3xl font-semibold mb-6">Bienvenue sur ton Dashboard</h1>
 
                 <section className="bg-[#1c1c1c] rounded-xl p-6 md:p-8 shadow-lg mb-10">
                     <h2 className="text-2xl font-semibold mb-6">Ambiance actuelle</h2>

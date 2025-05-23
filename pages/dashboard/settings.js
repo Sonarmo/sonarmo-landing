@@ -81,10 +81,10 @@ export default function Settings() {
     };
 
     return (
-        <main className="bg-[#121212] text-white min-h-screen flex font-[Poppins]">
+        <main className="bg-black text-white min-h-screen flex font-[Poppins]">
 
             {/* SIDEBAR */}
-            <aside className="hidden md:flex md:w-64 bg-[#1c1c1c] text-gray-300 p-6 flex-col gap-8">
+            <aside className="hidden md:flex md:w-64 bg-black text-gray-300 p-6 flex-col gap-8">
                 <Link href="/dashboard" className="flex items-center gap-3 mb-8">
                     <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={140} height={40} />
                 </Link>

@@ -26,7 +26,7 @@ export default function AnalyticsPage() {
     }, []);
 
     return (
-        <div className="flex min-h-screen bg-[#121212] text-white font-[Poppins]">
+        <div className="flex min-h-screen bg-black text-white font-[Poppins]">
             {/* Mobile toggle */}
             <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -37,7 +37,7 @@ export default function AnalyticsPage() {
 
             {/* Sidebar */}
             <aside
-                className={`fixed md:static z-40 w-64 bg-[#1c1c1c] text-gray-300 p-6 flex flex-col gap-8 transition-transform duration-300 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+                className={`fixed md:static z-40 w-64 bg-black text-gray-300 p-6 flex flex-col gap-8 transition-transform duration-300 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
                     }`}
             >
                 <Link href="/dashboard" className="flex items-center gap-3 mb-8">

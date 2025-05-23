@@ -1,0 +1,19 @@
+
+{
+  "name": "functions",
+  "description": "Clean Firebase Cloud Function Setup",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "firebase deploy --only functions"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "dependencies": {
+    "firebase-admin": "^11.11.1",
+    "firebase-functions": "^3.23.0",
+    "node-fetch": "^2.6.1",
+    "openai": "^4.20.0"
+  },
+  "private": true
+}
