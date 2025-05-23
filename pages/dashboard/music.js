@@ -9,6 +9,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { doc, getDoc } from "firebase/firestore";
+import { MainPlaylistBadge } from "../components/builder/MainPlaylistBadge"; // adapte le chemin si besoin
+
 
 export default function MusicPage() {
     const router = useRouter();
@@ -21,6 +23,8 @@ export default function MusicPage() {
     const [playlistUrl, setPlaylistUrl] = useState(null);
     const [isGenerating, setIsGenerating] = useState(false);
     const promptRef = useRef();
+    const [userProfile, setUserProfile] = useState(null);
+
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -29,6 +33,16 @@ export default function MusicPage() {
             } else {
                 setUid(user.uid);
                 const docSnap = await getDoc(doc(db, "users", user.uid));
+                if (docSnap.exists()) {
+                    const token = docSnap.data().spotifyAccessToken;
+                    setAccessToken(token);
+                }
+
+                const profileSnap = await getDoc(doc(db, "profiles", user.uid));
+                if (profileSnap.exists()) {
+                    setUserProfile(profileSnap.data());
+                }
+
                 if (docSnap.exists()) {
                     const token = docSnap.data().spotifyAccessToken;
                     setAccessToken(token);
@@ -142,6 +156,13 @@ export default function MusicPage() {
             {/* Main Content */}
             <main className="flex-1 p-6 md:p-10 text-white font-poppins">
                 <h1 className="text-3xl font-bold mb-8">Vos Playlists</h1>
+                {userProfile?.mainPlaylist?.id && (
+                    <MainPlaylistBadge
+                        lastUpdated={userProfile?.mainPlaylist?.lastUpdated}
+                        spotifyUrl={`https://open.spotify.com/playlist/${userProfile?.mainPlaylist?.id}`}
+                    />
+                )}
+
 
                 {/* Prompt Input Section */}
                 <section className="bg-[#1c1c1c] p-6 rounded-xl shadow-lg mb-10">

@@ -123,7 +123,7 @@ Ne fais aucun commentaire. Ne donne aucune explication. Juste la liste.
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: `Sonarmo – ${profile.placeName || "Lieu"}`,
+        name: `Playlist principale – ${profile.placeName}`,
         description: "Playlist générée par IA avec Sonarmo",
         public: false
       }),
