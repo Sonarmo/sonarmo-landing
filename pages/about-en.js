@@ -15,10 +15,6 @@ export default function About() {
             <Head>
                 <title>Sonarmo - About</title>
                 <meta name="description" content="Découvrez la mission et la vision de Sonarmo, une expérience musicale intelligente." />
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
-                    rel="stylesheet"
-                />
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
                 {/* Google Analytics */}
                 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>

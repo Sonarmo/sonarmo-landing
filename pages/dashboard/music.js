@@ -114,13 +114,13 @@ export default function MusicPage() {
     };
 
     if (loading) {
-        return <div className="text-white min-h-screen flex items-center justify-center font-poppins">Chargement...</div>;
+        return <div className="text-white min-h-screen flex items-center justify-center">Chargement...</div>;
     }
 
     return (
-        <div className="min-h-screen bg-black flex flex-col md:flex-row font-poppins pb-24">
+        <div className="min-h-screen bg-black flex flex-col md:flex-row pb-24">
             {/* Sidebar */}
-            <aside className="w-full md:w-64 bg-black text-gray-300 p-6 flex flex-col gap-8 font-poppins">
+            <aside className="w-full md:w-64 bg-black text-gray-300 p-6 flex flex-col gap-8">
                 <Link href="/dashboard" className="flex items-center gap-3 mb-8">
                     <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={140} height={40} />
                 </Link>
@@ -154,7 +154,7 @@ export default function MusicPage() {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-6 md:p-10 text-white font-poppins">
+            <main className="flex-1 p-6 md:p-10 text-white">
                 <h1 className="text-3xl font-bold mb-8">Vos Playlists</h1>
                 {userProfile?.mainPlaylist?.id && (
                     <MainPlaylistBadge

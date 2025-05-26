@@ -364,7 +364,7 @@ export default function Dashboard() {
 
 
     return (
-        <div className="min-h-screen bg-black flex flex-col md:flex-row font-[Poppins]">
+        <div className="min-h-screen bg-black flex flex-col md:flex-row">
             {/* Sidebar */}
             <aside className="w-full md:w-64 bg-black text-gray-300 p-6 flex flex-col gap-8">
                 <Link href="/dashboard" className="flex items-center gap-3 mb-8">

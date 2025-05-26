@@ -15,7 +15,7 @@ export default function Logout() {
     }, [router]);
 
     return (
-        <main className="bg-[#121212] text-white min-h-screen flex items-center justify-center font-[Poppins]">
+        <main className="bg-[#121212] text-white min-h-screen flex items-center justify-center">
             <p className="text-xl">Déconnexion en cours...</p>
         </main>
     );

@@ -13,10 +13,6 @@ return (
 
         <Head>
             <title>Sonarmo</title>
-            <link
-                href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
-                rel="stylesheet"
-            />
             <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
             {/* Google Analytics */}
             <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>
@@ -31,7 +27,7 @@ return (
                 }}
             />
         </Head>
-        <main className="bg-black text-white font-[Poppins] overflow-x-hidden">
+        <main className="bg-black text-white overflow-x-hidden">
         {/* HEADER */}
         <header className="flex justify-between items-center px-6 py-4">
             <div className="flex items-center gap-2">

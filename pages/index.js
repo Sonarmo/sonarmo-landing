@@ -27,11 +27,7 @@ export default function Home() {
         {/* Favicon */}
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
 
-        {/* Google Fonts */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
-          rel="stylesheet"
-        />
+      
 
         {/* Open Graph (LinkedIn, Facebook...) */}
         <meta property="og:title" content="Sonarmo | Ambiance musicale intelligente" />
@@ -65,7 +61,7 @@ export default function Home() {
         />
       </Head>
 
-      <main className="bg-black text-white font-[Poppins] overflow-x-hidden">
+      <main className="bg-black text-white overflow-x-hidden">
         {/* HEADER */}
         <header className="flex justify-between items-center px-6 py-4">
           <div className="flex items-center gap-2">

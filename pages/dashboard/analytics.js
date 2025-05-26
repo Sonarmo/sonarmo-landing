@@ -26,7 +26,7 @@ export default function AnalyticsPage() {
     }, []);
 
     return (
-        <div className="flex min-h-screen bg-black text-white font-[Poppins]">
+        <div className="flex min-h-screen bg-black text-white">
             {/* Mobile toggle */}
             <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}

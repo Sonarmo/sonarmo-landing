@@ -12,10 +12,6 @@ export default function Contact() {
         <>
             <Head>
                 <title>Sonarmo - Contacte</title>
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
-                    rel="stylesheet"
-                />
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
                 {/* Google Analytics */}
                 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>
@@ -30,7 +26,7 @@ export default function Contact() {
                     }}
                 />
             </Head>
-            <main className="bg-black text-white font-[Poppins] min-h-screen relative overflow-x-hidden">
+            <main className="bg-black text-white min-h-screen relative overflow-x-hidden">
                 {/* HEADER */}
                 <header className="flex justify-between items-center px-6 py-4">
                     <Link href="/" className="flex items-center gap-2">
