@@ -117,23 +117,44 @@ export default function Dashboard() {
 
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            if (!user) return router.push("/login");
-            setLoading(false);
-            const docSnap = await getDoc(doc(db, "users", user.uid));
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                setAccessToken(data.spotifyAccessToken);
-                if (data.selectedPlaylistUri) setAmbianceUri(data.selectedPlaylistUri);
-                const testRes = await fetch("https://api.spotify.com/v1/me", {
-                    headers: { Authorization: `Bearer ${data.spotifyAccessToken}` },
-                });
-                if (testRes.status === 401 || testRes.status === 403) await refreshAccessToken();
+  const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    if (!user) return router.push("/login");
 
-            }
-        });
-        return () => unsubscribe();
-    }, [router]);
+    setLoading(false);
+    const docSnap = await getDoc(doc(db, "users", user.uid));
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const token = data.spotifyAccessToken;
+
+      setAccessToken(token);
+      if (data.selectedPlaylistUri) setAmbianceUri(data.selectedPlaylistUri);
+
+      if (token && typeof token === "string") {
+        console.log("🔐 Vérification du token Spotify :", token.slice(0, 10) + "...");
+
+        try {
+          const testRes = await fetch("https://api.spotify.com/v1/me", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const json = await testRes.json();
+          console.log("📥 Réponse Spotify /v1/me :", json);
+
+          if (testRes.status === 401 || testRes.status === 403) {
+            console.warn("⚠️ Token Spotify invalide → refresh...");
+            await refreshAccessToken();
+          }
+        } catch (err) {
+          console.error("❌ Erreur lors de la vérification du token Spotify :", err);
+        }
+      } else {
+        console.warn("⚠️ Aucun token Spotify valide trouvé dans Firestore.");
+      }
+    }
+  });
+
+  return () => unsubscribe();
+}, [router]);
 
     useEffect(() => {
         if (router.query.uri) {
