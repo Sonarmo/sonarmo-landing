@@ -131,7 +131,7 @@ export default function Settings() {
 
       {/* CONTENU */}
       <section className="flex-1 p-10">
-        <h1 className="text-3xl font-bold mb-6">Réglages</h1>
+        <h1 className="text-3xl font-semibold mb-6">Réglages</h1>
 
         <section className="bg-[#1e1e1e] rounded-2xl p-6 mb-8 shadow-lg">
           <h2 className="text-2xl font-semibold mb-4">🎧 Connecter Spotify</h2>

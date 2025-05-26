@@ -132,7 +132,7 @@ export default function ProfilePage() {
 
             {/* Main Content */}
             <main className="flex-1 p-6 md:p-10 text-white">
-                <h1 className="text-3xl font-bold mb-8">Profil du Lieu 👤</h1>
+                <h1 className="text-3xl font-semibold mb-6">Profil du Lieu</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>

@@ -155,7 +155,7 @@ export default function MusicPage() {
 
             {/* Main Content */}
             <main className="flex-1 p-6 md:p-10 text-white">
-                <h1 className="text-3xl font-bold mb-8">Vos Playlists</h1>
+                <h1 className="text-3xl font-semibold mb-6">Vos Playlists</h1>
                 {userProfile?.mainPlaylist?.id && (
                     <MainPlaylistBadge
                         lastUpdated={userProfile?.mainPlaylist?.lastUpdated}

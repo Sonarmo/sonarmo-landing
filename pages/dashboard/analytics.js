@@ -73,14 +73,14 @@ export default function AnalyticsPage() {
             </aside>
 
             {/* Main content */}
-            <main className="flex-1 p-6 font-[Poppins]">
+            <main className="flex-1 p-6">
                 <motion.h1
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="text-3xl font-semibold mb-8"
+                    className="text-3xl font-semibold mb-6"
                 >
-                    📊 Analyses Sonarmo
+                Analyses
                 </motion.h1>
 
                 <div className="grid md:grid-cols-3 gap-6 mb-10">
