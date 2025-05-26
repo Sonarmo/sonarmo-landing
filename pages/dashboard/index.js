@@ -453,7 +453,7 @@ export default function Dashboard() {
                         <TrackPreviewPanel accessToken={accessToken} />
 
                         <div className="bg-[#1c1c1c] p-4 rounded-2xl shadow-lg">
-                            <h3 className="text-lg font-semibold mb-2">Énergie musicale 🔋</h3>
+                            <h3 className="text-lg font-semibold mb-2">Énergie musicale</h3>
                             <ResponsiveContainer width="100%" height={150}>
                                 <LineChart data={fakeEnergyData}>
                                     <XAxis dataKey="name" stroke="#888" />

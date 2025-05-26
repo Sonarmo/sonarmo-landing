@@ -46,7 +46,7 @@ export default function TrackPreviewPanel({ accessToken }) {
 
   return (
     <div className="bg-[#1c1c1c] p-4 rounded-2xl shadow-lg text-white">
-      <h3 className="text-lg font-semibold mb-3">🎶 File d’attente</h3>
+      <h3 className="text-lg font-semibold mb-3">File d’attente</h3>
 
       <div className="mb-4">
         <p className="text-gray-400 mb-1 text-sm">À venir :</p>
