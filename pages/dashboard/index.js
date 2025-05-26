@@ -116,40 +116,53 @@ export default function Dashboard() {
 
 
 
-    useEffect(() => {
+   useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
     if (!user) return router.push("/login");
 
     setLoading(false);
-    const docSnap = await getDoc(doc(db, "users", user.uid));
+    try {
+      const docSnap = await getDoc(doc(db, "users", user.uid));
 
-    if (docSnap.exists()) {
+      if (!docSnap.exists()) {
+        console.warn("📭 Aucun document Firestore trouvé pour cet utilisateur.");
+        return;
+      }
+
       const data = docSnap.data();
       const token = data.spotifyAccessToken;
 
       setAccessToken(token);
-      if (data.selectedPlaylistUri) setAmbianceUri(data.selectedPlaylistUri);
+
+      if (data.selectedPlaylistUri) {
+        setAmbianceUri(data.selectedPlaylistUri);
+        console.log("🎯 Playlist personnalisée :", data.selectedPlaylistUri);
+      }
+
+      if (data.ambianceLabel) {
+        setAmbiance(data.ambianceLabel);
+        console.log("🎵 Label d'ambiance :", data.ambianceLabel);
+      }
 
       if (token && typeof token === "string") {
         console.log("🔐 Vérification du token Spotify :", token.slice(0, 10) + "...");
 
-        try {
-          const testRes = await fetch("https://api.spotify.com/v1/me", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const json = await testRes.json();
-          console.log("📥 Réponse Spotify /v1/me :", json);
+        const testRes = await fetch("https://api.spotify.com/v1/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-          if (testRes.status === 401 || testRes.status === 403) {
-            console.warn("⚠️ Token Spotify invalide → refresh...");
-            await refreshAccessToken();
-          }
-        } catch (err) {
-          console.error("❌ Erreur lors de la vérification du token Spotify :", err);
+        const json = await testRes.json();
+        console.log("📥 Réponse Spotify /v1/me :", json);
+
+        if (testRes.status === 401 || testRes.status === 403) {
+          console.warn("⛔️ Token expiré ou invalide. Rafraîchissement...");
+          await refreshAccessToken();
         }
       } else {
         console.warn("⚠️ Aucun token Spotify valide trouvé dans Firestore.");
       }
+    } catch (err) {
+      console.error("❌ Erreur Firestore ou API Spotify :", err);
     }
   });
 

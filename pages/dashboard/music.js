@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { doc, getDoc } from "firebase/firestore";
 import { MainPlaylistBadge } from "@/components/builder/MainPlaylistBadge"; // adapte le chemin si besoin
-
+import { updateDoc } from "firebase/firestore";
 
 export default function MusicPage() {
     const router = useRouter();
@@ -204,7 +204,22 @@ export default function MusicPage() {
                             key={playlist.id}
                             whileHover={{ scale: 1.05 }}
                             className="bg-[#1c1c1c] rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition cursor-pointer"
-                            onClick={() => playPlaylist(playlist.uri)}
+                            onClick={async () => {
+  await playPlaylist(playlist.uri);
+
+  // 🔐 Sauvegarde dans Firestore
+  if (uid) {
+    try {
+      await updateDoc(doc(db, "users", uid), {
+        selectedPlaylistUri: playlist.uri,
+        ambianceLabel: playlist.name, // (optionnel pour affichage dans le dashboard)
+      });
+      console.log("✅ Playlist enregistrée dans Firestore");
+    } catch (error) {
+      console.error("❌ Erreur enregistrement Firestore :", error);
+    }
+  }
+}}
                         >
                             <Image
                                 src={playlist.images[0]?.url || "/images/default.jpg"}
