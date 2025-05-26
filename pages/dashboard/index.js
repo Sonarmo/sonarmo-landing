@@ -12,6 +12,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
+import TrackPreviewPanel from "@/components/builder/TrackPreviewPanel";
 
 const playlistUrls = {
     "Lounge Chill 🌙": "https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6",
@@ -449,6 +450,7 @@ export default function Dashboard() {
                             isShuffling={isShuffling}
                             onToggleShuffle={onToggleShuffle}
                         />
+                        <TrackPreviewPanel accessToken={accessToken} />
 
                         <div className="bg-[#1c1c1c] p-4 rounded-2xl shadow-lg">
                             <h3 className="text-lg font-semibold mb-2">Énergie musicale 🔋</h3>
