@@ -313,7 +313,7 @@ export default function Experience() {
                         <div className="text-left max-w-md">
                             <h4 className="text-white font-semibold text-lg mb-2">Toute la musique, sans limite</h4>
                             <p className="text-gray-300 text-base leading-relaxed">
-                                Connecte ton compte Spotify et accède à l&apos;intégralité de son catalogue, directement depuis la plateforme Sonarmo. Zéro friction, 100% fluide.
+                                Connectez votre compte Spotify et accedez à l&apos;intégralité de son catalogue, directement depuis la plateforme Sonarmo.
                             </p>
                         </div>
                     </div>
