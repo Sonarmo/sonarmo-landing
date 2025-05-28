@@ -30,9 +30,9 @@ export default function AnalyticsPage() {
     async function fetchStats() {
       const playlistId = "37i9dQZF1DXdPec7aLTmlC"; // playlist test
       const token = localStorage.getItem("spotifyToken");
-      const res = await fetch(`/api/test-playlist?playlistId=${playlistId}&token=${token}`);
-      const json = await res.json();
-      setStats(json.stats);
+      const res = await fetch("/api/analyse-playlist"); // plus besoin de token
+const json = await res.json();
+setStats(json.stats);
     }
     fetchStats();
   }, []);
