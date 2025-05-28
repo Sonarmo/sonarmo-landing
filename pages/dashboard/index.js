@@ -185,18 +185,27 @@ export default function Dashboard() {
     if (!ambianceUri || !accessToken) return;
 
     const fetchAnalysis = async () => {
-        try {
-            const res = await fetch("/api/analyse-playlist");
-            const data = await res.json();
+    try {
+        const res = await fetch("/api/analyse-playlist", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                playlistUri: ambianceUri, // ou tout autre paramètre requis
+            }),
+        });
 
-            if (!res.ok) throw new Error(data.error || "Erreur inconnue");
+        const data = await res.json();
 
-            console.log("🧠 Résultats de l'analyse :", data);
-            setPlaylistAnalysis(data);
-        } catch (err) {
-            console.error("❌ Erreur analyse playlist :", err.message);
-        }
-    };
+        if (!res.ok) throw new Error(data.error || "Erreur inconnue");
+
+        console.log("🧠 Résultats de l'analyse :", data);
+        setPlaylistAnalysis(data);
+    } catch (err) {
+        console.error("❌ Erreur analyse playlist :", err.message);
+    }
+};
 
     fetchAnalysis();
 }, [ambianceUri, accessToken]);
