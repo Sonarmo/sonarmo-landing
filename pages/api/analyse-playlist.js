@@ -2,6 +2,7 @@ import { getPlaylistAudioData } from "@/lib/spotify/getPlaylistAudioData";
 import { aggregateAudioStats } from "@/lib/spotify/aggregateAudioStats";
 import { authAdmin } from "@/lib/firebaseAdmin";
 import { getFirestore } from "firebase-admin/firestore";
+import { db } from "@/lib/firebaseAdmin";
 
 // Vérifie qu’un token Spotify fonctionne avec une requête simple
 async function validateSpotifyToken(token) {
