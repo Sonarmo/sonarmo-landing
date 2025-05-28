@@ -47,6 +47,7 @@ export default function Dashboard() {
     const [isShuffling, setIsShuffling] = useState(false);
     const justRefreshed = useRef(false);
     const hasPlayedOnce = useRef(false);
+    const [playlistAnalysis, setPlaylistAnalysis] = useState(null);
 
     // 🔶 Démo données énergie (graph temporaire)
     const [energy, setEnergy] = useState(0.65);
@@ -179,6 +180,26 @@ export default function Dashboard() {
             }).catch(console.error);
         }
     }, [router.query.uri]);
+
+    useEffect(() => {
+    if (!ambianceUri || !accessToken) return;
+
+    const fetchAnalysis = async () => {
+        try {
+            const res = await fetch("/api/analyse-playlist");
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || "Erreur inconnue");
+
+            console.log("🧠 Résultats de l'analyse :", data);
+            setPlaylistAnalysis(data);
+        } catch (err) {
+            console.error("❌ Erreur analyse playlist :", err.message);
+        }
+    };
+
+    fetchAnalysis();
+}, [ambianceUri, accessToken]);
 
     // dashboard.js – version corrigée avec SDK chargé de façon fiable et gestion d'erreur renforcée
 
@@ -360,7 +381,17 @@ export default function Dashboard() {
         fetchAudioFeatures();
     }, [currentTrack?.id, accessToken]);
 
-
+{playlistAnalysis && (
+  <div className="bg-[#1c1c1c] text-white p-4 rounded-xl mb-8">
+    <h3 className="text-xl font-semibold mb-2">Analyse Playlist</h3>
+    <ul className="text-sm text-gray-300 list-disc list-inside space-y-1">
+      <li><strong>Énergie moyenne :</strong> {(playlistAnalysis.average_energy * 100).toFixed(1)}%</li>
+      <li><strong>Tempo moyen :</strong> {playlistAnalysis.average_tempo.toFixed(0)} BPM</li>
+      <li><strong>Valence moyenne :</strong> {(playlistAnalysis.average_valence * 100).toFixed(1)}%</li>
+      <li><strong>Nombre de morceaux :</strong> {playlistAnalysis.total_tracks}</li>
+    </ul>
+  </div>
+)}
 
 
 
