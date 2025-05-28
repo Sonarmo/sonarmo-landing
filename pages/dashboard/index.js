@@ -26,6 +26,12 @@ const convertToSpotifyUri = (url) => {
     const id = url.split("/playlist/")[1].split("?")[0];
     return `spotify:playlist:${id}`;
 };
+const extractPlaylistId = (uri) => {
+  if (!uri) return null;
+  return uri.startsWith("spotify:playlist:")
+    ? uri.replace("spotify:playlist:", "")
+    : uri;
+};
 
 export default function Dashboard() {
     const router = useRouter();
@@ -171,41 +177,53 @@ export default function Dashboard() {
   return () => unsubscribe();
 }, [router]);
 
-    useEffect(() => {
-        if (router.query.uri) {
-            const uri = convertToSpotifyUri(router.query.uri);
-            setAmbianceUri(uri);
-            updateDoc(doc(db, "users", auth.currentUser.uid), {
-                selectedPlaylistUri: uri,
-            }).catch(console.error);
-        }
-    }, [router.query.uri]);
+    // 👉 Met à jour l'URI sélectionnée si elle est passée dans l'URL
+useEffect(() => {
+    if (router.query.uri) {
+        const uri = convertToSpotifyUri(router.query.uri);
+        setAmbianceUri(uri);
+        updateDoc(doc(db, "users", auth.currentUser.uid), {
+            selectedPlaylistUri: uri,
+        }).catch(console.error);
+    }
+}, [router.query.uri]);
 
-    useEffect(() => {
+// 👉 Analyse automatique de la playlist dès que l’URI et le token sont prêts
+useEffect(() => {
     if (!ambianceUri || !accessToken) return;
 
+    const extractPlaylistId = (uri) => {
+        const match = uri.match(/spotify:playlist:(.+)/);
+        return match ? match[1] : null;
+    };
+
     const fetchAnalysis = async () => {
-    try {
-        const res = await fetch("/api/analyse-playlist", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                playlistUri: ambianceUri, // ou tout autre paramètre requis
-            }),
-        });
+        const playlistId = extractPlaylistId(ambianceUri);
 
-        const data = await res.json();
+        if (!playlistId) {
+            console.warn("⚠️ Aucun playlistId trouvé à analyser.");
+            return;
+        }
 
-        if (!res.ok) throw new Error(data.error || "Erreur inconnue");
+        try {
+            const res = await fetch("/api/analyse-playlist", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ playlistId }),
+            });
 
-        console.log("🧠 Résultats de l'analyse :", data);
-        setPlaylistAnalysis(data);
-    } catch (err) {
-        console.error("❌ Erreur analyse playlist :", err.message);
-    }
-};
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || "Erreur inconnue");
+
+            console.log("🧠 Résultats de l'analyse :", data);
+            setPlaylistAnalysis(data);
+        } catch (err) {
+            console.error("❌ Erreur analyse playlist :", err.message);
+        }
+    };
 
     fetchAnalysis();
 }, [ambianceUri, accessToken]);
