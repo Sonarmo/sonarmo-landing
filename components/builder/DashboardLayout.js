@@ -49,7 +49,7 @@ export default function DashboardLayout({ children }) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 p-6 pb-32"> {/* padding bas pour le player */}
+      <main className="flex-1 p-6 pb-36"> {/* padding bas pour le player */}
         {children}
       </main>
 

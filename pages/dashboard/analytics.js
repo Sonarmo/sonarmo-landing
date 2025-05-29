@@ -57,35 +57,8 @@ export default function AnalyticsPage() {
         <Menu size={28} />
       </button>
 
-      <aside
-        className={`fixed md:static z-40 w-64 bg-black text-gray-300 p-6 flex flex-col gap-8 transition-transform duration-300 transform ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
-      >
-        <Link href="/dashboard" className="flex items-center gap-3 mb-8">
-          <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={140} height={40} />
-        </Link>
-        <nav className="flex flex-col gap-6 text-sm">
-          <Link href="/dashboard" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard" ? "text-white" : ""}`}>
-            <Image src="/icons/home.png" alt="Home" width={24} height={24} /> Dashboard
-          </Link>
-          <Link href="/dashboard/music" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/music" ? "text-white" : ""}`}>
-            <Image src="/icons/music.png" alt="Music" width={24} height={24} /> Musique
-          </Link>
-          <Link href="/dashboard/analytics" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/analytics" ? "text-white" : ""}`}>
-            <Image src="/icons/analytics.png" alt="Analytics" width={24} height={24} /> Analyses
-          </Link>
-          <Link href="/dashboard/settings" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/settings" ? "text-white" : ""}`}>
-            <Image src="/icons/settings.png" alt="Settings" width={24} height={24} /> Réglages
-          </Link>
-          <Link href="/dashboard/profile" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/profile" ? "text-white" : ""}`}>
-            <Image src="/icons/profile.png" alt="Profile" width={24} height={24} /> Profil
-          </Link>
-          <Link href="/logout" className="flex items-center gap-4 hover:text-white mt-8">
-            <Image src="/icons/logout.png" alt="Logout" width={24} height={24} /> Déconnexion
-          </Link>
-        </nav>
-      </aside>
+    
+        
 
       <main className="flex-1 p-6">
         <motion.h1
