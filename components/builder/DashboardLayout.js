@@ -33,44 +33,62 @@ export default function DashboardLayout({ children }) {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (!accessToken || player) return;
+ useEffect(() => {
+  if (!accessToken || player) return;
 
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const newPlayer = new window.Spotify.Player({
-        name: "Sonarmo Player",
-        getOAuthToken: cb => cb(accessToken),
-        volume: 0.5,
-      });
+  window.onSpotifyWebPlaybackSDKReady = () => {
+    const newPlayer = new window.Spotify.Player({
+      name: "Sonarmo Player",
+      getOAuthToken: cb => cb(accessToken),
+      volume: 0.5,
+    });
 
-      newPlayer.addListener("ready", ({ device_id }) => {
-        setDeviceId(device_id);
-        setPlayer(newPlayer);
-      });
+    newPlayer.addListener("ready", async ({ device_id }) => {
+      console.log("✅ Spotify Player prêt avec device ID :", device_id);
+      setDeviceId(device_id);
+      setPlayer(newPlayer);
 
-      newPlayer.addListener("player_state_changed", (state) => {
-        if (!state) return;
-        const track = state.track_window.current_track;
-        setCurrentTrack({
-          id: track.id,
-          name: track.name,
-          artist: track.artists.map(a => a.name).join(", "),
-          image: track.album.images[0]?.url,
+      // Activation du device pour recevoir les commandes
+      try {
+        const res = await fetch("https://api.spotify.com/v1/me/player", {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ device_ids: [device_id], play: false }),
         });
-        setIsPlaying(!state.paused);
-        setPosition(state.position);
-        setDuration(state.duration);
-        setIsShuffling(state.shuffle);
+
+        if (res.ok) {
+          console.log("🎧 Device activé avec succès");
+        } else {
+          console.warn("⚠️ Device non activé :", await res.text());
+        }
+      } catch (error) {
+        console.error("❌ Erreur lors de la sélection du device :", error);
+      }
+    });
+
+    newPlayer.addListener("player_state_changed", (state) => {
+      if (!state) return;
+      const track = state.track_window.current_track;
+      setCurrentTrack({
+        id: track.id,
+        name: track.name,
+        artist: track.artists.map(a => a.name).join(", "),
+        image: track.album.images[0]?.url,
       });
+    });
 
-      newPlayer.connect();
-    };
+    newPlayer.connect();
+  };
 
-    const script = document.createElement("script");
-    script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
-    document.body.appendChild(script);
-  }, [accessToken, player]);
+  // Charger le SDK Spotify si non présent
+  const script = document.createElement("script");
+  script.src = "https://sdk.scdn.co/spotify-player.js";
+  script.async = true;
+  document.body.appendChild(script);
+}, [accessToken, player]);
 
   const handlePlayPause = () => player?.togglePlay();
   const handleNext = () => player?.nextTrack();
