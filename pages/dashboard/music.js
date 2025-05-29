@@ -1,4 +1,3 @@
-import useSpotifyPlayer from "/hooks/useSpotifyPlayer";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "../../lib/firebase";
@@ -21,6 +20,7 @@ export default function MusicPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const promptRef = useRef();
   const [userProfile, setUserProfile] = useState(null);
+  const [deviceId, setDeviceId] = useState(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -63,7 +63,46 @@ export default function MusicPage() {
     fetchUserPlaylists();
   }, [accessToken]);
 
-  const { playPlaylist } = useSpotifyPlayer(accessToken);
+  useEffect(() => {
+    if (!accessToken) return;
+    const script = document.createElement("script");
+    script.src = "https://sdk.scdn.co/spotify-player.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      const player = new Spotify.Player({
+        name: "Sonarmo Web Player",
+        getOAuthToken: cb => cb(accessToken),
+        volume: 0.5
+      });
+
+      player.addListener("ready", ({ device_id }) => {
+        console.log("✅ SDK prêt, deviceId :", device_id);
+        setDeviceId(device_id);
+      });
+
+      player.connect();
+    };
+  }, [accessToken]);
+
+  const playPlaylist = async (playlistUri) => {
+    if (!deviceId || !accessToken) {
+      console.error("❌ Impossible de lancer la lecture : deviceId ou accessToken manquant");
+      return;
+    }
+
+    await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        context_uri: playlistUri,
+      }),
+    });
+  };
 
   const generatePlaylistFromPrompt = async () => {
     if (!promptText || promptText.length < 10) return;
