@@ -302,49 +302,40 @@ useEffect(() => {
     // À placer dans Dashboard() — après avoir déclaré : const hasPlayedOnce = useRef(false);
 
     useEffect(() => {
-        if (accessToken && deviceId && player && !hasPlayedOnce.current) {
-            const play = async () => {
-                const uri = ambianceUri || convertToSpotifyUri(playlistUrls[ambiance]);
+  if (!accessToken || !deviceId || !player || hasPlayedOnce.current) return;
 
-                try {
-                    const user = auth.currentUser;
-                    if (user) {
-                        await updateDoc(doc(db, "users", user.uid), {
-                            selectedPlaylistUri: uri,
-                        });
-                    }
+  const checkAndPlay = async () => {
+    try {
+      // Vérifie l'état actuel du player
+      const state = await player.getCurrentState();
 
-                    await fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${isShuffling}`, {
-                        method: "PUT",
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    });
+      if (state && !state.paused) {
+        console.log("🎵 Une lecture est déjà en cours. Pas de relance.");
+        hasPlayedOnce.current = true;
+        return;
+      }
 
-                    const res = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-                        method: "PUT",
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ context_uri: uri, offset: { position: 0 }, position_ms: 0 }),
-                    });
+      const uri = ambianceUri || convertToSpotifyUri(playlistUrls[ambiance]);
 
-                    if (!res.ok) {
-                        const err = await res.json();
-                        console.error("Erreur lecture Spotify:", err);
-                    } else {
-                        hasPlayedOnce.current = true; // ✅ Ne joue qu’une seule fois
-                    }
+      // On relance uniquement si rien ne joue
+      await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ context_uri: uri }) // ⛔ PAS de position_ms
+      });
 
-                } catch (err) {
-                    console.error("Erreur lors de l'appel /play Spotify:", err);
-                }
-            };
+      console.log("▶️ Playlist lancée.");
+      hasPlayedOnce.current = true;
+    } catch (err) {
+      console.error("Erreur lecture Spotify:", err);
+    }
+  };
 
-            play();
-        }
-    }, [accessToken, deviceId, player]); // ✅ ambiance retiré ici pour éviter les relances
+  checkAndPlay();
+}, [accessToken, deviceId, player]);
 
 
     // 🔊 Appliquer le volume dès qu'il change
