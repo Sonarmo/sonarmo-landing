@@ -418,10 +418,24 @@ useEffect(() => {
   <div className="bg-[#1c1c1c] text-white p-4 rounded-xl mb-8">
     <h3 className="text-xl font-semibold mb-2">Analyse Playlist</h3>
     <ul className="text-sm text-gray-300 list-disc list-inside space-y-1">
-      <li><strong>Énergie moyenne :</strong> {(playlistAnalysis.average_energy * 100).toFixed(1)}%</li>
-      <li><strong>Tempo moyen :</strong> {playlistAnalysis.average_tempo.toFixed(0)} BPM</li>
-      <li><strong>Valence moyenne :</strong> {(playlistAnalysis.average_valence * 100).toFixed(1)}%</li>
-      <li><strong>Nombre de morceaux :</strong> {playlistAnalysis.total_tracks}</li>
+      <li><strong>Énergie moyenne :</strong> 
+        {playlistAnalysis.average_energy !== undefined
+          ? `${(playlistAnalysis.average_energy * 100).toFixed(1)}%`
+          : "Données non disponibles"}
+      </li>
+      <li><strong>Tempo moyen :</strong> 
+        {playlistAnalysis.average_tempo !== undefined
+          ? `${playlistAnalysis.average_tempo.toFixed(0)} BPM`
+          : "Données non disponibles"}
+      </li>
+      <li><strong>Valence moyenne :</strong> 
+        {playlistAnalysis.average_valence !== undefined
+          ? `${(playlistAnalysis.average_valence * 100).toFixed(1)}%`
+          : "Données non disponibles"}
+      </li>
+      <li><strong>Nombre de morceaux :</strong> 
+        {playlistAnalysis.total_tracks || 0}
+      </li>
     </ul>
   </div>
 )}
