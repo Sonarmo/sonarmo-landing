@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
-import { useEffect, useState } from "react";
 import EnhancedPlayer from "/components/builder/EnhancedPlayer";
 import { auth, db } from "/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -33,71 +32,104 @@ export default function DashboardLayout({ children }) {
     return () => unsubscribe();
   }, []);
 
- useEffect(() => {
-  if (!accessToken || player) return;
+  useEffect(() => {
+    if (!accessToken || player) return;
 
-  window.onSpotifyWebPlaybackSDKReady = () => {
-    const newPlayer = new window.Spotify.Player({
-      name: "Sonarmo Player",
-      getOAuthToken: cb => cb(accessToken),
-      volume: 0.5,
-    });
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      const newPlayer = new window.Spotify.Player({
+        name: "Sonarmo Player",
+        getOAuthToken: cb => cb(accessToken),
+        volume: 0.5,
+      });
 
-    newPlayer.addListener("ready", async ({ device_id }) => {
-      console.log("✅ Spotify Player prêt avec device ID :", device_id);
-      setDeviceId(device_id);
-      setPlayer(newPlayer);
+      newPlayer.addListener("ready", async ({ device_id }) => {
+        console.log("✅ Spotify Player prêt avec device ID :", device_id);
+        setDeviceId(device_id);
+        setPlayer(newPlayer);
 
-      // Activation du device pour recevoir les commandes
-      try {
-        const res = await fetch("https://api.spotify.com/v1/me/player", {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ device_ids: [device_id], play: false }),
+        try {
+          const res = await fetch("https://api.spotify.com/v1/me/player", {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ device_ids: [device_id], play: false }),
+          });
+
+          if (res.ok) {
+            console.log("🎧 Device activé avec succès");
+          } else {
+            console.warn("⚠️ Device non activé :", await res.text());
+          }
+        } catch (error) {
+          console.error("❌ Erreur lors de la sélection du device :", error);
+        }
+      });
+
+      newPlayer.addListener("player_state_changed", (state) => {
+        if (!state) return;
+
+        const track = state.track_window.current_track;
+        setCurrentTrack({
+          id: track.id,
+          name: track.name,
+          artist: track.artists.map((a) => a.name).join(", "),
+          image: track.album.images[0]?.url,
         });
 
-        if (res.ok) {
-          console.log("🎧 Device activé avec succès");
-        } else {
-          console.warn("⚠️ Device non activé :", await res.text());
-        }
-      } catch (error) {
-        console.error("❌ Erreur lors de la sélection du device :", error);
-      }
-    });
-
-    newPlayer.addListener("player_state_changed", (state) => {
-      if (!state) return;
-      const track = state.track_window.current_track;
-      setCurrentTrack({
-        id: track.id,
-        name: track.name,
-        artist: track.artists.map(a => a.name).join(", "),
-        image: track.album.images[0]?.url,
+        setIsPlaying(!state.paused);
+        setDuration(state.duration);
+        setPosition(state.position);
       });
-    });
 
-    newPlayer.connect();
+      newPlayer.connect();
+    };
+
+    const script = document.createElement("script");
+    script.src = "https://sdk.scdn.co/spotify-player.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, [accessToken, player]);
+
+  // Mise à jour en continu de la position
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (!player) return;
+      const state = await player.getCurrentState();
+      if (state) {
+        setPosition(state.position);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [player]);
+
+  const handlePlayPause = async () => {
+    if (!player) return;
+    const state = await player.getCurrentState();
+    if (!state) {
+      console.warn("⛔ Aucun état de lecture Spotify");
+      return;
+    }
+
+    if (state.paused) {
+      await player.resume();
+    } else {
+      await player.pause();
+    }
   };
 
-  // Charger le SDK Spotify si non présent
-  const script = document.createElement("script");
-  script.src = "https://sdk.scdn.co/spotify-player.js";
-  script.async = true;
-  document.body.appendChild(script);
-}, [accessToken, player]);
-
-  const handlePlayPause = () => player?.togglePlay();
   const handleNext = () => player?.nextTrack();
   const handlePrevious = () => player?.previousTrack();
+
   const handleVolumeChange = (val) => {
     setVolume(val);
     player?.setVolume(val);
   };
+
   const handleSeek = (val) => player?.seek(val);
+
   const handleShuffle = () => {
     fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!isShuffling}`, {
       method: "PUT",

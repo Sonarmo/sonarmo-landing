@@ -1,4 +1,3 @@
-// EnhancedPlayer.js – mini lecteur fonctionnel avec contrôles actifs et barre de progression
 import { useEffect, useState, useRef } from "react";
 import React from "react";
 import Image from "next/image";
@@ -83,16 +82,28 @@ export default function EnhancedPlayer({
           </div>
 
           <div className="flex items-center gap-4">
-            <button onClick={onToggleShuffle} title="Shuffle" className={`transition ${isShuffling ? 'text-[#FF0BED]' : 'text-white'}`}>
+            <button onClick={() => {
+              console.log("▶️ Play/Pause button clicked");
+              onToggleShuffle?.();
+            }} title="Shuffle" className={`transition ${isShuffling ? 'text-[#FF0BED]' : 'text-white'}`}>
               <Shuffle size={20} />
             </button>
-            <button onClick={onPrevious} className="hover:text-[#FF0BED]">
+            <button onClick={() => {
+              console.log("⏮️ Previous button clicked");
+              onPrevious?.();
+            }} className="hover:text-[#FF0BED]">
               <SkipBack size={22} />
             </button>
-            <button onClick={onPlayPause} className="hover:text-[#FF0BED]">
+            <button onClick={() => {
+              console.log("⏯️ Play/Pause clicked");
+              onPlayPause?.();
+            }} className="hover:text-[#FF0BED]">
               {isPlaying ? <Pause size={24} /> : <Play size={24} />}
             </button>
-            <button onClick={onNext} className="hover:text-[#FF0BED]">
+            <button onClick={() => {
+              console.log("⏭️ Next button clicked");
+              onNext?.();
+            }} className="hover:text-[#FF0BED]">
               <SkipForward size={22} />
             </button>
           </div>
@@ -104,14 +115,22 @@ export default function EnhancedPlayer({
               min="0"
               max={duration}
               value={progress}
-              onChange={(e) => onSeek(Number(e.target.value))}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                console.log("⏩ Seek to", value);
+                onSeek?.(value);
+                setProgress(value);
+              }}
               className="flex-1 h-1 rounded-full appearance-none bg-[#333] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:bg-[#FF0BED] [&::-webkit-slider-thumb]:rounded-full"
             />
             <span className="text-xs text-gray-400">{formatTime(duration)}</span>
           </div>
 
           <div className="relative">
-            <button onClick={() => setShowVolume(!showVolume)} title="Volume">
+            <button onClick={() => {
+              console.log("🔊 Volume toggle");
+              setShowVolume(!showVolume);
+            }} title="Volume">
               <Volume2 size={20} />
             </button>
             <AnimatePresence>
@@ -129,7 +148,11 @@ export default function EnhancedPlayer({
                     max="1"
                     step="0.01"
                     value={volume}
-                    onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value);
+                      console.log("🔈 Volume set to", val);
+                      onVolumeChange?.(val);
+                    }}
                     className="h-1 w-24 bg-[#333] rounded appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:bg-[#FF0BED] [&::-webkit-slider-thumb]:rounded-full"
                   />
                 </motion.div>
