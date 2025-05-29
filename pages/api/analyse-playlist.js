@@ -4,10 +4,26 @@ import { authAdmin, db } from "@/lib/firebaseAdmin";
 
 // ✅ Vérifie si le token Spotify est encore valide
 async function validateSpotifyToken(token) {
-  const res = await fetch("https://api.spotify.com/v1/me", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.status !== 401 && res.status !== 403;
+  try {
+    const res = await fetch("https://api.spotify.com/v1/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      console.warn(`🔒 Token Spotify invalide ou expiré (status ${res.status})`);
+      return false;
+    }
+
+    if (!res.ok) {
+      console.error(`❌ Erreur inattendue lors de la validation du token Spotify :`, await res.text());
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("💥 Erreur réseau lors de la validation du token Spotify :", error);
+    return false;
+  }
 }
 
 export default async function handler(req, res) {
