@@ -1,4 +1,4 @@
-// dashboard.js – version avec affichage du morceau en cours
+// dashboard.js – version avec mini lecteur intégré
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "/lib/firebase";
@@ -6,19 +6,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
 import TrackPreviewPanel from "/components/builder/TrackPreviewPanel";
 import { getIdToken } from "firebase/auth";
-
-const playlistUrls = {
-  "Lounge Chill 🌙": "https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6",
-  "Apéro Festif 🍹": "https://open.spotify.com/playlist/37i9dQZF1DWZwtERXCS82H",
-  "Night Club 🔥": "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",
-  "Café Cosy ☕": "https://open.spotify.com/playlist/37i9dQZF1DX6VdMW310YC7"
-};
 
 export default function Dashboard({ currentTrack }) {
   const router = useRouter();
@@ -73,26 +66,17 @@ export default function Dashboard({ currentTrack }) {
       .catch(err => console.error("Erreur analyse:", err));
   }, [ambianceUri]);
 
+  const playlistUrls = {
+    "Lounge Chill 🌙": "https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6",
+    "Apéro Festif 🍹": "https://open.spotify.com/playlist/37i9dQZF1DWZwtERXCS82H",
+    "Night Club 🔥": "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",
+    "Café Cosy ☕": "https://open.spotify.com/playlist/37i9dQZF1DX6VdMW310YC7"
+  };
+
   return (
-    <div className="min-h-screen bg-black flex flex-col md:flex-row">
+    <div className="min-h-screen bg-black flex flex-col md:flex-row pb-24">
       <main className="flex-1 p-6 md:p-10 text-white">
         <h1 className="text-3xl font-semibold mb-6">Bienvenue sur ton Dashboard</h1>
-
-        {currentTrack && (
-          <section className="bg-[#1c1c1c] rounded-xl p-4 flex items-center gap-4 mb-8 shadow-md">
-            <Image
-              src={currentTrack.image}
-              alt={currentTrack.name}
-              width={64}
-              height={64}
-              className="rounded-lg"
-            />
-            <div>
-              <p className="text-white text-lg font-semibold">{currentTrack.name}</p>
-              <p className="text-gray-400 text-sm">{currentTrack.artist}</p>
-            </div>
-          </section>
-        )}
 
         <section className="bg-[#1c1c1c] rounded-xl p-6 md:p-8 shadow-lg mb-10">
           <h2 className="text-2xl font-semibold mb-6">Ambiance actuelle</h2>

@@ -1,4 +1,6 @@
+// EnhancedPlayer.js – mini lecteur fonctionnel avec contrôles actifs et barre de progression
 import { useEffect, useState, useRef } from "react";
+import React from "react";
 import Image from "next/image";
 import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -39,24 +41,18 @@ export default function EnhancedPlayer({
     if (!currentTrack?.id) return;
     const trackId = currentTrack.id;
     const sessionId = sessionIdRef.current;
-
     const alreadySent = window.sessionStorage.getItem(`analyzed-${trackId}`);
     if (alreadySent) return;
-
     window.sessionStorage.setItem(`analyzed-${trackId}`, "true");
 
     fetch("/api/analyse-track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ trackId, sessionId }),
+      body: JSON.stringify({ trackId, sessionId })
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log("📊 Track analysé :", data);
-      })
-      .catch((err) => {
-        console.error("❌ Erreur analyse auto :", err);
-      });
+      .then((data) => console.log("📊 Track analysé :", data))
+      .catch((err) => console.error("❌ Erreur analyse auto :", err));
   }, [currentTrack?.id]);
 
   const formatTime = (ms) => {
@@ -66,64 +62,82 @@ export default function EnhancedPlayer({
     return `${minutes}:${seconds}`;
   };
 
-  if (!currentTrack) return null;
-
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-[#1c1c1c] border-t border-gray-700 px-4 py-2 flex items-center justify-between z-50">
-      <div className="flex items-center gap-4">
-        {currentTrack.image && (
-          <div className="w-12 h-12 relative rounded overflow-hidden">
-            <Image src={currentTrack.image} alt="Pochette" layout="fill" objectFit="cover" />
+    <div className="w-full bg-[#1c1c1c] px-4 py-2 shadow-lg text-white flex items-center justify-between gap-4 z-50">
+      {currentTrack && (
+        <>
+          <div className="flex items-center gap-4 min-w-0">
+            {currentTrack.image && (
+              <Image
+                src={currentTrack.image}
+                alt="Pochette"
+                width={48}
+                height={48}
+                className="rounded-md"
+              />
+            )}
+            <div className="overflow-hidden">
+              <h2 className="text-sm font-medium truncate">{currentTrack.name}</h2>
+              <p className="text-xs text-gray-400 truncate">{currentTrack.artist}</p>
+            </div>
           </div>
-        )}
-        <div className="text-sm">
-          <p className="font-semibold text-white truncate max-w-[150px]">{currentTrack.name}</p>
-          <p className="text-gray-400 text-xs truncate max-w-[150px]">{currentTrack.artist}</p>
-        </div>
-      </div>
 
-      <div className="flex items-center gap-6">
-        <button
-          onClick={onToggleShuffle}
-          className={`hover:scale-110 transition ${isShuffling ? 'text-[#FF0BED]' : 'text-white'}`}
-        >
-          <Shuffle size={18} />
-        </button>
+          <div className="flex items-center gap-4">
+            <button onClick={onToggleShuffle} title="Shuffle" className={`transition ${isShuffling ? 'text-[#FF0BED]' : 'text-white'}`}>
+              <Shuffle size={20} />
+            </button>
+            <button onClick={onPrevious} className="hover:text-[#FF0BED]">
+              <SkipBack size={22} />
+            </button>
+            <button onClick={onPlayPause} className="hover:text-[#FF0BED]">
+              {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+            </button>
+            <button onClick={onNext} className="hover:text-[#FF0BED]">
+              <SkipForward size={22} />
+            </button>
+          </div>
 
-        <button onClick={onPrevious}>
-          <SkipBack size={20} className="text-white hover:text-[#FF0BED]" />
-        </button>
+          <div className="flex items-center gap-2 w-1/3">
+            <span className="text-xs text-gray-400">{formatTime(progress)}</span>
+            <input
+              type="range"
+              min="0"
+              max={duration}
+              value={progress}
+              onChange={(e) => onSeek(Number(e.target.value))}
+              className="flex-1 h-1 rounded-full appearance-none bg-[#333] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:bg-[#FF0BED] [&::-webkit-slider-thumb]:rounded-full"
+            />
+            <span className="text-xs text-gray-400">{formatTime(duration)}</span>
+          </div>
 
-        <button onClick={onPlayPause} className="p-2 bg-white rounded-full">
-          {isPlaying ? (
-            <Pause size={20} className="text-black" />
-          ) : (
-            <Play size={20} className="text-black" />
-          )}
-        </button>
-
-        <button onClick={onNext}>
-          <SkipForward size={20} className="text-white hover:text-[#FF0BED]" />
-        </button>
-      </div>
-
-      <div className="relative flex items-center gap-2">
-        <Volume2 size={20} className="text-white" />
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={(e) => {
-            const newVolume = parseFloat(e.target.value);
-            if (!isNaN(newVolume)) {
-              onVolumeChange(newVolume);
-            }
-          }}
-          className="w-24 h-1 appearance-none rounded-full bg-gradient-to-r from-[#FF0BED] to-[#333] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#FF0BED]"
-        />
-      </div>
+          <div className="relative">
+            <button onClick={() => setShowVolume(!showVolume)} title="Volume">
+              <Volume2 size={20} />
+            </button>
+            <AnimatePresence>
+              {showVolume && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute right-0 bottom-8 bg-[#1c1c1c] p-2 rounded shadow"
+                >
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={volume}
+                    onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
+                    className="h-1 w-24 bg-[#333] rounded appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:bg-[#FF0BED] [&::-webkit-slider-thumb]:rounded-full"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </>
+      )}
     </div>
   );
 }
