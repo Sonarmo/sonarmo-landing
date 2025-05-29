@@ -1,4 +1,3 @@
-// pages/api/user-stats.js
 import { authAdmin, db } from "@/lib/firebaseAdmin";
 
 function aggregateAudioStats(tracks) {
@@ -12,7 +11,7 @@ function aggregateAudioStats(tracks) {
     energy += track.energy || 0;
     valence += track.valence || 0;
 
-    if (track.genres && Array.isArray(track.genres)) {
+    if (Array.isArray(track.genres)) {
       for (const genre of track.genres) {
         genreCount[genre] = (genreCount[genre] || 0) + 1;
       }
@@ -21,6 +20,7 @@ function aggregateAudioStats(tracks) {
 
   const averageEnergy = energy / total;
   const averageValence = valence / total;
+
   const topGenres = Object.entries(genreCount)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
@@ -41,12 +41,30 @@ export default async function handler(req, res) {
     const decoded = await authAdmin.verifyIdToken(token);
     const uid = decoded.uid;
 
-    const snapshot = await db.collection("users").doc(uid).collection("trackAnalyses").get();
+    const snapshot = await db
+      .collection("users")
+      .doc(uid)
+      .collection("trackAnalyses")
+      .get();
+
     const tracks = snapshot.docs.map(doc => doc.data());
+    const stats = aggregateAudioStats(tracks) || {
+      averageEnergy: 0,
+      averageValence: 0,
+      topGenres: [],
+    };
 
-    const stats = aggregateAudioStats(tracks);
-
-    return res.status(200).json({ stats });
+    return res.status(200).json({
+      stats: {
+        ...stats,
+        total_tracks: tracks.length,
+        history: tracks.map((track, i) => ({
+          id: i,
+          energy: track.energy ?? 0,
+          valence: track.valence ?? 0,
+        })),
+      },
+    });
   } catch (error) {
     console.error("❌ Erreur dans /api/user-stats:", error);
     return res.status(500).json({ error: "Erreur serveur", details: error.message });
