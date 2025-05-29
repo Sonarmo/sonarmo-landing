@@ -1,12 +1,12 @@
-// DashboardLayout.js – mis à jour avec mini lecteur intégré
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import EnhancedPlayer from "/components/builder/EnhancedPlayer";
 import { auth, db } from "/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import EnhancedPlayer from "/components/builder/EnhancedPlayer";
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
@@ -17,17 +17,18 @@ export default function DashboardLayout({ children }) {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
-  const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [position, setPosition] = useState(0);
   const [isShuffling, setIsShuffling] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) return;
       const docSnap = await getDoc(doc(db, "users", user.uid));
-      if (!docSnap.exists()) return;
-      const data = docSnap.data();
-      setAccessToken(data.spotifyAccessToken);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setAccessToken(data.spotifyAccessToken);
+      }
     });
     return () => unsubscribe();
   }, []);
@@ -49,11 +50,6 @@ export default function DashboardLayout({ children }) {
 
       newPlayer.addListener("player_state_changed", (state) => {
         if (!state) return;
-        setIsPlaying(!state.paused);
-        setPosition(state.position);
-        setDuration(state.duration);
-        setIsShuffling(state.shuffle);
-
         const track = state.track_window.current_track;
         setCurrentTrack({
           id: track.id,
@@ -61,6 +57,10 @@ export default function DashboardLayout({ children }) {
           artist: track.artists.map(a => a.name).join(", "),
           image: track.album.images[0]?.url,
         });
+        setIsPlaying(!state.paused);
+        setPosition(state.position);
+        setDuration(state.duration);
+        setIsShuffling(state.shuffle);
       });
 
       newPlayer.connect();
@@ -72,36 +72,24 @@ export default function DashboardLayout({ children }) {
     document.body.appendChild(script);
   }, [accessToken, player]);
 
-  const handlePlayPause = () => {
-    if (!player) return;
-    player.togglePlay();
-  };
-
-  const handleNext = () => {
-    if (!player) return;
-    player.nextTrack();
-  };
-
-  const handlePrevious = () => {
-    if (!player) return;
-    player.previousTrack();
-  };
-
+  const handlePlayPause = () => player?.togglePlay();
+  const handleNext = () => player?.nextTrack();
+  const handlePrevious = () => player?.previousTrack();
   const handleVolumeChange = (val) => {
     setVolume(val);
-    if (player) player.setVolume(val);
+    player?.setVolume(val);
   };
-
-  const handleSeek = (pos) => {
-    if (player) player.seek(pos);
-  };
-
-  const handleShuffleToggle = () => {
-    setIsShuffling(prev => !prev);
+  const handleSeek = (val) => player?.seek(val);
+  const handleShuffle = () => {
+    fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!isShuffling}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${accessToken}` },
+    }).then(() => setIsShuffling(!isShuffling));
   };
 
   return (
     <div className="flex min-h-screen bg-black text-white">
+      {/* Bouton burger */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="absolute top-4 left-4 z-50 md:hidden text-white"
@@ -109,8 +97,9 @@ export default function DashboardLayout({ children }) {
         <Menu size={28} />
       </button>
 
+      {/* Sidebar */}
       <aside
-        className={`fixed md:static z-40 w-64 bg-black text-gray-300 p-6 flex flex-col gap-8 transition-transform duration-300 transform ${
+        className={`fixed md:static z-40 w-64 max-w-[16rem] h-full bg-black text-gray-300 p-6 flex flex-col gap-8 transition-transform duration-300 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
@@ -136,11 +125,13 @@ export default function DashboardLayout({ children }) {
         </nav>
       </aside>
 
+      {/* Contenu principal */}
       <main className="flex-1 p-6 pb-32">
         {React.cloneElement(children, { currentTrack })}
       </main>
 
-      <div className="fixed bottom-0 left-0 w-full z-30">
+      {/* Lecteur fixe */}
+      <div className="fixed bottom-0 left-0 w-full z-50 bg-black border-t border-gray-700">
         <EnhancedPlayer
           player={player}
           currentTrack={currentTrack}
@@ -150,11 +141,11 @@ export default function DashboardLayout({ children }) {
           onPrevious={handlePrevious}
           volume={volume}
           onVolumeChange={handleVolumeChange}
-          position={position}
           duration={duration}
+          position={position}
           onSeek={handleSeek}
           isShuffling={isShuffling}
-          onToggleShuffle={handleShuffleToggle}
+          onToggleShuffle={handleShuffle}
         />
       </div>
     </div>
