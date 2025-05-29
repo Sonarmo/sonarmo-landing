@@ -1,8 +1,6 @@
 import { getPlaylistAudioData } from "@/lib/spotify/getPlaylistAudioData";
 import { aggregateAudioStats } from "@/lib/spotify/aggregateAudioStats";
-import { authAdmin } from "@/lib/firebaseAdmin";
-import { getFirestore } from "firebase-admin/firestore";
-import { db } from "@/lib/firebaseAdmin";
+import { authAdmin, db } from "@/lib/firebaseAdmin";
 
 // Vérifie qu’un token Spotify fonctionne avec une requête simple
 async function validateSpotifyToken(token) {
@@ -49,19 +47,24 @@ export default async function handler(req, res) {
       const refreshData = await refreshRes.json();
 
       if (refreshData?.access_token) {
-  spotifyToken = refreshData.access_token;
+        spotifyToken = refreshData.access_token;
 
-  // 🔄 Met à jour le token rafraîchi dans Firestore
-  await userRef.update({
-    spotifyAccessToken: spotifyToken,
-    spotifyTokenTimestamp: Date.now(), // optionnel : utile pour debug ou analytics
-  });
-} else {
-  return res.status(401).json({ error: "Impossible de rafraîchir le token Spotify" });
-}
+        // 🔄 Met à jour le token rafraîchi dans Firestore
+        await userRef.update({
+          spotifyAccessToken: spotifyToken,
+          spotifyTokenTimestamp: Date.now(), // optionnel pour debug
+        });
+      } else {
+        return res.status(401).json({ error: "Impossible de rafraîchir le token Spotify" });
+      }
     }
 
     const tracks = await getPlaylistAudioData(playlistId, spotifyToken);
+
+    if (!tracks || !Array.isArray(tracks) || tracks.length === 0) {
+      return res.status(500).json({ error: "Aucune donnée audio récupérée depuis Spotify." });
+    }
+
     const stats = aggregateAudioStats(tracks);
 
     return res.status(200).json({ stats, tracks });

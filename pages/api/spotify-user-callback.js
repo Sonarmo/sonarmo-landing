@@ -58,11 +58,16 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Token Firebase invalide" });
     }
 
-    await db.collection("users").doc(uid).set(
+    const userRef = db.collection("users").doc(uid);
+    const existingUser = await userRef.get();
+    const existingRefreshToken = existingUser.exists ? existingUser.data().spotifyRefreshToken : null;
+
+    await userRef.set(
       {
         spotifyAccessToken: data.access_token,
-        spotifyRefreshToken: data.refresh_token,
+        spotifyRefreshToken: data.refresh_token || existingRefreshToken,
         expiresIn: data.expires_in,
+        expiresAt: Date.now() + data.expires_in * 1000,
         updatedAt: new Date(),
       },
       { merge: true }
