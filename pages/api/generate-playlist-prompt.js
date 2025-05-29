@@ -1,8 +1,8 @@
 // pages/api/generate-playlist-prompt.js
 import OpenAI from "openai";
-import { getSpotifyAccessToken } from "@/lib/spotifyTokens";
-import { db } from "@/lib/firebaseAdmin"; // 🔥 Ajout Firestore
-import { authAdmin } from "@/lib/firebaseAdmin";
+import { getSpotifyAccessToken } from "/lib/spotifyTokens";
+import { db } from "/lib/firebaseAdmin"; // 🔥 Ajout Firestore
+import { authAdmin } from "/lib/firebaseAdmin";
 import cookie from "cookie";
 
 export const config = {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "/components/ui/card";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import {
