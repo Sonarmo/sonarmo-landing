@@ -1,5 +1,5 @@
 // pages/_app.js
-import "@/styles/globals.css";
+import "/styles/globals.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import DashboardLayout from "/components/builder/DashboardLayout"; // chemin relatif

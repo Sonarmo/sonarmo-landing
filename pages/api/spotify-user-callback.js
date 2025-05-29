@@ -1,4 +1,4 @@
-import { db, authAdmin } from "@/lib/firebaseAdmin";
+import { db, authAdmin } from "/lib/firebaseAdmin";
 import cookie from "cookie";
 
 export default async function handler(req, res) {
