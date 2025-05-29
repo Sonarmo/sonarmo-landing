@@ -2,7 +2,7 @@ import { getPlaylistAudioData } from "@/lib/spotify/getPlaylistAudioData";
 import { aggregateAudioStats } from "@/lib/spotify/aggregateAudioStats";
 import { authAdmin, db } from "@/lib/firebaseAdmin";
 
-// Vérifie qu’un token Spotify fonctionne avec une requête simple
+// ✅ Vérifie si le token Spotify est encore valide
 async function validateSpotifyToken(token) {
   const res = await fetch("https://api.spotify.com/v1/me", {
     headers: { Authorization: `Bearer ${token}` },
@@ -16,13 +16,16 @@ export default async function handler(req, res) {
   }
 
   const { playlistId } = req.body;
-
   if (!playlistId) {
     return res.status(400).json({ error: "playlistId manquant dans le body" });
   }
 
   try {
     const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ error: "Token Firebase manquant dans les cookies." });
+    }
+
     const decodedToken = await authAdmin.verifyIdToken(token);
     const uid = decodedToken.uid;
     console.log("✅ Utilisateur Firebase UID :", uid);
@@ -31,14 +34,17 @@ export default async function handler(req, res) {
     const userSnap = await userRef.get();
 
     if (!userSnap.exists) {
-      return res.status(404).json({ error: "Utilisateur non trouvé" });
+      return res.status(404).json({ error: "Utilisateur non trouvé dans Firestore." });
     }
 
     let spotifyToken = userSnap.data()?.spotifyAccessToken;
+    if (!spotifyToken) {
+      return res.status(400).json({ error: "Aucun token Spotify trouvé pour cet utilisateur." });
+    }
 
-    const valid = await validateSpotifyToken(spotifyToken);
-    if (!valid) {
-      console.log("♻️ Token expiré, tentative de refresh...");
+    const tokenValid = await validateSpotifyToken(spotifyToken);
+    if (!tokenValid) {
+      console.log("♻️ Token Spotify expiré, tentative de refresh...");
       const refreshRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/refresh-token`, {
         headers: {
           Cookie: `token=${token};`,
@@ -46,26 +52,29 @@ export default async function handler(req, res) {
       });
       const refreshData = await refreshRes.json();
 
-      if (refreshData?.access_token) {
+      if (refreshRes.ok && refreshData?.access_token) {
         spotifyToken = refreshData.access_token;
-
-        // 🔄 Met à jour le token rafraîchi dans Firestore
         await userRef.update({
           spotifyAccessToken: spotifyToken,
-          spotifyTokenTimestamp: Date.now(), // optionnel pour debug
+          spotifyTokenTimestamp: Date.now(),
         });
+        console.log("🔄 Token Spotify rafraîchi avec succès.");
       } else {
-        return res.status(401).json({ error: "Impossible de rafraîchir le token Spotify" });
+        console.error("❌ Échec du rafraîchissement du token Spotify :", refreshData);
+        return res.status(401).json({ error: "Impossible de rafraîchir le token Spotify." });
       }
     }
 
+    console.log("📥 Analyse de la playlist :", playlistId);
     const tracks = await getPlaylistAudioData(playlistId, spotifyToken);
 
-    if (!tracks || !Array.isArray(tracks) || tracks.length === 0) {
+    if (!Array.isArray(tracks) || tracks.length === 0) {
+      console.warn("⚠️ Aucun morceau récupéré depuis la playlist Spotify.");
       return res.status(500).json({ error: "Aucune donnée audio récupérée depuis Spotify." });
     }
 
     const stats = aggregateAudioStats(tracks);
+    console.log("🧠 Statistiques générées :", stats);
 
     return res.status(200).json({ stats, tracks });
 
