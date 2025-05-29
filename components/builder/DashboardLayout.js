@@ -1,13 +1,12 @@
-// Étape 1 : Nouveau DashboardLayout.js avec logique du lecteur
-import React from "react";
+// DashboardLayout.js – version finale avec contrôle du player
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import EnhancedPlayer from "/components/builder/EnhancedPlayer";
 import { auth, db } from "/lib/firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
@@ -16,11 +15,15 @@ export default function DashboardLayout({ children }) {
   const [accessToken, setAccessToken] = useState(null);
   const [deviceId, setDeviceId] = useState(null);
   const [currentTrack, setCurrentTrack] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.5);
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isShuffling, setIsShuffling] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) return;
-
       const docSnap = await getDoc(doc(db, "users", user.uid));
       if (!docSnap.exists()) return;
       const data = docSnap.data();
@@ -31,7 +34,6 @@ export default function DashboardLayout({ children }) {
 
   useEffect(() => {
     if (!accessToken || player) return;
-
     window.onSpotifyWebPlaybackSDKReady = () => {
       const newPlayer = new window.Spotify.Player({
         name: "Sonarmo Player",
@@ -53,6 +55,9 @@ export default function DashboardLayout({ children }) {
           artist: track.artists.map(a => a.name).join(", "),
           image: track.album.images[0]?.url,
         });
+        setIsPlaying(!state.paused);
+        setDuration(state.duration);
+        setPosition(state.position);
       });
 
       newPlayer.connect();
@@ -63,6 +68,37 @@ export default function DashboardLayout({ children }) {
     script.async = true;
     document.body.appendChild(script);
   }, [accessToken, player]);
+
+  const onPlayPause = () => {
+    if (!player) return;
+    player.togglePlay();
+  };
+
+  const onNext = () => {
+    if (!player) return;
+    player.nextTrack();
+  };
+
+  const onPrevious = () => {
+    if (!player) return;
+    player.previousTrack();
+  };
+
+  const onVolumeChange = (vol) => {
+    if (!player) return;
+    player.setVolume(vol);
+    setVolume(vol);
+  };
+
+  const onSeek = (pos) => {
+    if (!player) return;
+    player.seek(pos);
+    setPosition(pos);
+  };
+
+  const onToggleShuffle = () => {
+    setIsShuffling(!isShuffling); // API Spotify requise pour un vrai shuffle
+  };
 
   return (
     <div className="flex min-h-screen bg-black text-white">
@@ -105,7 +141,21 @@ export default function DashboardLayout({ children }) {
       </main>
 
       <div className="fixed bottom-0 left-0 w-full z-30">
-        <EnhancedPlayer player={player} currentTrack={currentTrack} />
+        <EnhancedPlayer
+          player={player}
+          currentTrack={currentTrack}
+          isPlaying={isPlaying}
+          onPlayPause={onPlayPause}
+          onNext={onNext}
+          onPrevious={onPrevious}
+          volume={volume}
+          onVolumeChange={onVolumeChange}
+          position={position}
+          duration={duration}
+          onSeek={onSeek}
+          isShuffling={isShuffling}
+          onToggleShuffle={onToggleShuffle}
+        />
       </div>
     </div>
   );
