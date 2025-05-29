@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { useState } from "react";
-import EnhancedPlayer from "@/components/builder/EnhancedPlayer";
+import EnhancedPlayer from "/components/builder/EnhancedPlayer";
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
