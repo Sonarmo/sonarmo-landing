@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -6,6 +6,8 @@ import { Menu } from "lucide-react";
 import EnhancedPlayer from "/components/builder/EnhancedPlayer";
 import { auth, db } from "/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+
+const playlistUri = "spotify:playlist:37i9dQZF1DX4WYpdgoIcn6"; // Playlist par défaut
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
@@ -19,6 +21,7 @@ export default function DashboardLayout({ children }) {
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
   const [isShuffling, setIsShuffling] = useState(false);
+  const hasPlayedOnce = useRef(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -43,12 +46,12 @@ export default function DashboardLayout({ children }) {
       });
 
       newPlayer.addListener("ready", async ({ device_id }) => {
-        console.log("✅ Spotify Player prêt avec device ID :", device_id);
+        console.log("\u2705 Spotify Player prêt avec device ID :", device_id);
         setDeviceId(device_id);
         setPlayer(newPlayer);
 
         try {
-          const res = await fetch("https://api.spotify.com/v1/me/player", {
+          await fetch("https://api.spotify.com/v1/me/player", {
             method: "PUT",
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -57,19 +60,29 @@ export default function DashboardLayout({ children }) {
             body: JSON.stringify({ device_ids: [device_id], play: false }),
           });
 
-          if (res.ok) {
-            console.log("🎧 Device activé avec succès");
-          } else {
-            console.warn("⚠️ Device non activé :", await res.text());
+          // Lecture automatique de la playlist
+          if (!hasPlayedOnce.current) {
+            await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                context_uri: playlistUri,
+                offset: { position: 0 },
+                position_ms: 0
+              }),
+            });
+            hasPlayedOnce.current = true;
           }
         } catch (error) {
-          console.error("❌ Erreur lors de la sélection du device :", error);
+          console.error("\u274c Erreur lors de la lecture initiale :", error);
         }
       });
 
       newPlayer.addListener("player_state_changed", (state) => {
         if (!state) return;
-
         const track = state.track_window.current_track;
         setCurrentTrack({
           id: track.id,
@@ -77,7 +90,6 @@ export default function DashboardLayout({ children }) {
           artist: track.artists.map((a) => a.name).join(", "),
           image: track.album.images[0]?.url,
         });
-
         setIsPlaying(!state.paused);
         setDuration(state.duration);
         setPosition(state.position);
@@ -92,7 +104,6 @@ export default function DashboardLayout({ children }) {
     document.body.appendChild(script);
   }, [accessToken, player]);
 
-  // Mise à jour en continu de la position
   useEffect(() => {
     const interval = setInterval(async () => {
       if (!player) return;
@@ -101,7 +112,6 @@ export default function DashboardLayout({ children }) {
         setPosition(state.position);
       }
     }, 1000);
-
     return () => clearInterval(interval);
   }, [player]);
 
@@ -109,27 +119,19 @@ export default function DashboardLayout({ children }) {
     if (!player) return;
     const state = await player.getCurrentState();
     if (!state) {
-      console.warn("⛔ Aucun état de lecture Spotify");
+      console.warn("\u26d4 Aucun état de lecture Spotify");
       return;
     }
-
-    if (state.paused) {
-      await player.resume();
-    } else {
-      await player.pause();
-    }
+    state.paused ? await player.resume() : await player.pause();
   };
 
   const handleNext = () => player?.nextTrack();
   const handlePrevious = () => player?.previousTrack();
-
   const handleVolumeChange = (val) => {
     setVolume(val);
     player?.setVolume(val);
   };
-
   const handleSeek = (val) => player?.seek(val);
-
   const handleShuffle = () => {
     fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!isShuffling}`, {
       method: "PUT",
@@ -139,7 +141,6 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      {/* Bouton burger */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="absolute top-4 left-4 z-50 md:hidden text-white"
@@ -147,19 +148,13 @@ export default function DashboardLayout({ children }) {
         <Menu size={28} />
       </button>
 
-      {/* Sidebar */}
       <aside
         className={`fixed md:static z-40 w-64 max-w-[16rem] h-full bg-black text-gray-300 p-6 flex flex-col gap-8 transition-transform duration-300 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
         <Link href="/dashboard" className="flex items-center gap-3 mb-8">
-          <Image
-            src="/Logo-app-header.png"
-            alt="Sonarmo Logo"
-            width={140}
-            height={40}
-          />
+          <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={140} height={40} />
         </Link>
 
         <nav className="flex flex-col gap-6 text-sm">
@@ -175,12 +170,10 @@ export default function DashboardLayout({ children }) {
         </nav>
       </aside>
 
-      {/* Contenu principal */}
       <main className="flex-1 p-6 pb-32">
         {React.cloneElement(children, { currentTrack })}
       </main>
 
-      {/* Lecteur fixe */}
       <div className="fixed bottom-0 left-0 w-full z-50 bg-black border-t border-gray-700">
         <EnhancedPlayer
           player={player}
