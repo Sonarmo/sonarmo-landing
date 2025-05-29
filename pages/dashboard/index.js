@@ -13,6 +13,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
 import TrackPreviewPanel from "@/components/builder/TrackPreviewPanel";
+import { getIdToken } from "firebase/auth";
 
 const playlistUrls = {
     "Lounge Chill 🌙": "https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6",
@@ -124,12 +125,17 @@ export default function Dashboard() {
 
 
 
-   useEffect(() => {
+  useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
     if (!user) return router.push("/login");
 
     setLoading(false);
+
     try {
+      // ✅ Rafraîchir le token Firebase et le mettre dans un cookie
+      const freshToken = await getIdToken(user, true);
+      document.cookie = `token=${freshToken}; path=/`;
+
       const docSnap = await getDoc(doc(db, "users", user.uid));
 
       if (!docSnap.exists()) {

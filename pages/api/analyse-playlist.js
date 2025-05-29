@@ -49,10 +49,16 @@ export default async function handler(req, res) {
       const refreshData = await refreshRes.json();
 
       if (refreshData?.access_token) {
-        spotifyToken = refreshData.access_token;
-      } else {
-        return res.status(401).json({ error: "Impossible de rafraîchir le token Spotify" });
-      }
+  spotifyToken = refreshData.access_token;
+
+  // 🔄 Met à jour le token rafraîchi dans Firestore
+  await userRef.update({
+    spotifyAccessToken: spotifyToken,
+    spotifyTokenTimestamp: Date.now(), // optionnel : utile pour debug ou analytics
+  });
+} else {
+  return res.status(401).json({ error: "Impossible de rafraîchir le token Spotify" });
+}
     }
 
     const tracks = await getPlaylistAudioData(playlistId, spotifyToken);
