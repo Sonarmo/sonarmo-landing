@@ -1,34 +1,3 @@
-import { authAdmin, db } from "@/lib/firebaseAdmin";
-
-function aggregateAudioStats(tracks) {
-  const total = tracks.length;
-  if (total === 0) return null;
-
-  let energy = 0, valence = 0;
-  const genreCount = {};
-
-  for (const track of tracks) {
-    energy += track.energy || 0;
-    valence += track.valence || 0;
-
-    if (Array.isArray(track.genres)) {
-      for (const genre of track.genres) {
-        genreCount[genre] = (genreCount[genre] || 0) + 1;
-      }
-    }
-  }
-
-  const averageEnergy = energy / total;
-  const averageValence = valence / total;
-
-  const topGenres = Object.entries(genreCount)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([genre]) => ({ genre }));
-
-  return { averageEnergy, averageValence, topGenres };
-}
-
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Méthode non autorisée" });
@@ -47,12 +16,21 @@ export default async function handler(req, res) {
       .collection("trackAnalyses")
       .get();
 
-    const tracks = snapshot.docs.map(doc => doc.data());
-    const stats = aggregateAudioStats(tracks) || {
-      averageEnergy: 0,
-      averageValence: 0,
-      topGenres: [],
-    };
+    const tracks = snapshot.docs.map((doc) => doc.data());
+
+    if (tracks.length === 0) {
+      return res.status(200).json({
+        stats: {
+          averageEnergy: 0,
+          averageValence: 0,
+          topGenres: [],
+          total_tracks: 0,
+          history: [],
+        },
+      });
+    }
+
+    const stats = aggregateAudioStats(tracks);
 
     return res.status(200).json({
       stats: {

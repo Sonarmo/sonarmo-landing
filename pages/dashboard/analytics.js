@@ -50,14 +50,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="absolute top-4 left-4 z-50 md:hidden text-white"
-      >
-        <Menu size={28} />
-      </button>
-
-    
+  
         
 
       <main className="flex-1 p-6">

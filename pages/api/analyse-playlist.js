@@ -1,6 +1,6 @@
-import { getPlaylistAudioData } from "@/lib/spotify/getPlaylistAudioData";
-import { aggregateAudioStats } from "@/lib/spotify/aggregateAudioStats";
-import { authAdmin, db } from "@/lib/firebaseAdmin";
+import { getPlaylistAudioData } from "/lib/spotify/getPlaylistAudioData";
+import { aggregateAudioStats } from "/lib/spotify/aggregateAudioStats";
+import { authAdmin, db } from "/lib/firebaseAdmin";
 
 // ✅ Vérifie si le token Spotify est encore valide
 async function validateSpotifyToken(token) {

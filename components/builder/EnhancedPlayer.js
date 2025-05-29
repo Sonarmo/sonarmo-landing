@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import React from "react";
 import Image from "next/image";
 import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
