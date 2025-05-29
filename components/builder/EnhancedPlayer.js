@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,6 +20,7 @@ export default function EnhancedPlayer({
 }) {
     const [progress, setProgress] = useState(position);
     const [showVolume, setShowVolume] = useState(false);
+    const sessionIdRef = useRef(Date.now().toString());
 
     useEffect(() => {
         setProgress(position);
@@ -33,6 +34,31 @@ export default function EnhancedPlayer({
         }, 1000);
         return () => clearInterval(interval);
     }, [isPlaying, duration]);
+
+    useEffect(() => {
+        if (!currentTrack?.id) return;
+
+        const trackId = currentTrack.id;
+        const sessionId = sessionIdRef.current;
+
+        const alreadySent = window.sessionStorage.getItem(`analyzed-${trackId}`);
+        if (alreadySent) return;
+
+        window.sessionStorage.setItem(`analyzed-${trackId}`, "true");
+
+        fetch("/api/analyse-track", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ trackId, sessionId }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("📊 Track analysé :", data);
+            })
+            .catch((err) => {
+                console.error("❌ Erreur analyse auto :", err);
+            });
+    }, [currentTrack?.id]);
 
     const formatTime = (ms) => {
         if (!ms) return "0:00";
@@ -57,7 +83,6 @@ export default function EnhancedPlayer({
                     )}
 
                     <div className="flex items-center justify-center gap-8 relative w-full">
-                        {/* Contrôles principaux */}
                         <div className="flex items-center justify-center gap-9">
                             <button
                                 onClick={onToggleShuffle}
@@ -83,7 +108,6 @@ export default function EnhancedPlayer({
                                 <SkipForward size={28} className="text-white hover:text-[#FF0BED]" />
                             </button>
 
-                            {/* Volume control */}
                             <div className="relative">
                                 <button
                                     onClick={() => setShowVolume(!showVolume)}
@@ -123,14 +147,11 @@ export default function EnhancedPlayer({
                                             />
                                         </motion.div>
                                     )}
-
                                 </AnimatePresence>
-
                             </div>
                         </div>
                     </div>
 
-                    {/* Barre de progression */}
                     <div className="w-full max-w-[80%] mt-4">
                         <input
                             type="range"

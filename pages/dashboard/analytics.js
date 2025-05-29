@@ -3,18 +3,9 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-} from "recharts";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 // Interpréteurs de données
 function interpretEnergy(value) {
@@ -33,28 +24,22 @@ function interpretValence(value) {
 export default function AnalyticsPage() {
   const pathname = usePathname();
   const [stats, setStats] = useState(null);
+  const [history, setHistory] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     async function fetchStats() {
-      const playlistId = "37i9dQZF1DXdPec7aLTmlC"; // playlist test
-
-      const res = await fetch("/api/analyse-playlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ playlistId }),
-      });
+      const res = await fetch("/api/user-stats");
 
       if (!res.ok) {
         const err = await res.json();
-        console.error("❌ Erreur analyse playlist :", err);
+        console.error("❌ Erreur analyse cumulée :", err);
         return;
       }
 
       const json = await res.json();
       setStats(json.stats);
+      setHistory(json.stats?.history || []);
     }
 
     fetchStats();
@@ -86,76 +71,28 @@ export default function AnalyticsPage() {
         </Link>
 
         <nav className="flex flex-col gap-6 text-sm">
-          <Link
-            href="/dashboard"
-            className={`flex items-center gap-4 hover:text-white ${
-              pathname === "/dashboard" ? "text-white" : ""
-            }`}
-          >
-            <Image src="/icons/home.png" alt="Home" width={24} height={24} />{" "}
+          <Link href="/dashboard" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard" ? "text-white" : ""}`}>
+            <Image src="/icons/home.png" alt="Home" width={24} height={24} />
             Dashboard
           </Link>
-          <Link
-            href="/dashboard/music"
-            className={`flex items-center gap-4 hover:text-white ${
-              pathname === "/dashboard/music" ? "text-white" : ""
-            }`}
-          >
-            <Image src="/icons/music.png" alt="Music" width={24} height={24} />{" "}
+          <Link href="/dashboard/music" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/music" ? "text-white" : ""}`}>
+            <Image src="/icons/music.png" alt="Music" width={24} height={24} />
             Musique
           </Link>
-          <Link
-            href="/dashboard/analytics"
-            className={`flex items-center gap-4 hover:text-white ${
-              pathname === "/dashboard/analytics" ? "text-white" : ""
-            }`}
-          >
-            <Image
-              src="/icons/analytics.png"
-              alt="Analytics"
-              width={24}
-              height={24}
-            />{" "}
+          <Link href="/dashboard/analytics" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/analytics" ? "text-white" : ""}`}>
+            <Image src="/icons/analytics.png" alt="Analytics" width={24} height={24} />
             Analyses
           </Link>
-          <Link
-            href="/dashboard/settings"
-            className={`flex items-center gap-4 hover:text-white ${
-              pathname === "/dashboard/settings" ? "text-white" : ""
-            }`}
-          >
-            <Image
-              src="/icons/settings.png"
-              alt="Settings"
-              width={24}
-              height={24}
-            />{" "}
+          <Link href="/dashboard/settings" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/settings" ? "text-white" : ""}`}>
+            <Image src="/icons/settings.png" alt="Settings" width={24} height={24} />
             Réglages
           </Link>
-          <Link
-            href="/dashboard/profile"
-            className={`flex items-center gap-4 hover:text-white ${
-              pathname === "/dashboard/profile" ? "text-white" : ""
-            }`}
-          >
-            <Image
-              src="/icons/profile.png"
-              alt="Profile"
-              width={24}
-              height={24}
-            />{" "}
+          <Link href="/dashboard/profile" className={`flex items-center gap-4 hover:text-white ${pathname === "/dashboard/profile" ? "text-white" : ""}`}>
+            <Image src="/icons/profile.png" alt="Profile" width={24} height={24} />
             Profil
           </Link>
-          <Link
-            href="/logout"
-            className="flex items-center gap-4 hover:text-white mt-8"
-          >
-            <Image
-              src="/icons/logout.png"
-              alt="Logout"
-              width={24}
-              height={24}
-            />{" "}
+          <Link href="/logout" className="flex items-center gap-4 hover:text-white mt-8">
+            <Image src="/icons/logout.png" alt="Logout" width={24} height={24} />
             Déconnexion
           </Link>
         </nav>
@@ -169,36 +106,51 @@ export default function AnalyticsPage() {
           transition={{ duration: 0.6 }}
           className="text-3xl font-semibold mb-6"
         >
-          Analyses
+          Analyses globales
         </motion.h1>
 
         {stats ? (
-          <div className="grid md:grid-cols-3 gap-6 mb-10 font-[Poppins]">
-            <Card className="bg-[#1f1f1f]">
-              <CardContent className="p-4">
-                <p className="text-sm text-gray-400">Énergie moyenne</p>
-                <p className="text-xl font-bold mt-1">
-                  {interpretEnergy(stats.averageEnergy)}
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-[#1f1f1f]">
-              <CardContent className="p-4">
-                <p className="text-sm text-gray-400">Valence moyenne</p>
-                <p className="text-xl font-bold mt-1">
-                  {interpretValence(stats.averageValence)}
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-[#1f1f1f]">
-              <CardContent className="p-4">
-                <p className="text-sm text-gray-400">Genres dominants</p>
-                <p className="text-xl font-bold mt-1">
-                  {stats.topGenres.map((g) => g.genre).join(", ")}
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+          <>
+            <div className="grid md:grid-cols-3 gap-6 mb-10 font-[Poppins]">
+              <Card className="bg-[#1f1f1f]">
+                <CardContent className="p-4">
+                  <p className="text-sm text-gray-400">Énergie moyenne</p>
+                  <p className="text-xl font-bold mt-1">
+                    {interpretEnergy(stats.average_energy)}
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="bg-[#1f1f1f]">
+                <CardContent className="p-4">
+                  <p className="text-sm text-gray-400">Valence moyenne</p>
+                  <p className="text-xl font-bold mt-1">
+                    {interpretValence(stats.average_valence)}
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="bg-[#1f1f1f]">
+                <CardContent className="p-4">
+                  <p className="text-sm text-gray-400">Morceaux analysés</p>
+                  <p className="text-xl font-bold mt-1">
+                    {stats.total_tracks}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Graphique évolution de l'énergie */}
+            <div className="bg-[#1f1f1f] rounded-2xl p-6 shadow-lg">
+              <h2 className="text-lg font-semibold mb-4">Évolution de l’énergie musicale</h2>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={history.map((item, index) => ({ name: `#${index + 1}`, energy: item.energy * 10 }))}>
+                  <XAxis dataKey="name" stroke="#888" />
+                  <YAxis domain={[0, 10]} stroke="#888" />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="energy" stroke="#F28500" strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </>
         ) : (
           <p className="text-gray-500">Chargement des données...</p>
         )}
