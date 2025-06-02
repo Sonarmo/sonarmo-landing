@@ -1,4 +1,4 @@
-// dashboard.js – version avec mini lecteur intégré
+// dashboard.js – version corrigée avec mini lecteur et context
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "/lib/firebase";
@@ -6,14 +6,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
 import TrackPreviewPanel from "/components/builder/TrackPreviewPanel";
 import { getIdToken } from "firebase/auth";
+import { usePlayer } from "/lib/contexts/PlayerContext";
 
-export default function Dashboard({ currentTrack, recentTracks }) {
+export default function Dashboard() {
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,12 @@ export default function Dashboard({ currentTrack, recentTracks }) {
   const [showToast, setShowToast] = useState(false);
   const [playlistAnalysis, setPlaylistAnalysis] = useState(null);
   const [energy, setEnergy] = useState(0.65);
-  const fakeEnergyData = Array.from({ length: 15 }, (_, i) => ({ name: `T${i + 1}`, energy: Math.random() * 0.5 + 0.4 }));
+  const { currentTrack, recentTracks } = usePlayer();
+
+  const fakeEnergyData = Array.from({ length: 15 }, (_, i) => ({
+    name: `T${i + 1}`,
+    energy: Math.random() * 0.5 + 0.4,
+  }));
 
   const handleAmbianceChange = (e) => {
     setAmbiance(e.target.value);
@@ -56,22 +62,27 @@ export default function Dashboard({ currentTrack, recentTracks }) {
     if (!ambianceUri) return;
     const playlistId = ambianceUri.match(/spotify:playlist:(.+)/)?.[1];
     if (!playlistId) return;
+
     fetch("/api/analyse-playlist", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ playlistId })
+      body: JSON.stringify({ playlistId }),
     })
-      .then(res => res.json())
-      .then(data => setPlaylistAnalysis(data))
-      .catch(err => console.error("Erreur analyse:", err));
+      .then((res) => res.json())
+      .then((data) => setPlaylistAnalysis(data))
+      .catch((err) => console.error("Erreur analyse:", err));
   }, [ambianceUri]);
 
   const playlistUrls = {
     "Lounge Chill 🌙": "https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6",
     "Apéro Festif 🍹": "https://open.spotify.com/playlist/37i9dQZF1DWZwtERXCS82H",
     "Night Club 🔥": "https://open.spotify.com/playlist/37i9dQZF1DX4dyzvuaRJ0n",
-    "Café Cosy ☕": "https://open.spotify.com/playlist/37i9dQZF1DX6VdMW310YC7"
+    "Café Cosy ☕": "https://open.spotify.com/playlist/37i9dQZF1DX6VdMW310YC7",
   };
+
+  if (loading) {
+    return <div className="text-white min-h-screen flex items-center justify-center">Chargement...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-black flex flex-col md:flex-row pb-24">
@@ -163,7 +174,9 @@ export default function Dashboard({ currentTrack, recentTracks }) {
                 onChange={(e, val) => setEnergy(val)}
                 sx={{ color: "#F28500" }}
               />
-              <p className="text-sm text-center mt-2 text-gray-400">Énergie cible : {(energy * 100).toFixed(0)}%</p>
+              <p className="text-sm text-center mt-2 text-gray-400">
+                Énergie cible : {(energy * 100).toFixed(0)}%
+              </p>
             </Box>
           </div>
         </div>
