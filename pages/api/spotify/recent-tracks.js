@@ -1,5 +1,5 @@
 // /pages/api/spotify/recent-tracks.js
-import { getTokenFromFirebase } from '/lib/firebase/auth';
+import { getTokenFromFirebase } from '/lib/spotifyTokens';
 
 export default async function handler(req, res) {
   try {
