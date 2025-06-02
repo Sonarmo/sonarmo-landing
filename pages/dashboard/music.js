@@ -59,7 +59,7 @@ export default function MusicPage() {
         return;
       }
 
-      console.log("➡️ Appel Spotify pour récupérer les playlists");
+      console.log("🎧 Token prêt pour récupérer les playlists :", accessToken);
 
       try {
         const res = await fetch("https://api.spotify.com/v1/me/playlists", {
@@ -76,7 +76,6 @@ export default function MusicPage() {
 
         const data = await res.json();
         console.log("📥 Playlists récupérées :", data);
-
         setUserPlaylists(data.items || []);
       } catch (err) {
         console.error("❌ Erreur récupération playlists Spotify:", err);
@@ -103,8 +102,9 @@ export default function MusicPage() {
           context_uri: playlistUri,
         }),
       });
+      console.log("▶️ Lecture lancée pour", playlistUri);
     } catch (error) {
-      console.error("❌ Erreur lors de la lecture de la playlist:", error);
+      console.error("❌ Erreur lancement playlist:", error);
     }
   };
 
