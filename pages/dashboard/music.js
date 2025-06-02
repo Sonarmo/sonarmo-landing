@@ -7,15 +7,14 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { MainPlaylistBadge } from "/components/builder/MainPlaylistBadge";
-import { usePlayer } from "/lib/contexts/PlayerContext";
 
 export default function MusicPage() {
-  const { accessToken, deviceId } = usePlayer(); // vient du contexte global
-
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
   const [userPlaylists, setUserPlaylists] = useState([]);
+  const [accessToken, setAccessToken] = useState(null);
+  const [deviceId, setDeviceId] = useState(null);
   const [uid, setUid] = useState(null);
   const [promptText, setPromptText] = useState("");
   const [playlistUrl, setPlaylistUrl] = useState(null);
@@ -24,27 +23,29 @@ export default function MusicPage() {
   const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
-  const unsubscribe = auth.onAuthStateChanged(async (user) => {
-    if (!user) {
-      router.push("/login");
-    } else {
-      setUid(user.uid);
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        router.push("/login");
+      } else {
+        setUid(user.uid);
+        const docSnap = await getDoc(doc(db, "users", user.uid));
+        if (docSnap.exists()) {
+          const token = docSnap.data().spotifyAccessToken;
+          const device = docSnap.data().deviceId;
+          setAccessToken(token);
+          setDeviceId(device);
+        }
 
-      try {
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
         if (profileSnap.exists()) {
           setUserProfile(profileSnap.data());
         }
-      } catch (err) {
-        console.error("❌ Erreur chargement du profil :", err);
+
+        setLoading(false);
       }
-
-      setLoading(false);
-    }
-  });
-
-  return () => unsubscribe();
-}, [router]);
+    });
+    return () => unsubscribe();
+  }, [router]);
 
   useEffect(() => {
     const fetchUserPlaylists = async () => {
@@ -63,7 +64,6 @@ export default function MusicPage() {
     };
     fetchUserPlaylists();
   }, [accessToken]);
-
 
   const playPlaylist = async (playlistUri) => {
     if (!deviceId || !accessToken) {
