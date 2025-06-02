@@ -7,43 +7,44 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { MainPlaylistBadge } from "/components/builder/MainPlaylistBadge";
+import { usePlayer } from "/lib/contexts/PlayerContext";
 
 export default function MusicPage() {
+  const { accessToken, deviceId } = usePlayer(); // vient du contexte global
+
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
   const [userPlaylists, setUserPlaylists] = useState([]);
-  const [accessToken, setAccessToken] = useState(null);
   const [uid, setUid] = useState(null);
   const [promptText, setPromptText] = useState("");
   const [playlistUrl, setPlaylistUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const promptRef = useRef();
   const [userProfile, setUserProfile] = useState(null);
-  const [deviceId, setDeviceId] = useState(null);
-
+  
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        router.push("/login");
-      } else {
-        setUid(user.uid);
-        const docSnap = await getDoc(doc(db, "users", user.uid));
-        if (docSnap.exists()) {
-          const token = docSnap.data().spotifyAccessToken;
-          setAccessToken(token);
-        }
+  const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+      router.push("/login");
+    } else {
+      setUid(user.uid);
 
+      try {
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
         if (profileSnap.exists()) {
           setUserProfile(profileSnap.data());
         }
-
-        setLoading(false);
+      } catch (err) {
+        console.error("❌ Erreur chargement du profil :", err);
       }
-    });
-    return () => unsubscribe();
-  }, [router]);
+
+      setLoading(false);
+    }
+  });
+
+  return () => unsubscribe();
+}, [router]);
 
   useEffect(() => {
     const fetchUserPlaylists = async () => {
@@ -63,28 +64,6 @@ export default function MusicPage() {
     fetchUserPlaylists();
   }, [accessToken]);
 
-  useEffect(() => {
-    if (!accessToken) return;
-    const script = document.createElement("script");
-    script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const player = new Spotify.Player({
-        name: "Sonarmo Web Player",
-        getOAuthToken: cb => cb(accessToken),
-        volume: 0.5
-      });
-
-      player.addListener("ready", ({ device_id }) => {
-        console.log("✅ SDK prêt, deviceId :", device_id);
-        setDeviceId(device_id);
-      });
-
-      player.connect();
-    };
-  }, [accessToken]);
 
   const playPlaylist = async (playlistUri) => {
     if (!deviceId || !accessToken) {

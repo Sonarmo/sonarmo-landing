@@ -3,6 +3,7 @@ import "/styles/globals.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import DashboardLayout from "/components/builder/DashboardLayout"; // chemin relatif
+import { PlayerProvider } from "/lib/contexts/PlayerContext";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -13,17 +14,17 @@ function MyApp({ Component, pageProps }) {
     : (page) => page;
 
   return getLayout(
-    <>
-      <Head>
-        <title>Sonarmo</title>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-      <Component {...pageProps} />
-    </>
-  );
+  <PlayerProvider>
+    <Head>
+      <title>Sonarmo</title>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </Head>
+    <Component {...pageProps} />
+  </PlayerProvider>
+);
 }
 
 export default MyApp;
