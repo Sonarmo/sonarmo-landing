@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { MainPlaylistBadge } from "/components/builder/MainPlaylistBadge";
+import { usePlayer } from "/lib/contexts/PlayerContext";
 
 export default function MusicPage() {
   const router = useRouter();
@@ -14,8 +15,7 @@ export default function MusicPage() {
   const [loading, setLoading] = useState(true);
   const [userPlaylists, setUserPlaylists] = useState([]);
   const [accessToken, setAccessToken] = useState(null);
-  const [deviceId, setDeviceId] = useState(null);
-  const [uid, setUid] = useState(null);
+  const { deviceId: playerDeviceId, accessToken: contextToken } = usePlayer();  const [uid, setUid] = useState(null);
   const [promptText, setPromptText] = useState("");
   const [playlistUrl, setPlaylistUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -66,15 +66,14 @@ export default function MusicPage() {
   }, [accessToken]);
 
   const playPlaylist = async (playlistUri) => {
-    if (!deviceId || !accessToken) {
-      console.error("❌ Impossible de lancer la lecture : deviceId ou accessToken manquant");
-      return;
-    }
+   if (!playerDeviceId || !contextToken) {
+  console.error("❌ Device ID ou accessToken manquant pour lire la playlist");
+  return;
+}
 
-    await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-      method: "PUT",
+  await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${playerDeviceId}`, {      method: "PUT",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${contextToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

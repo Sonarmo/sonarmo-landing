@@ -9,15 +9,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith("/dashboard");
 
-  const getLayout = isDashboard
-    ? (page) => (
-        <PlayerProvider>
-          <DashboardLayout>{page}</DashboardLayout>
-        </PlayerProvider>
-      )
-    : (page) => page;
-
-  return getLayout(
+  const page = (
     <>
       <Head>
         <title>Sonarmo</title>
@@ -29,6 +21,16 @@ function MyApp({ Component, pageProps }) {
       <Component {...pageProps} />
     </>
   );
+
+  const getLayout = isDashboard
+    ? (page) => (
+        <PlayerProvider>
+          <DashboardLayout>{page}</DashboardLayout>
+        </PlayerProvider>
+      )
+    : (page) => page;
+
+  return getLayout(page);
 }
 
 export default MyApp;

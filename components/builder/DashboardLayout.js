@@ -31,6 +31,8 @@ const {
   position,
   isShuffling,
   setVolume,
+  setIsShuffling, // ✅ à ajouter
+  accessToken,
 } = context;
   const handlePlayPause = async () => {
     if (!player) return;
