@@ -23,7 +23,12 @@ export default function Dashboard() {
   const [showToast, setShowToast] = useState(false);
   const [playlistAnalysis, setPlaylistAnalysis] = useState(null);
   const [energy, setEnergy] = useState(0.65);
-  const { currentTrack, recentTracks } = usePlayer();
+
+  const {
+    accessToken,
+    currentTrack,
+    // ✅ recentTracks n’est pas dans le context, donc on le retire ici
+  } = usePlayer(); // usePlayer gère tout sauf les pistes récemment jouées
 
   const fakeEnergyData = Array.from({ length: 15 }, (_, i) => ({
     name: `T${i + 1}`,
@@ -85,116 +90,113 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex flex-col md:flex-row pb-24">
-      <main className="flex-1 p-6 md:p-10 text-white">
-        <h1 className="text-3xl font-semibold mb-6">Bienvenue sur ton Dashboard</h1>
+  <div className="min-h-screen bg-black flex flex-col md:flex-row pb-24">
+    <main className="flex-1 p-6 md:p-10 text-white">
+      <h1 className="text-3xl font-semibold mb-6">Bienvenue sur ton Dashboard</h1>
 
-        <section className="bg-[#1c1c1c] rounded-xl p-6 md:p-8 shadow-lg mb-10">
-          <h2 className="text-2xl font-semibold mb-6">Ambiance actuelle</h2>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-center md:text-left min-h-[60px]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={ambiance}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <p className="text-lg font-light">{ambiance}</p>
-                  <p className="text-gray-400 text-sm">Adaptée à l&apos;heure actuelle</p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <select
-              value={ambiance}
-              onChange={handleAmbianceChange}
-              className="bg-[#121212] border border-gray-600 rounded-full px-6 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#F28500]"
-            >
-              {Object.keys(playlistUrls).map((key) => (
-                <option key={key} value={key}>{key}</option>
-              ))}
-            </select>
+      <section className="bg-[#1c1c1c] rounded-xl p-6 md:p-8 shadow-lg mb-10">
+        <h2 className="text-2xl font-semibold mb-6">Ambiance actuelle</h2>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-center md:text-left min-h-[60px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={ambiance}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-lg font-light">{ambiance}</p>
+                <p className="text-gray-400 text-sm">Adaptée à l&apos;heure actuelle</p>
+              </motion.div>
+            </AnimatePresence>
           </div>
-        </section>
-
-        {playlistAnalysis && typeof playlistAnalysis === "object" && (
-          <div className="bg-[#1c1c1c] text-white p-4 rounded-xl mb-8">
-            <h3 className="text-xl font-semibold mb-2">Analyse Playlist</h3>
-            <ul className="text-sm text-gray-300 list-disc list-inside space-y-1">
-              <li>
-                <strong>Énergie moyenne :</strong>{" "}
-                {playlistAnalysis.average_energy !== undefined
-                  ? `${(playlistAnalysis.average_energy * 100).toFixed(1)}%`
-                  : "Données non disponibles"}
-              </li>
-              <li>
-                <strong>Tempo moyen :</strong>{" "}
-                {playlistAnalysis.average_tempo !== undefined
-                  ? `${playlistAnalysis.average_tempo.toFixed(0)} BPM`
-                  : "Données non disponibles"}
-              </li>
-              <li>
-                <strong>Valence moyenne :</strong>{" "}
-                {playlistAnalysis.average_valence !== undefined
-                  ? `${(playlistAnalysis.average_valence * 100).toFixed(1)}%`
-                  : "Données non disponibles"}
-              </li>
-              <li>
-                <strong>Nombre de morceaux :</strong>{" "}
-                {playlistAnalysis.total_tracks !== undefined
-                  ? playlistAnalysis.total_tracks
-                  : "Données non disponibles"}
-              </li>
-            </ul>
-          </div>
-        )}
-
-        <div className="grid md:grid-cols-2 gap-6 items-start">
-          <TrackPreviewPanel
-            currentTrack={currentTrack}
-            recentTracks={recentTracks}
-          />
-          <div className="bg-[#1c1c1c] p-4 rounded-2xl shadow-lg">
-            <h3 className="text-lg font-semibold mb-2">Énergie musicale</h3>
-            <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={fakeEnergyData}>
-                <XAxis dataKey="name" stroke="#888" />
-                <YAxis domain={[0, 1]} stroke="#888" />
-                <Tooltip />
-                <Line type="monotone" dataKey="energy" stroke="#F28500" strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
-            <Box mt={4}>
-              <Slider
-                value={energy}
-                min={0}
-                max={1}
-                step={0.01}
-                onChange={(e, val) => setEnergy(val)}
-                sx={{ color: "#F28500" }}
-              />
-              <p className="text-sm text-center mt-2 text-gray-400">
-                Énergie cible : {(energy * 100).toFixed(0)}%
-              </p>
-            </Box>
-          </div>
-        </div>
-      </main>
-
-      <AnimatePresence>
-        {showToast && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ duration: 0.5 }}
-            className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-[#1DB954] text-white px-6 py-3 rounded-full shadow-lg"
+          <select
+            value={ambiance}
+            onChange={handleAmbianceChange}
+            className="bg-[#121212] border border-gray-600 rounded-full px-6 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#F28500]"
           >
-            Ambiance changée avec succès ✔️
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+            {Object.keys(playlistUrls).map((key) => (
+              <option key={key} value={key}>{key}</option>
+            ))}
+          </select>
+        </div>
+      </section>
+
+      {playlistAnalysis && typeof playlistAnalysis === "object" && (
+        <div className="bg-[#1c1c1c] text-white p-4 rounded-xl mb-8">
+          <h3 className="text-xl font-semibold mb-2">Analyse Playlist</h3>
+          <ul className="text-sm text-gray-300 list-disc list-inside space-y-1">
+            <li>
+              <strong>Énergie moyenne :</strong>{" "}
+              {playlistAnalysis.average_energy !== undefined
+                ? `${(playlistAnalysis.average_energy * 100).toFixed(1)}%`
+                : "Données non disponibles"}
+            </li>
+            <li>
+              <strong>Tempo moyen :</strong>{" "}
+              {playlistAnalysis.average_tempo !== undefined
+                ? `${playlistAnalysis.average_tempo.toFixed(0)} BPM`
+                : "Données non disponibles"}
+            </li>
+            <li>
+              <strong>Valence moyenne :</strong>{" "}
+              {playlistAnalysis.average_valence !== undefined
+                ? `${(playlistAnalysis.average_valence * 100).toFixed(1)}%`
+                : "Données non disponibles"}
+            </li>
+            <li>
+              <strong>Nombre de morceaux :</strong>{" "}
+              {playlistAnalysis.total_tracks !== undefined
+                ? playlistAnalysis.total_tracks
+                : "Données non disponibles"}
+            </li>
+          </ul>
+        </div>
+      )}
+
+      <div className="grid md:grid-cols-2 gap-6 items-start">
+        <TrackPreviewPanel accessToken={accessToken} />
+        <div className="bg-[#1c1c1c] p-4 rounded-2xl shadow-lg">
+          <h3 className="text-lg font-semibold mb-2">Énergie musicale</h3>
+          <ResponsiveContainer width="100%" height={150}>
+            <LineChart data={fakeEnergyData}>
+              <XAxis dataKey="name" stroke="#888" />
+              <YAxis domain={[0, 1]} stroke="#888" />
+              <Tooltip />
+              <Line type="monotone" dataKey="energy" stroke="#F28500" strokeWidth={2} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
+          <Box mt={4}>
+            <Slider
+              value={energy}
+              min={0}
+              max={1}
+              step={0.01}
+              onChange={(e, val) => setEnergy(val)}
+              sx={{ color: "#F28500" }}
+            />
+            <p className="text-sm text-center mt-2 text-gray-400">
+              Énergie cible : {(energy * 100).toFixed(0)}%
+            </p>
+          </Box>
+        </div>
+      </div>
+    </main>
+
+    <AnimatePresence>
+      {showToast && (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          transition={{ duration: 0.5 }}
+          className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-[#1DB954] text-white px-6 py-3 rounded-full shadow-lg"
+        >
+          Ambiance changée avec succès ✔️
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+);
 }
