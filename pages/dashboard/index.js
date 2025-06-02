@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 import TrackPreviewPanel from "/components/builder/TrackPreviewPanel";
 import { getIdToken } from "firebase/auth";
 
-export default function Dashboard({ currentTrack }) {
+export default function Dashboard({ currentTrack, recentTracks }) {
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
@@ -140,7 +140,10 @@ export default function Dashboard({ currentTrack }) {
         )}
 
         <div className="grid md:grid-cols-2 gap-6 items-start">
-          <TrackPreviewPanel />
+          <TrackPreviewPanel
+            currentTrack={currentTrack}
+            recentTracks={recentTracks}
+          />
           <div className="bg-[#1c1c1c] p-4 rounded-2xl shadow-lg">
             <h3 className="text-lg font-semibold mb-2">Énergie musicale</h3>
             <ResponsiveContainer width="100%" height={150}>

@@ -3,6 +3,8 @@ import React from "react";
 import Image from "next/image";
 import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Slider from "@mui/material/Slider";
+import Box from "@mui/material/Box";
 
 export default function EnhancedPlayer({
   player,
@@ -17,7 +19,8 @@ export default function EnhancedPlayer({
   duration,
   onSeek,
   isShuffling,
-  onToggleShuffle
+  onToggleShuffle,
+  onTrackChange
 }) {
   const [progress, setProgress] = useState(position);
   const [showVolume, setShowVolume] = useState(false);
@@ -38,6 +41,9 @@ export default function EnhancedPlayer({
 
   useEffect(() => {
     if (!currentTrack?.id) return;
+
+    onTrackChange?.(currentTrack);
+
     const trackId = currentTrack.id;
     const sessionId = sessionIdRef.current;
     const alreadySent = window.sessionStorage.getItem(`analyzed-${trackId}`);
@@ -62,10 +68,10 @@ export default function EnhancedPlayer({
   };
 
   return (
-    <div className="w-full bg-[#1c1c1c] px-4 py-2 shadow-lg text-white flex items-center justify-between gap-4 z-50">
+    <div className="w-full bg-[#1c1c1c] px-2 py-3 shadow-lg text-white flex flex-col sm:flex-row items-center justify-between gap-4 z-50">
       {currentTrack && (
         <>
-          <div className="flex items-center gap-4 min-w-0">
+          <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
             {currentTrack.image && (
               <Image
                 src={currentTrack.image}
@@ -76,61 +82,56 @@ export default function EnhancedPlayer({
               />
             )}
             <div className="overflow-hidden">
-              <h2 className="text-sm font-medium truncate">{currentTrack.name}</h2>
-              <p className="text-xs text-gray-400 truncate">{currentTrack.artist}</p>
+              <h2 className="text-sm font-medium truncate max-w-[160px]">{currentTrack.name}</h2>
+              <p className="text-xs text-gray-400 truncate max-w-[160px]">{currentTrack.artist}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button onClick={() => {
-              console.log("▶️ Play/Pause button clicked");
-              onToggleShuffle?.();
-            }} title="Shuffle" className={`transition ${isShuffling ? 'text-[#FF0BED]' : 'text-white'}`}>
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-center">
+            <button onClick={onToggleShuffle} title="Shuffle" className={`transition ${isShuffling ? 'text-[#FF0BED]' : 'text-white'}`}>
               <Shuffle size={20} />
             </button>
-            <button onClick={() => {
-              console.log("⏮️ Previous button clicked");
-              onPrevious?.();
-            }} className="hover:text-[#FF0BED]">
+            <button onClick={onPrevious} className="hover:text-[#FF0BED]">
               <SkipBack size={22} />
             </button>
-            <button onClick={() => {
-              console.log("⏯️ Play/Pause clicked");
-              onPlayPause?.();
-            }} className="hover:text-[#FF0BED]">
+            <button onClick={onPlayPause} className="hover:text-[#FF0BED]">
               {isPlaying ? <Pause size={24} /> : <Play size={24} />}
             </button>
-            <button onClick={() => {
-              console.log("⏭️ Next button clicked");
-              onNext?.();
-            }} className="hover:text-[#FF0BED]">
+            <button onClick={onNext} className="hover:text-[#FF0BED]">
               <SkipForward size={22} />
             </button>
           </div>
 
-          <div className="flex items-center gap-2 w-1/3">
+          <Box className="flex items-center gap-2 w-full sm:w-1/3 px-2">
             <span className="text-xs text-gray-400">{formatTime(progress)}</span>
-            <input
-              type="range"
-              min="0"
-              max={duration}
+            <Slider
               value={progress}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                console.log("⏩ Seek to", value);
-                onSeek?.(value);
-                setProgress(value);
+              max={duration}
+              onChange={(_, val) => setProgress(val)}
+              onChangeCommitted={(_, val) => onSeek(val)}
+              sx={{
+                color: "#F28500",
+                height: 6,
+                flex: 1,
+                '& .MuiSlider-track': {
+                  backgroundColor: '#F28500',
+                },
+                '& .MuiSlider-rail': {
+                  backgroundColor: '#444',
+                  opacity: 1,
+                },
+                '& .MuiSlider-thumb': {
+                  width: 12,
+                  height: 12,
+                  backgroundColor: '#fff',
+                },
               }}
-              className="flex-1 h-1 rounded-full appearance-none bg-[#333] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:bg-[#FF0BED] [&::-webkit-slider-thumb]:rounded-full"
             />
             <span className="text-xs text-gray-400">{formatTime(duration)}</span>
-          </div>
+          </Box>
 
-          <div className="relative">
-            <button onClick={() => {
-              console.log("🔊 Volume toggle");
-              setShowVolume(!showVolume);
-            }} title="Volume">
+          <div className="relative flex items-center justify-center">
+            <button onClick={() => setShowVolume(!showVolume)} title="Volume">
               <Volume2 size={20} />
             </button>
             <AnimatePresence>
@@ -140,20 +141,31 @@ export default function EnhancedPlayer({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute right-0 bottom-8 bg-[#1c1c1c] p-2 rounded shadow"
+                  className="absolute right-0 bottom-10 bg-[#1c1c1c] p-2 rounded shadow"
                 >
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
+                  <Slider
                     value={volume}
-                    onChange={(e) => {
-                      const val = parseFloat(e.target.value);
-                      console.log("🔈 Volume set to", val);
-                      onVolumeChange?.(val);
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    onChange={(_, val) => onVolumeChange(val)}
+                    sx={{
+                      color: "#F28500",
+                      height: 6,
+                      width: 100,
+                      '& .MuiSlider-track': {
+                        backgroundColor: '#F28500',
+                      },
+                      '& .MuiSlider-rail': {
+                        backgroundColor: '#444',
+                        opacity: 1,
+                      },
+                      '& .MuiSlider-thumb': {
+                        width: 10,
+                        height: 10,
+                        backgroundColor: '#fff',
+                      },
                     }}
-                    className="h-1 w-24 bg-[#333] rounded appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:bg-[#FF0BED] [&::-webkit-slider-thumb]:rounded-full"
                   />
                 </motion.div>
               )}

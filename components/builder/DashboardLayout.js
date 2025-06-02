@@ -22,6 +22,7 @@ export default function DashboardLayout({ children }) {
   const [position, setPosition] = useState(0);
   const [isShuffling, setIsShuffling] = useState(false);
   const hasPlayedOnce = useRef(false);
+  const [recentTracks, setRecentTracks] = useState([]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -171,7 +172,7 @@ export default function DashboardLayout({ children }) {
       </aside>
 
       <main className="flex-1 p-6 pb-32">
-        {React.cloneElement(children, { currentTrack })}
+        {React.cloneElement(children, { currentTrack, recentTracks })}
       </main>
 
       <div className="fixed bottom-0 left-0 w-full z-50 bg-black border-t border-gray-700">
@@ -189,6 +190,13 @@ export default function DashboardLayout({ children }) {
           onSeek={handleSeek}
           isShuffling={isShuffling}
           onToggleShuffle={handleShuffle}
+          onTrackChange={(track) => {
+          setCurrentTrack(track);
+          setRecentTracks((prev) => {
+            if (!track || prev.some((t) => t.id === track.id)) return prev;
+            return [track, ...prev.slice(0, 9)];
+    });
+  }}
         />
       </div>
     </div>
