@@ -51,34 +51,49 @@ export default function MusicPage() {
 
   return () => unsubscribe();
 }, [router, setAccessToken]);
+useEffect(() => {
+  const fetchUserPlaylists = async () => {
+    if (!accessToken) {
+      console.warn("⛔ Aucun accessToken, impossible de récupérer les playlists");
+      return;
+    }
 
-  useEffect(() => {
-    const fetchUserPlaylists = async () => {
-      if (!accessToken) return;
-      try {
-        const res = await fetch("https://api.spotify.com/v1/me/playlists", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        const data = await res.json();
-        setUserPlaylists(data.items || []);
-      } catch (err) {
-        console.error("❌ Erreur récupération playlists Spotify:", err);
+    try {
+      console.log("🎧 Token prêt pour récupérer les playlists :", accessToken);
+
+      const res = await fetch("https://api.spotify.com/v1/me/playlists", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error(`❌ Erreur HTTP ${res.status} :`, errorText);
+        return;
       }
-    };
-    fetchUserPlaylists();
-  }, [accessToken]);
+
+      const data = await res.json();
+      console.log("📥 Playlists récupérées :", data);
+
+      setUserPlaylists(data.items || []);
+    } catch (err) {
+      console.error("❌ Erreur récupération playlists Spotify:", err);
+    }
+  };
+
+  fetchUserPlaylists();
+}, [accessToken]);
 
   const playPlaylist = async (playlistUri) => {
-   if (!playerDeviceId || !contextToken) {
+   if (!playerDeviceId || !accessToken) {
   console.error("❌ Device ID ou accessToken manquant pour lire la playlist");
   return;
 }
 
   await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${playerDeviceId}`, {      method: "PUT",
       headers: {
-      Authorization: `Bearer ${contextToken}`,
+      Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
