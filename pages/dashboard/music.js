@@ -12,7 +12,7 @@ import { usePlayer } from "/lib/contexts/PlayerContext";
 export default function MusicPage() {
   const router = useRouter();
   const pathname = usePathname();
-  const { accessToken, deviceId, setAccessToken } = usePlayer(); // depuis le contexte
+  const { accessToken, deviceId, setAccessToken } = usePlayer();
 
   const [loading, setLoading] = useState(true);
   const [userPlaylists, setUserPlaylists] = useState([]);
@@ -24,82 +24,88 @@ export default function MusicPage() {
   const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
-  const unsubscribe = auth.onAuthStateChanged(async (user) => {
-    if (!user) {
-      router.push("/login");
-    } else {
-      setUid(user.uid);
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        router.push("/login");
+      } else {
+        setUid(user.uid);
 
-      try {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          const token = userDoc.data().spotifyAccessToken;
-          setAccessToken(token); // via le contexte !
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists()) {
+            const token = userDoc.data().spotifyAccessToken;
+            setAccessToken(token);
+          }
+
+          const profileSnap = await getDoc(doc(db, "profiles", user.uid));
+          if (profileSnap.exists()) {
+            setUserProfile(profileSnap.data());
+          }
+        } catch (error) {
+          console.error("Erreur récupération Firestore:", error);
         }
 
-        const profileSnap = await getDoc(doc(db, "profiles", user.uid));
-        if (profileSnap.exists()) {
-          setUserProfile(profileSnap.data());
-        }
-      } catch (error) {
-        console.error("Erreur récupération Firestore:", error);
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router, setAccessToken]);
+
+  useEffect(() => {
+    const fetchUserPlaylists = async () => {
+      if (!accessToken) {
+        console.warn("⛔ Aucun accessToken, impossible de récupérer les playlists");
+        return;
       }
 
-      setLoading(false);
-    }
-  });
+      console.log("➡️ Appel Spotify pour récupérer les playlists");
 
-  return () => unsubscribe();
-}, [router, setAccessToken]);
-useEffect(() => {
-  const fetchUserPlaylists = async () => {
-    if (!accessToken) {
-      console.warn("⛔ Aucun accessToken, impossible de récupérer les playlists");
+      try {
+        const res = await fetch("https://api.spotify.com/v1/me/playlists", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error(`❌ Erreur HTTP ${res.status} :`, errorText);
+          return;
+        }
+
+        const data = await res.json();
+        console.log("📥 Playlists récupérées :", data);
+
+        setUserPlaylists(data.items || []);
+      } catch (err) {
+        console.error("❌ Erreur récupération playlists Spotify:", err);
+      }
+    };
+
+    fetchUserPlaylists();
+  }, [accessToken]);
+
+  const playPlaylist = async (playlistUri) => {
+    if (!deviceId || !accessToken) {
+      console.error("❌ Device ID ou accessToken manquant pour lire la playlist");
       return;
     }
 
     try {
-      console.log("🎧 Token prêt pour récupérer les playlists :", accessToken);
-
-      const res = await fetch("https://api.spotify.com/v1/me/playlists", {
+      await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+        method: "PUT",
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          context_uri: playlistUri,
+        }),
       });
-
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error(`❌ Erreur HTTP ${res.status} :`, errorText);
-        return;
-      }
-
-      const data = await res.json();
-      console.log("📥 Playlists récupérées :", data);
-
-      setUserPlaylists(data.items || []);
-    } catch (err) {
-      console.error("❌ Erreur récupération playlists Spotify:", err);
+    } catch (error) {
+      console.error("❌ Erreur lors de la lecture de la playlist:", error);
     }
-  };
-
-  fetchUserPlaylists();
-}, [accessToken]);
-
-  const playPlaylist = async (playlistUri) => {
-   if (!playerDeviceId || !accessToken) {
-  console.error("❌ Device ID ou accessToken manquant pour lire la playlist");
-  return;
-}
-
-  await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${playerDeviceId}`, {      method: "PUT",
-      headers: {
-      Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        context_uri: playlistUri,
-      }),
-    });
   };
 
   const generatePlaylistFromPrompt = async () => {
