@@ -11,18 +11,27 @@ export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [recentTracks, setRecentTracks] = useState([]);
 
-  const {
-    player,
-    deviceId,
-    currentTrack,
-    isPlaying,
-    volume,
-    duration,
-    position,
-    isShuffling,
-    setVolume,
-  } = usePlayer();
+  const context = usePlayer();
 
+if (!context) {
+  // Option 1 : Retourne null (le layout ne s’affiche pas tant que le contexte n’est pas prêt)
+  return null;
+
+  // Option 2 (recommandée pour UX) : Affiche un petit loader
+  // return <div className="text-white p-6">Chargement du lecteur...</div>;
+}
+
+const {
+  player,
+  deviceId,
+  currentTrack,
+  isPlaying,
+  volume,
+  duration,
+  position,
+  isShuffling,
+  setVolume,
+} = context;
   const handlePlayPause = async () => {
     if (!player) return;
     const state = await player.getCurrentState();
@@ -38,11 +47,11 @@ export default function DashboardLayout({ children }) {
   };
   const handleSeek = (val) => player?.seek(val);
   const handleShuffle = () => {
-    fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!isShuffling}`, {
-      method: "PUT",
-      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_SPOTIFY_ACCESS_TOKEN}` },
-    }).then(() => setIsShuffling(!isShuffling));
-  };
+  fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!isShuffling}`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  }).then(() => setIsShuffling(!isShuffling));
+};
 
   return (
     <div className="flex min-h-screen bg-black text-white">
