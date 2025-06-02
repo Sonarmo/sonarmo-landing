@@ -3,7 +3,7 @@ import "/styles/globals.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import DashboardLayout from "/components/builder/DashboardLayout"; // chemin relatif
-import { PlayerProvider } from "/contexts/PlayerContext";
+import { PlayerProvider } from "/lib/contexts/PlayerContext";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
