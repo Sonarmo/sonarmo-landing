@@ -12,10 +12,11 @@ import { usePlayer } from "/lib/contexts/PlayerContext";
 export default function MusicPage() {
   const router = useRouter();
   const pathname = usePathname();
+  const { accessToken, deviceId, setAccessToken } = usePlayer(); // depuis le contexte
+
   const [loading, setLoading] = useState(true);
   const [userPlaylists, setUserPlaylists] = useState([]);
-  const [accessToken, setAccessToken] = useState(null);
-  const { deviceId: playerDeviceId, accessToken: contextToken } = usePlayer();  const [uid, setUid] = useState(null);
+  const [uid, setUid] = useState(null);
   const [promptText, setPromptText] = useState("");
   const [playlistUrl, setPlaylistUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -23,29 +24,33 @@ export default function MusicPage() {
   const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        router.push("/login");
-      } else {
-        setUid(user.uid);
-        const docSnap = await getDoc(doc(db, "users", user.uid));
-        if (docSnap.exists()) {
-          const token = docSnap.data().spotifyAccessToken;
-          const device = docSnap.data().deviceId;
-          setAccessToken(token);
-          setDeviceId(device);
+  const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+      router.push("/login");
+    } else {
+      setUid(user.uid);
+
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          const token = userDoc.data().spotifyAccessToken;
+          setAccessToken(token); // via le contexte !
         }
 
         const profileSnap = await getDoc(doc(db, "profiles", user.uid));
         if (profileSnap.exists()) {
           setUserProfile(profileSnap.data());
         }
-
-        setLoading(false);
+      } catch (error) {
+        console.error("Erreur récupération Firestore:", error);
       }
-    });
-    return () => unsubscribe();
-  }, [router]);
+
+      setLoading(false);
+    }
+  });
+
+  return () => unsubscribe();
+}, [router, setAccessToken]);
 
   useEffect(() => {
     const fetchUserPlaylists = async () => {
