@@ -12,11 +12,12 @@ import { usePlayer } from "/lib/contexts/PlayerContext";
 export default function MusicPage() {
   const router = useRouter();
   const pathname = usePathname();
-  const { accessToken, deviceId, setAccessToken } = usePlayer();
+  const { deviceId, setAccessToken: setContextToken } = usePlayer();
 
   const [loading, setLoading] = useState(true);
   const [userPlaylists, setUserPlaylists] = useState([]);
   const [uid, setUid] = useState(null);
+  const [localAccessToken, setLocalAccessToken] = useState(null);
   const [promptText, setPromptText] = useState("");
   const [playlistUrl, setPlaylistUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -34,7 +35,8 @@ export default function MusicPage() {
           const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
             const token = userDoc.data().spotifyAccessToken;
-            setAccessToken(token);
+            setContextToken(token); // pour le PlayerContext
+            setLocalAccessToken(token); // pour cette page
           }
 
           const profileSnap = await getDoc(doc(db, "profiles", user.uid));
@@ -50,21 +52,19 @@ export default function MusicPage() {
     });
 
     return () => unsubscribe();
-  }, [router, setAccessToken]);
+  }, [router, setContextToken]);
 
   useEffect(() => {
     const fetchUserPlaylists = async () => {
-      if (!accessToken) {
-        console.warn("⛔ Aucun accessToken, impossible de récupérer les playlists");
+      if (!localAccessToken) {
+        console.warn("⛔ Aucun accessToken local pour récupérer les playlists");
         return;
       }
-
-      console.log("🎧 Token prêt pour récupérer les playlists :", accessToken);
 
       try {
         const res = await fetch("https://api.spotify.com/v1/me/playlists", {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localAccessToken}`,
           },
         });
 
@@ -83,29 +83,24 @@ export default function MusicPage() {
     };
 
     fetchUserPlaylists();
-  }, [accessToken]);
+  }, [localAccessToken]);
 
   const playPlaylist = async (playlistUri) => {
-    if (!deviceId || !accessToken) {
+    if (!deviceId || !localAccessToken) {
       console.error("❌ Device ID ou accessToken manquant pour lire la playlist");
       return;
     }
 
-    try {
-      await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          context_uri: playlistUri,
-        }),
-      });
-      console.log("▶️ Lecture lancée pour", playlistUri);
-    } catch (error) {
-      console.error("❌ Erreur lancement playlist:", error);
-    }
+    await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localAccessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        context_uri: playlistUri,
+      }),
+    });
   };
 
   const generatePlaylistFromPrompt = async () => {
