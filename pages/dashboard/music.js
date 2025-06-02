@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { MainPlaylistBadge } from "/components/builder/MainPlaylistBadge";
-import { usePlayer } from "/lib/contexts/PlayerContext";
+import { usePlayer } from "/contexts/PlayerContext";
 
 export default function MusicPage() {
   const { accessToken, deviceId } = usePlayer(); // vient du contexte global
@@ -22,7 +22,7 @@ export default function MusicPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const promptRef = useRef();
   const [userProfile, setUserProfile] = useState(null);
-  
+
   useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
     if (!user) {
