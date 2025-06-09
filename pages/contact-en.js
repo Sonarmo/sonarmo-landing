@@ -133,7 +133,7 @@ export default function Contact() {
                                     <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} className="hover:opacity-70 transition" />
                                 </a>
                             </div>
-                            <p>Sonarmo Team</p>
+                            <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
                             <Link href="/about-en" className="hover:text-white">About us</Link>
                             <Link href="/contact" className="hover:text-white">Contact us</Link>
                         </div>

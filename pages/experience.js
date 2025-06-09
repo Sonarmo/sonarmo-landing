@@ -355,7 +355,7 @@ export default function Experience() {
                                     <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} />
                                 </a>
                             </div>
-                            <p>Sonarmo Team</p>
+                            <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
                             <Link href="/about" className="hover:text-white">À propos de nous</Link>
                             <Link href="/contact" className="hover:text-white">Nous contacter</Link>
                         </div>
