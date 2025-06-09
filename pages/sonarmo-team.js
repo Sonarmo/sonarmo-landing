@@ -91,7 +91,7 @@ export default function Team() {
 
                     <p className="text-lg md:text-xl leading-relaxed text-gray-300">
                         La musique a toujours été au cœur de ma vie. DJ pendant plus de 10 ans, multi-instrumentiste — guitare,
-                        batterie, piano — je compose mes propres morceaux, explorant sans cesse les émotions que le son peut faire naître.
+                        batterie, piano, harmonica — je compose mes propres morceaux, explorant sans cesse les émotions que le son peut faire naître.
                         Pour moi, la musique n’est pas qu&apos;un fond sonore : c&apos;est une énergie, un lien invisible entre les gens,
                         un vecteur d&apos;émotions puissantes et durables.
                     </p>
@@ -104,13 +104,13 @@ export default function Team() {
                     </p>
 
                     <p className="text-lg md:text-xl mt-6 leading-relaxed text-gray-300">
-                        Avec Sonarmo, j&apos;explore comment l’intelligence artificielle peut enrichir notre rapport à la musique tout en
+                        Avec Sonarmo, j&apos;explore comment l&apos;intelligence artificielle peut enrichir notre rapport à la musique tout en
                         respectant une vision plus émotionnelle, sincère et porteuse de sens. Mon objectif ? Offrir aux lieux de vie un
                         outil qui crée des ambiances harmonieuses, cohérentes, et surtout pleines de vie.
                     </p>
 
                     <p className="text-xl md:text-3xl italic mt-10 text-center text-white">
-                        Sonarmo, c&apos;est ma manière d’apporter un peu de bonheur à travers ce que je sais faire de mieux : créer des émotions.
+                        Sonarmo, c&apos;est ma manière d&apos;apporter un peu de bonheur à travers ce que je sais faire de mieux : créer des émotions.
                     </p>
 
                     <div className="mt-10 flex justify-center">
