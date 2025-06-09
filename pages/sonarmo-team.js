@@ -92,7 +92,7 @@ export default function Team() {
                     <p className="text-lg md:text-xl leading-relaxed text-gray-300">
                         La musique a toujours été au cœur de ma vie. DJ pendant plus de 10 ans, multi-instrumentiste — guitare,
                         batterie, piano, harmonica — je compose mes propres morceaux, explorant sans cesse les émotions que le son peut faire naître.
-                        Pour moi, la musique n’est pas qu&apos;un fond sonore : c&apos;est une énergie, un lien invisible entre les gens,
+                        Pour moi, la musique n&apos;est pas qu&apos;un fond sonore : c&apos;est une énergie, un lien invisible entre les gens,
                         un vecteur d&apos;émotions puissantes et durables.
                     </p>
 
