@@ -15,6 +15,7 @@ export default async function handler(req, res) {
 
   try {
     const token = req.cookies.token;
+    console.log("🎫 Token reçu :", token);
     const decodedToken = await authAdmin.verifyIdToken(token);
     const uid = decodedToken.uid;
     console.log("✅ UID utilisateur :", uid);
@@ -28,12 +29,14 @@ export default async function handler(req, res) {
 
     const accessToken = userSnap.data().spotifyAccessToken;
     const trackData = await getTrackData(trackId, accessToken);
+    console.log("🎶 Track data récupérée :", trackData);
 
     if (!trackData) {
       return res.status(500).json({ error: "Impossible de récupérer les données du morceau" });
     }
 
     // Enregistre le morceau dans la session
+    console.log("📥 Données prêtes à être enregistrées dans Firestore :", trackData);
     const trackRef = db
       .collection("listeningSessions")
       .doc(sessionId)
@@ -84,7 +87,8 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ message: "Analyse mise à jour", stats: { averageEnergy, averageValence, topGenres: sortedGenres } });
   } catch (err) {
-    console.error("❌ Erreur analyse de morceau:", err);
+    console.error("❌ Erreur analyse de morceau:", err.message);
+console.error(err.stack); // ➕ pour avoir l'origine exacte
     return res.status(500).json({ error: "Erreur serveur", details: err.message });
   }
 }
