@@ -12,7 +12,7 @@ export default function Team() {
     return (
         <div className="overflow-x-hidden bg-black text-white font-[Poppins]">
             <Head>
-                <title>Sonarmo - L'équipe</title>
+                <title>Sonarmo - L&apos;équipe</title>
                 <meta name="description" content="Rencontrez Arthur Fromont, fondateur de Sonarmo et passionné de musique." />
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
             </Head>
