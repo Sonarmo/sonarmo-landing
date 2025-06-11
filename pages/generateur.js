@@ -21,7 +21,7 @@ export default function Generateur() {
 
   const handleGenerate = async () => {
     if (!isAuthenticated) {
-      router.push("/api/spotify-login");
+      router.push("/api/login-user");
       return;
     }
 
@@ -112,7 +112,7 @@ export default function Generateur() {
 
         {!isAuthenticated && (
           <Link
-            href="/api/spotify-login"
+            href="/api/login-user"
             className="mb-10 bg-green-500 hover:bg-green-600 px-4 py-2 rounded text-white"
           >
             Se connecter à Spotify
