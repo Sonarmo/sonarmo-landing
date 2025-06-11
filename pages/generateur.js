@@ -12,17 +12,36 @@ export default function Generateur() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [playlistUrl, setPlaylistUrl] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
+  const [spotifyProfile, setSpotifyProfile] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    // Récupère le token Spotify depuis l'URL (si B2C)
-    if (router.query.access_token) {
-      setAccessToken(router.query.access_token);
+    const accessToken = router.query.access_token;
+    if (accessToken) {
+      setAccessToken(accessToken);
       setIsAuthenticated(true);
+
+      // Récupération des infos utilisateur Spotify
+      fetch("https://api.spotify.com/v1/me", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.email) {
+            setSpotifyProfile({
+              name: data.display_name,
+              email: data.email,
+              image: data.images?.[0]?.url || null,
+            });
+          }
+        })
+        .catch((err) => {
+          console.error("Erreur récupération profil Spotify :", err);
+        });
     } else {
-      fetch("/api/spotify-user")
-        .then((res) => res.status === 200 ? setIsAuthenticated(true) : setIsAuthenticated(false))
-        .catch(() => setIsAuthenticated(false));
+      setIsAuthenticated(false);
     }
   }, [router.query.access_token]);
 
@@ -66,7 +85,8 @@ export default function Generateur() {
           <span className="text-white text-lg font-semibold italic">Sonarmo</span>
         </div>
         <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
+            <Link href="/generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
+          <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
           <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
@@ -126,6 +146,13 @@ export default function Generateur() {
           >
             Se connecter à Spotify
           </Link>
+        )}
+
+        {spotifyProfile && (
+          <div className="mt-4 text-sm text-gray-300 bg-[#1c1c1c] p-4 rounded-xl text-center">
+            ✅ Connecté avec <strong>{spotifyProfile.email}</strong><br />
+            {spotifyProfile.name && <span>Bienvenue, {spotifyProfile.name} !</span>}
+          </div>
         )}
 
         <textarea
