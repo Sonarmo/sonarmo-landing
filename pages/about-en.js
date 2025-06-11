@@ -39,7 +39,8 @@ export default function About() {
                     </Link>
 
                     <nav className="relative z-10 hidden md:flex gap-6 text-sm items-center">
-                        <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
+                        
+                        <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
                         <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
                         <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
                             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
