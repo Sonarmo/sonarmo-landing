@@ -1,7 +1,7 @@
 // pages/api/generate-playlist-prompt.js
 import OpenAI from "openai";
 import { getSpotifyAccessToken } from "/lib/spotifyTokens";
-import { db } from "/lib/firebaseAdmin"; // 🔥 Ajout Firestore
+import { db } from "/lib/firebaseAdmin";
 import { authAdmin } from "/lib/firebaseAdmin";
 import cookie from "cookie";
 
@@ -71,6 +71,15 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         const user = await userRes.json();
+        const spotifyEmail = user.email || "";
+        const spotifyCountry = user.country || "";
+        const spotifyProduct = user.product || "";
+        const spotifyDisplayName = user.display_name || "";
+
+        // 🎯 Nom dynamique basé sur le prompt
+        const rawTitle = prompt.length > 40 ? prompt.slice(0, 40) + "…" : prompt;
+        const cleanTitle = rawTitle.replace(/[^\w\sÀ-ÿ!?.,:;'-]/g, "").trim();
+        const playlistName = `Sonarmo – ${cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1)}`;
 
         const playlistRes = await fetch(`https://api.spotify.com/v1/users/${user.id}/playlists`, {
             method: "POST",
@@ -79,8 +88,8 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                name: `Sonarmo – Playlist personnalisée`,
-                description: `Générée par GPT via un prompt personnalisé`,
+                name: playlistName,
+                description: `Générée par Sonarmo`,
                 public: false,
             }),
         });
@@ -105,11 +114,17 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
                 const decodedToken = await authAdmin.verifyIdToken(idToken);
                 const uid = decodedToken.uid;
                 await db.collection("promptHistory").add({
-                    uid,
-                    prompt,
-                    playlistUrl: playlist.external_urls.spotify,
-                    createdAt: new Date(),
-                });
+  uid,
+  prompt,
+  playlistUrl: playlist.external_urls.spotify,
+  playlistName: playlist.name,
+  totalTracks: uris.length,
+  spotifyEmail,
+  spotifyCountry,
+  spotifyProduct,
+  spotifyDisplayName,
+  createdAt: new Date(),
+});
             } catch (err) {
                 console.warn("⚠️ Impossible d'enregistrer l'historique du prompt:", err);
             }
