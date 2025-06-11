@@ -11,13 +11,20 @@ export default function Generateur() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [playlistUrl, setPlaylistUrl] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/spotify-user")
-      .then((res) => res.status === 200 ? setIsAuthenticated(true) : setIsAuthenticated(false))
-      .catch(() => setIsAuthenticated(false));
-  }, []);
+    // Récupère le token Spotify depuis l'URL (si B2C)
+    if (router.query.access_token) {
+      setAccessToken(router.query.access_token);
+      setIsAuthenticated(true);
+    } else {
+      fetch("/api/spotify-user")
+        .then((res) => res.status === 200 ? setIsAuthenticated(true) : setIsAuthenticated(false))
+        .catch(() => setIsAuthenticated(false));
+    }
+  }, [router.query.access_token]);
 
   const handleGenerate = async () => {
     if (!isAuthenticated) {
@@ -28,13 +35,16 @@ export default function Generateur() {
     setIsLoading(true);
     const res = await fetch("/api/generate-playlist", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {})
+      },
       body: JSON.stringify({ prompt })
     });
 
     if (res.ok) {
       const data = await res.json();
-      setPlaylistUrl(data.playlistUrl); // Assure-toi que ton API renvoie cette valeur
+      setPlaylistUrl(data.playlistUrl);
     } else {
       alert("Erreur lors de la génération. Réessaie !");
     }
@@ -56,8 +66,7 @@ export default function Generateur() {
           <span className="text-white text-lg font-semibold italic">Sonarmo</span>
         </div>
         <nav className="hidden md:flex gap-6 text-sm items-center">
-            <Link href="/generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-          <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
+          <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
           <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
@@ -108,12 +117,12 @@ export default function Generateur() {
       </AnimatePresence>
 
       <main className="flex flex-col items-center justify-center flex-grow w-full relative z-10">
-        <h1 className="text-3xl font-semi-bold mb-10 text-center">Crée ta playlist avec l’IA Sonarmo</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Crée ta playlist avec l’IA</h1>
 
         {!isAuthenticated && (
           <Link
             href="/api/login-user"
-            className="mb-10 bg-green-500 hover:bg-green-600 px-4 py-2 rounded text-white"
+            className="mb-6 bg-green-500 hover:bg-green-600 px-4 py-2 rounded text-white"
           >
             Se connecter à Spotify
           </Link>
@@ -133,7 +142,7 @@ export default function Generateur() {
           whileTap={{ scale: 0.95 }}
           className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold px-6 py-3 rounded-xl disabled:opacity-50"
         >
-          {isLoading ? "Génération en cours..." : "Générer ma playlist"}
+          {isLoading ? "Génération en cours..." : "🎶 Générer ma playlist"}
         </motion.button>
 
         {playlistUrl && (

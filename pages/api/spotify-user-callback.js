@@ -45,9 +45,12 @@ export default async function handler(req, res) {
     const idToken = cookies.token || null;
 
     if (!idToken) {
-      console.warn("⚠️ Aucun token Firebase trouvé dans les cookies.");
-      return res.status(401).json({ error: "Utilisateur non authentifié" });
-    }
+  console.warn("⚠️ Aucun token Firebase trouvé dans les cookies (mode B2C ?)");
+
+  // Pour usage B2C : on redirige vers une page de succès avec token dans l'URL
+  const safeRedirect = `/generateur?access_token=${data.access_token}`;
+  return res.redirect(safeRedirect);
+}
 
     let uid;
     try {
