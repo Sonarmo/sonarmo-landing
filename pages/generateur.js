@@ -21,7 +21,6 @@ export default function Generateur() {
       setAccessToken(accessToken);
       setIsAuthenticated(true);
 
-      // Récupération des infos utilisateur Spotify
       fetch("https://api.spotify.com/v1/me", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -52,7 +51,7 @@ export default function Generateur() {
     }
 
     setIsLoading(true);
-    const res = await fetch("/api/generate-playlist", {
+    const res = await fetch("/api/generate-playlist-prompt", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,22 +69,27 @@ export default function Generateur() {
     setIsLoading(false);
   };
 
+  const handleSpotifyDisconnect = () => {
+    setAccessToken(null);
+    setIsAuthenticated(false);
+    setSpotifyProfile(null);
+    router.replace("/generateur");
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center p-6 relative overflow-hidden">
-      {/* Background Bubble */}
       <div className="absolute inset-0 z-0">
         <div className="absolute w-[300px] h-[300px] bg-[#F28500] rounded-full blur-[120px] top-1/4 left-1/2 opacity-60" />
         <div className="absolute w-[300px] h-[300px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-50" />
       </div>
 
-      {/* HEADER */}
       <header className="flex justify-between items-center px-6 py-4 w-full relative z-10">
         <div className="flex items-center gap-2">
           <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
           <span className="text-white text-lg font-semibold italic">Sonarmo</span>
         </div>
         <nav className="hidden md:flex gap-6 text-sm items-center">
-            <Link href="/generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
+          <Link href="/generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
           <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
           <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
@@ -151,7 +155,13 @@ export default function Generateur() {
         {spotifyProfile && (
           <div className="mt-4 text-sm text-gray-300 bg-[#1c1c1c] p-4 rounded-xl text-center">
             ✅ Connecté avec <strong>{spotifyProfile.email}</strong><br />
-            {spotifyProfile.name && <span>Bienvenue, {spotifyProfile.name} !</span>}
+            {spotifyProfile.name && <span>Bienvenue, {spotifyProfile.name} !</span>}<br />
+            <button
+              onClick={handleSpotifyDisconnect}
+              className="mt-4 text-red-500 underline hover:text-red-300"
+            >
+              Se déconnecter de Spotify
+            </button>
           </div>
         )}
 
@@ -186,7 +196,6 @@ export default function Generateur() {
         )}
       </main>
 
-      {/* FOOTER */}
       <footer className="bg-[#121212] text-sm text-gray-400 px-6 py-10 mt-20 w-full relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div className="flex flex-col gap-2 mb-6 md:mb-0">
