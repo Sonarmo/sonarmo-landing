@@ -35,7 +35,7 @@ export default function Register() {
 
       await setDoc(doc(db, "users", user.uid), {
   email,
-  role,
+  role: "particulier", // 🔒 rôle fixé par défaut
   credits: 1,
   createdAt: new Date(),
 }, { merge: true }); // ← AJOUT ICI
