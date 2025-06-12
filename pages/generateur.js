@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import CreditBadge from "@/components/builder/CreditBadge";
+import CreditBadge from "/components/builder/CreditBadge";
 
 export default function Generateur() {
   const [prompt, setPrompt] = useState("");
