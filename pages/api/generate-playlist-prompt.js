@@ -53,7 +53,7 @@ export default async function handler(req, res) {
     // 🔮 Génération GPT
     const systemPrompt = `
 Tu es un expert en curation musicale.
-En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist de 15 morceaux Spotify cohérente, originale et fluide.
+En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist de 20 morceaux Spotify cohérente, originale et fluide.
 
 Prompt utilisateur : """${prompt}"""
 
@@ -101,7 +101,7 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
 
     const rawTitle = prompt.length > 40 ? prompt.slice(0, 40) + "…" : prompt;
     const cleanTitle = rawTitle.replace(/[^\w\sÀ-ÿ!?.,:;'-]/g, "").trim();
-    const playlistName = `Sonarmo – ${cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1)}`;
+    const playlistName = `${cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1)}`;
 
     const playlistRes = await fetch(`https://api.spotify.com/v1/users/${user.id}/playlists`, {
       method: "POST",

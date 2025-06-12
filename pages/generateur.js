@@ -108,7 +108,7 @@ export default function Generateur() {
 
     if (res.ok) {
       const data = await res.json();
-      setPlaylistUrl(data.playlistUrl);
+      setPlaylistUrl(data.url);
     } else {
       alert("Erreur lors de la génération. Réessaie !");
     }
@@ -229,6 +229,23 @@ export default function Generateur() {
         >
           {isLoading ? "Génération en cours..." : "Générer ma playlist"}
         </motion.button>
+        {credits !== null && credits <= 1 && (
+  <div className="mt-6 flex flex-col items-center animate-fade-in">
+    <p className="text-sm text-pink-300 mb-3 text-center max-w-xs">
+      Tu n&apos;as plus assez de crédits pour générer de nouvelles playlists.<br />
+      Recharge ton compte pour continuer l&apos;expérience Sonarmo 🎶
+    </p>
+    <div className="relative group">
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-orange-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:scale-105 animate-pulse"></div>
+      <button
+        onClick={() => router.push("/achat-credits")}
+        className="relative inline-flex items-center justify-center px-6 py-3 text-base font-bold text-white bg-black border border-pink-500 rounded-xl transition duration-300 hover:scale-105 hover:border-orange-500"
+      >
+        💳 Acheter des crédits
+      </button>
+    </div>
+  </div>
+)}
 
         {playlistUrl && (
           <div className="mt-6">
