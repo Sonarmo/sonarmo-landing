@@ -48,7 +48,7 @@ export default function Register() {
       router.push("/generateur");
     } catch (err) {
       console.error(err);
-      setError("Erreur lors de l'inscription.");
+      setError("Erreur lors de l&apos;inscription.");
     }
   };
 
@@ -67,7 +67,7 @@ export default function Register() {
           <span className="text-white text-lg font-semibold italic">Sonarmo</span>
         </Link>
         <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
+          <Link href="/explique-generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
           <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
         </nav>
