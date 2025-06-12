@@ -143,7 +143,7 @@ export default function Generateur() {
       </AnimatePresence>
 
       <main className="flex flex-col items-center justify-center flex-grow w-full relative z-10">
-         <CreditsBadge credits={credits} />
+         <CreditBadge credits={credits} />
         <h1 className="text-3xl font-bold mb-6 text-center">Crée ta playlist avec Sonarmo IA</h1>
 
         {!isAuthenticated && (
