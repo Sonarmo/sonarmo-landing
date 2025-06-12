@@ -113,7 +113,7 @@ export default function Register() {
             />
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <button type="submit" className="bg-gradient-to-r from-orange-500 to-pink-500 px-4 py-2 rounded text-white">
-              S'inscrire
+              S&apos;inscrire
             </button>
             <p className="text-sm text-gray-400 text-center">
               Vous avez déjà un compte ?{" "}
