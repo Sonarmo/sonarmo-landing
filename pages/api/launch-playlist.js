@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
         // On stocke la playlist sélectionnée dans Firestore
         const { uri } = req.body;
-        const decodedToken = await (await import("@/lib/firebaseAdmin")).authAdmin.verifyIdToken(idToken);
+        const decodedToken = await (await import("/lib/firebaseAdmin")).authAdmin.verifyIdToken(idToken);
         const uid = decodedToken.uid;
 
         await db.collection("users").doc(uid).set(

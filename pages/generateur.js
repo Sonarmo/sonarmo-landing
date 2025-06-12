@@ -15,6 +15,7 @@ export default function Generateur() {
   const [accessToken, setAccessToken] = useState(null);
   const [spotifyProfile, setSpotifyProfile] = useState(null);
   const router = useRouter();
+  const [credits, setCredits] = useState(null);
 
   useEffect(() => {
     const accessToken = router.query.access_token;
@@ -143,7 +144,7 @@ export default function Generateur() {
       </AnimatePresence>
 
       <main className="flex flex-col items-center justify-center flex-grow w-full relative z-10">
-         <CreditBadge credits={credits} />
+         {credits !== null && <CreditBadge credits={credits} />}
         <h1 className="text-3xl font-bold mb-6 text-center">Crée ta playlist avec Sonarmo IA</h1>
 
         {!isAuthenticated && (

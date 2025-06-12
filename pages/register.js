@@ -34,11 +34,11 @@ export default function Register() {
       const user = userCredential.user;
 
       await setDoc(doc(db, "users", user.uid), {
-        email,
-        role,
-        credits: 1, // 🎁 1 crédit gratuit
-         createdAt: new Date(),
-    });
+  email,
+  role,
+  credits: 1,
+  createdAt: new Date(),
+}, { merge: true }); // ← AJOUT ICI
 
       const token = await user.getIdToken();
       nookies.set(undefined, "token", token, {
