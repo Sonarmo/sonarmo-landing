@@ -24,8 +24,8 @@ export default function CreditBadge() {
   if (credits === null) return null;
 
   return (
-    <div className="fixed top-6 right-6 bg-[#1c1c1c] text-white px-4 py-2 rounded-full shadow-lg border border-gray-700 z-50">
-      🎧 Crédits restants : <span className="text-orange-400 font-semibold">{credits}</span>
-    </div>
+    <div className="absolute top-4 right-4 z-20 bg-[#1c1c1c] text-white px-3 py-1 rounded-full border border-gray-600 text-sm">
+  {credits === 0 ? "Plus de crédits" : `${credits} génération${credits > 1 ? "s" : ""} disponible${credits > 1 ? "s" : ""}`}
+</div>
   );
 }
