@@ -44,13 +44,12 @@ export default async function handler(req, res) {
     const cookies = cookie.parse(req.headers.cookie || "");
     const idToken = cookies.token || null;
 
+    // 🔓 Mode B2C sans connexion Firebase (optionnel)
     if (!idToken) {
-  console.warn("⚠️ Aucun token Firebase trouvé dans les cookies (mode B2C ?)");
-
-  // Pour usage B2C : on redirige vers une page de succès avec token dans l'URL
-  const safeRedirect = `/generateur?access_token=${data.access_token}`;
-  return res.redirect(safeRedirect);
-}
+      console.warn("⚠️ Aucun token Firebase trouvé dans les cookies (mode B2C ?)");
+      const safeRedirect = `/generateur?access_token=${data.access_token}`;
+      return res.redirect(safeRedirect);
+    }
 
     let uid;
     try {
@@ -78,7 +77,14 @@ export default async function handler(req, res) {
 
     console.log("✅ Token Spotify stocké pour UID :", uid);
 
-    return res.redirect("/dashboard/settings");
+    // 🔁 Redirection selon le rôle
+    const role = existingUser.exists ? existingUser.data().role : "particulier";
+
+    if (role === "admin" || role === "pro") {
+      return res.redirect("/dashboard/settings");
+    } else {
+      return res.redirect(`/generateur?access_token=${data.access_token}`);
+    }
   } catch (err) {
     console.error("❌ Erreur Spotify callback :", err);
     return res.status(500).json({ error: err.message || "Erreur serveur." });

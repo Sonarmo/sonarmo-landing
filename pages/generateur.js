@@ -67,6 +67,28 @@ export default function Generateur() {
 
     return () => unsubscribe();
   }, []);
+  useEffect(() => {
+  const refreshToken = async () => {
+    try {
+      const res = await fetch("/api/refresh-spotify-token");
+      if (res.ok) {
+        const data = await res.json();
+        setAccessToken(data.access_token);
+        console.log("🔄 Token Spotify rafraîchi automatiquement");
+      } else {
+        console.warn("⚠️ Échec du rafraîchissement du token Spotify");
+      }
+    } catch (err) {
+      console.error("❌ Erreur lors du rafraîchissement du token :", err);
+    }
+  };
+
+  if (isAuthenticated) {
+    refreshToken(); // Appel initial
+    const interval = setInterval(refreshToken, 55 * 60 * 1000); // Toutes les 55 min
+    return () => clearInterval(interval);
+  }
+}, [isAuthenticated]);
 
   const handleGenerate = async () => {
     if (!isAuthenticated) {
