@@ -89,7 +89,7 @@ export default function Generateur() {
           <span className="text-white text-lg font-semibold italic">Sonarmo</span>
         </div>
         <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
+          <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
           <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
           <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
@@ -125,7 +125,7 @@ export default function Generateur() {
             exit={{ opacity: 0, y: -10 }}
             className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50 w-full"
           >
-            <Link href="/generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
+            <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
             <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
             <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">

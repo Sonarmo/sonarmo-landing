@@ -26,7 +26,7 @@ export default function ExplicationGeneration() {
             <span className="text-white text-lg font-semibold italic">Sonarmo</span>
           </Link>
           <nav className="hidden md:flex gap-6 text-sm items-center">
-            <Link href="/explique-generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
+            <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
             <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
             <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">

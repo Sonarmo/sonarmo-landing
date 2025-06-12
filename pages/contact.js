@@ -36,7 +36,7 @@ export default function Contact() {
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex gap-6 text-sm items-center">
-                        <Link href="/explique-generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
+                        <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
                         <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
                         <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
                         <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
@@ -70,7 +70,7 @@ export default function Contact() {
                             exit={{ opacity: 0, y: -10 }}
                             className="md:hidden px-6 py-4 bg-black shadow-lg flex flex-col gap-4 text-sm z-50 relative"
                         >
-                            <Link href="/generateur" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
+                            <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
                             <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
                             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
                             <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
