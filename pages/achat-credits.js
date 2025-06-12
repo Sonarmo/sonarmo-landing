@@ -36,7 +36,7 @@ export default function AchatCredits() {
       <main className="flex flex-col items-center flex-grow px-6 py-10">
         <h1 className="text-3xl font-bold mb-4">Recharge tes crédits Sonarmo</h1>
         <p className="mb-8 text-center text-gray-300 max-w-xl">
-          Chaque playlist générée utilise 1 crédit. Choisis une formule simple ou opte pour l'abonnement illimité !
+          Chaque playlist générée utilise 1 crédit. Choisis une formule simple ou opte pour l&apos;abonnement illimité !
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -68,7 +68,7 @@ export default function AchatCredits() {
               onClick={() => handleCheckout("price_1RYvjLDnUAWbLtYHuVqkc3vk")}
               className="bg-pink-600 px-4 py-2 rounded-lg text-white font-medium hover:bg-pink-700"
             >
-              S'abonner
+              S&apos;abonner
             </button>
           </motion.div>
         </div>

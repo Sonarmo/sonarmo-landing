@@ -15,12 +15,12 @@ export default function Cancel() {
 
       <main className="flex flex-col items-center text-center">
         <h1 className="text-3xl font-bold mb-4">⛔ Paiement annulé</h1>
-        <p className="text-gray-400 mb-6">Ton paiement n’a pas été finalisé. Tu peux réessayer à tout moment.</p>
+        <p className="text-gray-400 mb-6">Ton paiement n&apos;a pas été finalisé. Tu peux réessayer à tout moment.</p>
         <Link
           href="/achat-credits"
           className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold px-6 py-3 rounded-xl"
         >
-          Retour à l’achat de crédits
+          Retour à l&apos;achat de crédits
         </Link>
       </main>
 
