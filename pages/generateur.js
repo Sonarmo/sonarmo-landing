@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import CreditBadge from "@/components/builder/CreditBadge";
 
 export default function Generateur() {
   const [prompt, setPrompt] = useState("");
@@ -142,7 +143,7 @@ export default function Generateur() {
       </AnimatePresence>
 
       <main className="flex flex-col items-center justify-center flex-grow w-full relative z-10">
-        <h1 className="text-3xl font-bold mb-6 text-center">Crée ta playlist avec l’IA</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Crée ta playlist avec Sonarmo IA</h1>
 
         {!isAuthenticated && (
           <Link
@@ -196,7 +197,7 @@ export default function Generateur() {
           </div>
         )}
       </main>
-
+<CreditBadge />
       <footer className="bg-[#121212] text-sm text-gray-400 px-6 py-10 mt-20 w-full relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div className="flex flex-col gap-2 mb-6 md:mb-0">

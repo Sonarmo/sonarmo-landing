@@ -35,9 +35,10 @@ export default function Register() {
 
       await setDoc(doc(db, "users", user.uid), {
         email,
-        role: "particulier",
-        createdAt: new Date(),
-      });
+        role,
+        credits: 1, // 🎁 1 crédit gratuit
+         createdAt: new Date(),
+    });
 
       const token = await user.getIdToken();
       nookies.set(undefined, "token", token, {
