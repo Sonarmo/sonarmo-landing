@@ -5,6 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import CreditBadge from "/components/builder/CreditBadge";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import app from "/lib/firebase";
 
 export default function Generateur() {
   const [prompt, setPrompt] = useState("");
@@ -45,6 +48,25 @@ export default function Generateur() {
       setIsAuthenticated(false);
     }
   }, [router.query.access_token]);
+
+  useEffect(() => {
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setCredits(data.credits ?? 0);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleGenerate = async () => {
     if (!isAuthenticated) {
@@ -94,9 +116,9 @@ export default function Generateur() {
           <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
           <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-          <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+          <Link href="/logout" className="hover:text-gray-300 flex items-center gap-1">
             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-            SE CONNECTER
+            SE DECONNECTER
           </Link>
           <div className="flex items-center gap-4">
             <Link href="/index-en" className="text-sm text-gray-400 hover:text-white border px-2 py-1 rounded">
@@ -130,9 +152,9 @@ export default function Generateur() {
             <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
             <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-            <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+            <Link href="/logout" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-              SE CONNECTER
+              SE DECONNECTER
             </Link>
             <div className="flex items-center gap-4">
               <Link href="/index-en" className="text-sm text-gray-400 hover:text-white border px-2 py-1 rounded">
@@ -144,7 +166,7 @@ export default function Generateur() {
       </AnimatePresence>
 
       <main className="flex flex-col items-center justify-center flex-grow w-full relative z-10">
-         {credits !== null && <CreditBadge credits={credits} />}
+        {credits !== null && <CreditBadge credits={credits} />}
         <h1 className="text-3xl font-bold mb-6 text-center">Crée ta playlist avec Sonarmo IA</h1>
 
         {!isAuthenticated && (
@@ -183,7 +205,7 @@ export default function Generateur() {
           whileTap={{ scale: 0.95 }}
           className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold px-6 py-3 rounded-xl disabled:opacity-50"
         >
-          {isLoading ? "Génération en cours..." : "🎶 Générer ma playlist"}
+          {isLoading ? "Génération en cours..." : "Générer ma playlist"}
         </motion.button>
 
         {playlistUrl && (
