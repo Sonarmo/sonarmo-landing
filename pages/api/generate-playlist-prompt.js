@@ -109,26 +109,40 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
         const cookies = cookie.parse(req.headers.cookie || "");
         const idToken = cookies.token;
 
-        if (idToken) {
-            try {
-                const decodedToken = await authAdmin.verifyIdToken(idToken);
-                const uid = decodedToken.uid;
-                await db.collection("promptHistory").add({
-  uid,
-  prompt,
-  playlistUrl: playlist.external_urls.spotify,
-  playlistName: playlist.name,
-  totalTracks: uris.length,
-  spotifyEmail,
-  spotifyCountry,
-  spotifyProduct,
-  spotifyDisplayName,
-  createdAt: new Date(),
-});
-            } catch (err) {
-                console.warn("⚠️ Impossible d'enregistrer l'historique du prompt:", err);
-            }
-        }
+if (idToken) {
+  try {
+    const decodedToken = await authAdmin.verifyIdToken(idToken);
+    const uid = decodedToken.uid;
+
+    const userRef = db.collection("users").doc(uid);
+    const userDoc = await userRef.get();
+
+    const hasUsedFreePrompt = userDoc.exists && userDoc.data().freePromptUsed;
+
+    if (hasUsedFreePrompt) {
+      return res.status(403).json({ error: "Prompt gratuit déjà utilisé. Veuillez acheter un crédit." });
+    }
+
+    // 🔥 Sauvegarde de l'utilisation du prompt gratuit
+    await userRef.set({ freePromptUsed: true }, { merge: true });
+
+    // 🔥 Historique du prompt
+    await db.collection("promptHistory").add({
+      uid,
+      prompt,
+      playlistUrl: playlist.external_urls.spotify,
+      playlistName: playlist.name,
+      totalTracks: uris.length,
+      spotifyEmail,
+      spotifyCountry,
+      spotifyProduct,
+      spotifyDisplayName,
+      createdAt: new Date(),
+    });
+  } catch (err) {
+    console.warn("⚠️ Impossible d'enregistrer l'historique ou de vérifier l'utilisateur :", err);
+  }
+}
 
         return res.status(200).json({
             url: playlist.external_urls.spotify,
