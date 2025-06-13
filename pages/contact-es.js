@@ -11,7 +11,7 @@ export default function Contact() {
     return (
         <>
             <Head>
-                <title>Sonarmo - Contact</title>
+                <title>Sonarmo - Contacte</title>
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
                 {/* Google Analytics */}
                 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>
@@ -29,19 +29,19 @@ export default function Contact() {
             <main className="bg-black text-white min-h-screen relative overflow-x-hidden">
                 {/* HEADER */}
                 <header className="flex justify-between items-center px-6 py-4">
-                    <Link href="/index-en" className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2">
                         <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
                         <span className="text-white text-lg font-semibold italic">Sonarmo</span>
                     </Link>
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex gap-6 text-sm items-center">
-                        <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
-                        <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
-                        <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                        <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
+                        <Link href="/explique-generation" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+                        <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
+                        <Link href="/contact" className="hover:text-gray-300">CONTÀCTENOS</Link>
+                        <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
                             <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-                            LOGIN
+                            CONECTARSE
                         </Link>
                     </nav>
 
@@ -70,12 +70,12 @@ export default function Contact() {
                             exit={{ opacity: 0, y: -10 }}
                             className="md:hidden px-6 py-4 bg-black shadow-lg flex flex-col gap-4 text-sm z-50 relative"
                         >
-                            <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
-                            <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
-                            <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                            <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
+                            <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+                            <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+                            <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
+                            <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
                                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-                                LOGIN
+                                CONECTARSE
                             </Link>
                         </motion.div>
                     )}
@@ -104,17 +104,17 @@ export default function Contact() {
                             className="flex flex-col gap-4 w-full text-left"
                         >
                             <input type="hidden" name="_captcha" value="false" />
-                            <label className="text-sm">Name
+                            <label className="text-sm">Nombre
                                 <input type="text" name="Nom" required className="w-full px-4 py-2 rounded bg-white/90 text-black mt-1" /></label>
-                            <label className="text-sm">Surname
+                            <label className="text-sm">Apellido
                                 <input type="text" name="Prénom" required className="w-full px-4 py-2 rounded bg-white/90 text-black mt-1" /></label>
                             <label className="text-sm">Email
                                 <input type="email" name="email" required className="w-full px-4 py-2 rounded bg-white/90 text-black mt-1" /></label>
-                            <label className="text-sm">Message
+                            <label className="text-sm">Mensaje
                                 <textarea name="message" rows="4" required className="w-full px-4 py-2 rounded bg-white/90 text-black mt-1"></textarea></label>
-                            <button type="submit" className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-2 rounded text-white font-semibold">Send</button>
+                            <button type="submit" className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-2 rounded text-white font-semibold">Enviar</button>
                             {formSubmitted && (
-                                <p className="text-green-400 mt-4">Thank you for contacting us, we will get back to you as soon as possible.</p>
+                                <p className="text-green-400 mt-4">Gracias por ponerse en contacto con nosotros, le responderemos lo antes posible.</p>
                             )}
                         </form>
                     </div>
@@ -136,13 +136,13 @@ export default function Contact() {
                                 </a>
                             </div>
                             <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
-                            <Link href="/about-en" className="hover:text-white">About us</Link>
-                            <Link href="/contact" className="hover:text-white">Contact us</Link>
-                        </div>
-                        <div className="flex flex-col items-end text-right gap-2">
-                            <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-                            <p className="text-xs">&copy;2025 Sonarmo Team. All Rights Reserved</p>
-                            <p className="text-xs">Terms of Use &amp; Privacy Policy</p>
+              <Link href="/about-es" className="hover:text-white">Sobre nosotros</Link>
+              <Link href="/contact-es" className="hover:text-white">Contáctenos</Link>
+            </div>
+            <div className="flex flex-col items-end text-right gap-2">
+              <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
+              <p className="text-xs">©2025 Sonarmo Team. Todos los derechos reservados</p>
+              <p className="text-xs">Términos y condiciones de uso y política de privacidad</p>
                         </div>
                     </div>
                 </footer>

@@ -30,7 +30,7 @@ export default function Home() {
           </div>
 
           <nav className="hidden md:flex gap-6 text-sm items-center">
-            <Link href="/explique-generation-es" className="hover:text-gray-300">GENERADOR DE PLAYLIST</Link>
+            <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
             <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
             <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
             <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
