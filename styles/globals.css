@@ -39,3 +39,15 @@ body {
 .animate-fade-in-up {
   animation: fade-in-up 0.8s ease-out both;
 }
+@keyframes waveLoop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-waveLoop {
+  animation: waveLoop 20s linear infinite;
+}

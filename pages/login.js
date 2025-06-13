@@ -6,6 +6,7 @@ import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, sig
 import { auth } from "../lib/firebase";
 import nookies from "nookies";
 import Head from "next/head";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -44,20 +45,32 @@ export default function Login() {
     };
 
     const signInWithGoogle = async () => {
-        const provider = new GoogleAuthProvider();
-        try {
-            const result = await signInWithPopup(auth, provider);
-            const token = await result.user.getIdToken();
-            nookies.set(undefined, "token", token, {
-                maxAge: 60 * 60 * 24,
-                path: "/",
-            });
-            router.push("/dashboard");
-        } catch (err) {
-            console.error("Erreur connexion Google :", err);
-            setError("Échec de la connexion avec Google.");
-        }
-    };
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const token = await result.user.getIdToken();
+    nookies.set(undefined, "token", token, {
+      maxAge: 60 * 60 * 24,
+      path: "/",
+    });
+
+    // 🔍 Vérifie le rôle dans Firestore
+    const db = getFirestore();
+    const userRef = doc(db, "users", result.user.uid);
+    const userSnap = await getDoc(userRef);
+    const role = userSnap.exists() ? userSnap.data().role : "particulier";
+
+    // 🧭 Redirection selon le rôle
+    if (role === "pro") {
+      router.push("/dashboard");
+    } else {
+      router.push("/generateur");
+    }
+  } catch (err) {
+    console.error("Erreur connexion Google :", err);
+    setError("Échec de la connexion avec Google.");
+  }
+};
 
     return (
         <>
