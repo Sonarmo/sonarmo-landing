@@ -184,7 +184,7 @@ export default function Home() {
             <div className="flex flex-col items-end text-right gap-2">
               <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
               <p className="text-xs">©2025 Sonarmo Team. Tous droits réservés</p>
-              <p className="text-xs">Conditions d'utilisation & Politique de confidentialité</p>
+              <p className="text-xs">Conditions d&apos;utilisation & Politique de confidentialité</p>
             </div>
           </div>
         </footer>
