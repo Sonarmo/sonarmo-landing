@@ -142,11 +142,7 @@ export default function Generateur() {
             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
             SE DECONNECTER
           </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/index-en" className="text-sm text-gray-400 hover:text-white border px-2 py-1 rounded">
-              EN
-            </Link>
-          </div>
+          
         </nav>
         <div className="md:hidden">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -178,31 +174,27 @@ export default function Generateur() {
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
               SE DECONNECTER
             </Link>
-            <div className="flex items-center gap-4">
-              <Link href="/index-en" className="text-sm text-gray-400 hover:text-white border px-2 py-1 rounded">
-                EN
-              </Link>
-            </div>
+            
           </motion.div>
         )}
       </AnimatePresence>
 
       <main className="flex flex-col items-center justify-center flex-grow w-full relative z-10">
         {credits !== null && <CreditBadge credits={credits} />}
-        <h1 className="text-3xl font-bold mb-6 text-center">Crée ta playlist avec Sonarmo IA</h1>
+        <h1 className="text-3xl font-semibold mt-10 mb-15 text-center">Crée ta playlist avec Sonarmo IA</h1>
 
         {!isAuthenticated && (
           <Link
             href="/api/login-user"
-            className="mb-6 bg-green-500 hover:bg-green-600 px-4 py-2 rounded text-white"
+            className="mb-15 bg-green-500 hover:bg-green-600 px-4 py-2 rounded text-white"
           >
             Se connecter à Spotify
           </Link>
         )}
 
         {spotifyProfile && (
-          <div className="mt-4 text-sm text-gray-300 bg-[#1c1c1c] p-4 rounded-xl text-center">
-            ✅ Connecté avec <strong>{spotifyProfile.email}</strong><br />
+          <div className="mt-8 text-sm text-gray-300 bg-[#1c1c1c] p-4 rounded-xl text-center">
+            Connecté avec <strong>{spotifyProfile.email}</strong><br />
             {spotifyProfile.name && <span>Bienvenue, {spotifyProfile.name} !</span>}<br />
             <button
               onClick={handleSpotifyDisconnect}
@@ -216,7 +208,7 @@ export default function Generateur() {
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Décris ton ambiance idéale..."
+          placeholder="Décris l'ambiance que tu souhaite..."
           className="w-full max-w-xl p-4 rounded-lg bg-[#1c1c1c] text-white border border-gray-700 mb-4"
         />
 
@@ -225,14 +217,14 @@ export default function Generateur() {
           disabled={isLoading || !prompt}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold px-6 py-3 rounded-xl disabled:opacity-50"
+          className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold mt-5 px-10 py-3 rounded-xl disabled:opacity-50"
         >
           {isLoading ? "Génération en cours..." : "Générer ma playlist"}
         </motion.button>
         {credits !== null && credits <= 1 && (
   <div className="mt-6 flex flex-col items-center animate-fade-in">
-    <p className="text-sm text-pink-300 mb-3 text-center max-w-xs">
-      Tu n&apos;as plus assez de crédits pour générer de nouvelles playlists.<br />
+    <p className="text-sm text-pink-300 mb-10 text-center max-w-xs">
+      Tu n&apos;as plus assez de crédits pour générer de nouvelles playlists ?<br />
       Recharge ton compte pour continuer l&apos;expérience Sonarmo 🎶
     </p>
     <div className="relative group">

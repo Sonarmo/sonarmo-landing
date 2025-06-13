@@ -104,7 +104,7 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="bg-[#1c1c1c] p-8 rounded-2xl shadow-lg"
             >
-              <h3 className="text-2xl font-semibold mb-4 text-[#f58711]">Particuliers</h3>
+              <h3 className="text-2xl font-semibold mb-4 text-[#f58711]">Pour tous</h3>
               <p className="text-gray-400 mb-6">
                 Que vous soyez au bord d&apos;une piscine, au travail ou entrain de cuisiner… Une ambiance bien choisie peut tout changer.
                 Avec Sonarmo, créez une playlist sur mesure, adaptée à l&apos;instant et à votre humeur.
