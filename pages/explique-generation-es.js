@@ -8,8 +8,8 @@ export default function ExplicationGeneration() {
   return (
     <>
       <Head>
-        <title>Comment ça marche ? - Sonarmo</title>
-        <meta name="description" content="Découvrez comment Sonarmo génère votre playlist parfaite en quelques secondes." />
+        <title> ¿Cómo funciona? - Sonarmo</title>
+        <meta name="description" content="Descubre cómo Sonarmo genera tu playlist perfecta en segundos." />
         <link rel="icon" href="/sonarmo-experience.png" />
       </Head>
 
@@ -23,17 +23,17 @@ export default function ExplicationGeneration() {
 
         {/* HEADER */}
         <header className="flex justify-between items-center px-6 py-4 relative z-10">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/index-es" className="flex items-center gap-2">
             <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
             <span className="text-white text-lg font-semibold italic">Sonarmo</span>
           </Link>
           <nav className="hidden md:flex gap-6 text-sm items-center">
-            <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-            <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-            <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-            <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+            <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+            <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+            <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
+            <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-              SE CONNECTER
+              CONECTARSE
             </Link>
           </nav>
         </header>
@@ -47,8 +47,8 @@ export default function ExplicationGeneration() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-white">Générateur </span>
-            <span className="text-[#FCE2BA]">Atmosphérique</span>
+            <span className="text-white">Generador de </span>
+            <span className="text-[#FCE2BA]">Atmósfera</span>
           </motion.h1>
 
           <motion.p
@@ -57,7 +57,7 @@ export default function ExplicationGeneration() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            Chaque playlist Sonarmo se construisent avec notre Intelligence Atmospherique capable de lire votre ambiance, vos besoins, et de transformer l&apos;instant en une expérience sonore mémorable.
+            Cada playlist Sonarmo se construye con nuestra Inteligencia Atmosférica capaz de leer su ambiente, sus necesidades, y transformar el momento en una experiencia sonora memorable.
           </motion.p>
 
           <motion.div
@@ -69,26 +69,26 @@ export default function ExplicationGeneration() {
             <ul className="text-left text-gray-300 space-y-6 mb-10">
   <li className="flex items-center gap-5">
     <Zap className="text-orange-400 mt-1" size={40} />
-    <span><strong>Instantané :</strong> Votre playlist prête en moins de 5 secondes.</span>
+    <span><strong>Inmediato :</strong> Su lista de reproducción lista en menos de 5 segundos.</span>
   </li>
   <li className="flex items-center gap-5">
     <Target className="text-pink-400 mt-1" size={40} />
-    <span><strong>Personnalisé :</strong> Chaque morceau est sélectionné selon votre description.</span>
+    <span><strong>Personalizado :</strong> Cada música se selecciona de acuerdo a su descripción.</span>
   </li>
   <li className="flex items-center gap-5">
     <LinkIcon className="text-purple-400 mt-1" size={40} />
-    <span><strong>Spotify intégré :</strong> Écoutez, modifiez et partagez librement.</span>
+    <span><strong>Spotify integrado :</strong> Escucha, edita y comparte libremente.</span>
   </li>
   <li className="flex items-center gap-5">
     <Brain className="text-blue-400 mt-1" size={40} />
-    <span><strong>IA évolutive :</strong> Elle apprend au fil de vos ambiances.</span>
+    <span><strong>IA escalable :</strong> Aprende a través de sus ambientes.</span>
   </li>
 </ul>
 
             <div className="mt-10 text-center">
-              <Link href="/login">
+              <Link href="/login-es">
                 <button className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-8 py-3 rounded-full text-white font-semibold text-lg hover:scale-105 transition">
-                  ✨ Générer ma playlist maintenant
+                  ✨ Generar mi playlist ahora
                 </button>
               </Link>
             </div>
@@ -96,28 +96,28 @@ export default function ExplicationGeneration() {
         </section>
 
         {/* FOOTER */}
-        <footer className="bg-black text-sm text-gray-400 border-t border-gray-700 px-6 py-10 w-full relative z-10">
+        <footer className="bg-[#121212] text-sm text-gray-400 px-6 py-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
             <div className="flex flex-col gap-2 mb-6 md:mb-0">
               <div className="flex items-center gap-4">
                 <a href="https://www.instagram.com/sonarmo_music/?hl=fr" target="_blank" rel="noopener noreferrer">
-                  <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} className="hover:opacity-70 transition" />
+                  <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} />
                 </a>
                 <a href="https://www.linkedin.com/company/sonarmo/" target="_blank" rel="noopener noreferrer">
-                  <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24} className="hover:opacity-70 transition" />
+                  <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24} />
                 </a>
                 <a href="https://www.facebook.com/profile.php?id=61574580608705" target="_blank" rel="noopener noreferrer">
-                  <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} className="hover:opacity-70 transition" />
+                  <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} />
                 </a>
               </div>
               <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
-              <Link href="/about" className="hover:text-white">À propos de nous</Link>
-              <Link href="/contact" className="hover:text-white">Nous contacter</Link>
+              <Link href="/about" className="hover:text-white">Sobre nosotros</Link>
+              <Link href="/contact" className="hover:text-white">Contáctenos</Link>
             </div>
             <div className="flex flex-col items-end text-right gap-2">
               <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-              <p className="text-xs">&copy;2025 Sonarmo Team. Tous droits réservés</p>
-              <p className="text-xs">Conditions d&apos;utilisation &amp; Politique de confidentialité</p>
+              <p className="text-xs">©2025 Sonarmo Team. Todos los derechos reservados</p>
+              <p className="text-xs">Términos y condiciones de uso y política de privacidad</p>
             </div>
           </div>
         </footer>

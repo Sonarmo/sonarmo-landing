@@ -22,7 +22,7 @@ export default function Login() {
                     maxAge: 60 * 60 * 24,
                     path: "/",
                 });
-                router.push("/dashboard");
+                router.push("/generateur");
             }
         });
         return () => unsubscribe();
@@ -38,7 +38,7 @@ export default function Login() {
                 maxAge: 60 * 60 * 24,
                 path: "/",
             });
-            router.push("/dashboard");
+            router.push("/generateur");
         } catch (err) {
             setError("Email ou mot de passe incorrect.");
         }

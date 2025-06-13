@@ -13,10 +13,10 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Sonarmo | Ambiance musicale intelligente pour tous</title>
+        <title>Sonarmo | Ambiente musical inteligente para todos</title>
         <meta
           name="description"
-          content="Générez votre playlist personnalisée avec Sonarmo, l’outil intelligent pour créer une ambiance sonore unique chez vous ou dans votre établissement."
+          content="Genera tu playlist personalizada con Sonarmo, la herramienta inteligente para crear un ambiente sonoro único en casa o en tu establecimiento."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
@@ -30,12 +30,12 @@ export default function Home() {
           </div>
 
           <nav className="hidden md:flex gap-6 text-sm items-center">
-            <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-            <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-            <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-            <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+            <Link href="/explique-generation-es" className="hover:text-gray-300">GENERADOR DE PLAYLIST</Link>
+            <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+            <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
+            <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-              SE CONNECTER
+              CONECTARSE
             </Link>
             <LanguageSwitcher />
           </nav>
@@ -57,12 +57,12 @@ export default function Home() {
               exit={{ opacity: 0, y: -10 }}
               className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
             >
-              <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-              <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-              <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-              <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+              <Link href="/explique-generation-es" className="hover:text-gray-300">GENERADOR DE PLAYLIST</Link>
+              <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+              <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
+              <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-                SE CONNECTER
+                CONECTARSE
               </Link>
               <LanguageSwitcher />
             </motion.div>
@@ -81,13 +81,13 @@ export default function Home() {
 </div>
           
           <h2 className="text-5xl font-semibold mb-4">
-            <span className="text-white">Intelligence </span>
-            <span className="text-[#FCE2BA]">Atmosphérique</span>
+            <span className="text-white">Inteligencia </span>
+            <span className="text-[#FCE2BA]">Atmosférica</span>
             
           </h2>
           
           <p className="mx-auto text-gray-400 text-lg mb-12">
-            Créez une ambiance musicale sur mesure, que vous soyez un particulier ou un professionnel.
+            Crea un ambiente musical a medida, tanto si eres un particular como un profesional.
           </p>
           <div className="mx-auto relative w-full h-[170px] z-20 mb-5">
   <AnimatedWave />
@@ -96,7 +96,7 @@ export default function Home() {
         </section>
         {/* DUAL CTA SECTION */}
         <section className="px-6 py-18 text-center bg-black">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12">Choisissez votre expérience</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-12">Elige tu experiencia</h2>
           <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -104,13 +104,13 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="bg-[#1c1c1c] p-8 rounded-2xl shadow-lg"
             >
-              <h3 className="text-2xl font-semibold mb-4 text-[#f58711]">Particuliers</h3>
+              <h3 className="text-2xl font-semibold mb-4 text-[#f58711]">Personal</h3>
               <p className="text-gray-400 mb-6">
-                Que vous soyez au bord d&apos;une piscine, au travail ou entrain de cuisiner… Une ambiance bien choisie peut tout changer.
-                Avec Sonarmo, créez une playlist sur mesure, adaptée à l&apos;instant et à votre humeur.
+                Ya sea que esté en la piscina, trabajando o cocinando... Un ambiente bien elegido puede cambiar todo.
+                Con Sonarmo, crea una lista de reproducción personalizada, adaptada al momento y a tu estado de ánimo.
               </p>
-              <Link href="/login" className="inline-block bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-3 rounded-full text-white font-semibold hover:scale-105 transition-transform">
-                Générer ma playlist
+              <Link href="/login-es" className="inline-block bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-3 rounded-full text-white font-semibold hover:scale-105 transition-transform">
+                Generar mi playlist
               </Link>
             </motion.div>
             <motion.div
@@ -119,13 +119,13 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="bg-[#1c1c1c] p-8 rounded-2xl shadow-lg"
             >
-              <h3 className="text-2xl font-semibold mb-4 text-[#FF00FF]">Professionnels</h3>
+              <h3 className="text-2xl font-semibold mb-4 text-[#FF00FF]">Profesionales</h3>
               <p className="text-gray-400 mb-6">
-                Un bar qui invite à rester, un café qui respire la douceur, un espace pro qui stimule la concentration…
-                Grâce à Sonarmo Pro, offrez à vos clients une ambiance sonore mémorable, pensée pour eux.
+                Un bar que invita a quedarse, un café que respira dulzura, un espacio profesional que estimula la concentración...
+                Gracias a Sonarmo Pro, ofrezca a sus clientes un ambiente sonoro memorable, pensado para ellos.
               </p>
-              <Link href="/experience" className="inline-block bg-gradient-to-r from-[#FF00FF] to-[#F28500] px-6 py-3 rounded-full text-white font-semibold hover:scale-105 transition-transform">
-                Découvrir Sonarmo Pro
+              <Link href="/experience-es" className="inline-block bg-gradient-to-r from-[#FF00FF] to-[#F28500] px-6 py-3 rounded-full text-white font-semibold hover:scale-105 transition-transform">
+                Descubre Sonarmo Pro
               </Link>
             </motion.div>
           </div>
@@ -135,7 +135,7 @@ export default function Home() {
         <section className="relative text-center px-10 py-20 overflow-hidden bg-gradient-to-br from-[#2a0a00] via-[#1a0015] to-[#120d0d]">
           <div className="absolute left-0 top-0 w-[600px] h-[600px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-20 -translate-x-1/3 -translate-y-1/3 z-0" />
           <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-8">
-            Pourquoi Sonarmo ?
+            Por qué Sonarmo ?
           </p>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -144,17 +144,17 @@ export default function Home() {
             viewport={{ once: true }}
             className="relative z-10"
           >
-            <h2 className="text-3xl font-semibold mb-10">Une ambiance qui change tout</h2>
+            <h2 className="text-3xl font-semibold mb-10">Un ambiente que cambia todo</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-6xl mx-auto text-gray-300">
               {[{
                 value: "100%",
-                text: "des playlists générées sont uniques, basées sur votre ambiance."
+                text: "de Playlist generadas son únicas, basadas en tu ambiente."
               }, {
                 value: "+9%",
-                text: "de Dopamine libérée dans le cerveau lorsqu&apos;on écoute de la musique qu&apos;on aime"
+                text: "de Dopamina liberada en el cerebro cuando oímos música que nos gusta"
               }, {
                 value: "1 min",
-                text: "pour générer une ambiance musicale cohérente et prête à diffuser."
+                text: "para generar un ambiente musical coherente y listo para transmitir."
               }].map((item, index) => (
                 <motion.div
                   key={index}
@@ -185,13 +185,13 @@ export default function Home() {
                 </a>
               </div>
               <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
-              <Link href="/about" className="hover:text-white">À propos de nous</Link>
-              <Link href="/contact" className="hover:text-white">Nous contacter</Link>
+              <Link href="/about" className="hover:text-white">Sobre nosotros</Link>
+              <Link href="/contact" className="hover:text-white">Contáctenos</Link>
             </div>
             <div className="flex flex-col items-end text-right gap-2">
               <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-              <p className="text-xs">©2025 Sonarmo Team. Tous droits réservés</p>
-              <p className="text-xs">Conditions d&apos;utilisation & Politique de confidentialité</p>
+              <p className="text-xs">©2025 Sonarmo Team. Todos los derechos reservados</p>
+              <p className="text-xs">Términos y condiciones de uso y política de privacidad</p>
             </div>
           </div>
         </footer>

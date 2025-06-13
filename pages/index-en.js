@@ -3,193 +3,199 @@ import Head from "next/head";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
+import AnimatedWave from "/components/builder/AnimatedWave";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Home() {
-const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-return (
-<>
+  return (
+    <>
+      <Head>
+        <title>Sonarmo | Intelligent music atmosphere for all</title>
+        <meta
+          name="description"
+          content="Generate your personalized playlist with Sonarmo, the intelligent tool to create a unique sound atmosphere at home or in your establishment."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
+      </Head>
 
-        <Head>
-            <title>Sonarmo</title>
-            <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
-            {/* Google Analytics */}
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>
-            <script
-                dangerouslySetInnerHTML={{
-                    __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-PTGDLQ7W2N');
-      `,
-                }}
-            />
-        </Head>
-        <main className="bg-black text-white overflow-x-hidden">
-        {/* HEADER */}
+      <main className="bg-black text-white overflow-x-hidden">
         <header className="flex justify-between items-center px-6 py-4">
-            <div className="flex items-center gap-2">
-                    <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-                <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-            </div>
-               
+          <div className="flex items-center gap-2">
+            <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+            <span className="text-white text-lg font-semibold italic">Sonarmo</span>
+          </div>
 
+          <nav className="hidden md:flex gap-6 text-sm items-center">
+            <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
+            <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
+            <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
+            <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
+              <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
+              LOGIN
+            </Link>
+            <LanguageSwitcher />
+          </nav>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex gap-6 text-sm items-center">
-                <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
-                <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
-                        <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-                LOGIN
-                </Link>
-                
-            </nav>
-
-            {/* Mobile Nav Toggle */}
-            <div className="md:hidden">
-                <button onClick={()=> setIsMenuOpen(!isMenuOpen)}>
-                    {isMenuOpen ? (
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    ) : (
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    )}
-                </button>
-            </div>
+          <div className="md:hidden">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+              </svg>
+            </button>
+          </div>
         </header>
 
-        {/* Mobile Nav Menu */}
         <AnimatePresence>
-            {isMenuOpen && (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50">
-                <Link href="/experience-en" className="hover:text-gray-300">SONARMO EXPERIENCE</Link>
-                <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
+            >
+              <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
+              <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
+              <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
+              <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                 LOGIN
-                </Link>
+              </Link>
+              <LanguageSwitcher />
             </motion.div>
-            )}
+          )}
         </AnimatePresence>
 
-        {/* HERO SECTION */}
-        <section className="relative text-center px-4 py-0">
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}
-                className="relative z-10 flex flex-col items-center">
-                <div className="relative w-[500px] h-[225px] mb-1">
-                    <Image src="/Logo-app-header.png" alt="Sonarmo Logo" fill className="object-contain" priority />
-                </div>
-                <h1 className="text-5xl font-semibold mb-4">
-                    <span className="text-[#FCE2BA]">Atmospheric </span>
-                    <span className="text-white">Intelligence </span>
-                </h1>
-                <p className="max-w-xl text-gray-400 text-base sm:text-lg mb-8">
-                        Each place has a story, a unique identity. Sonarmo creates a personalized sound environment,
-                        specially designed to reflect the soul of your space and offer an immersive experience
-                        incomparable.
-                </p>
-                <Link href="/experience-en" legacyBehavior><a
-                    className="inline-block bg-gradient-to-r from-[#FF9400] to-[#FF0BED] px-6 py-3 rounded-full text-white font-semibold shadow-md transform transition-transform duration-300 hover:scale-105 active:scale-95">
-                    Discover
-                </a>
-                </Link>
-                <div className="h-24" />
+        <section className="text-center px-4 py-5 bg-black">
+          <div className="relative w-full max-w-xs sm:max-w-md h-[140px] sm:h-[225px] mx-auto mb-6">
+  <Image
+    src="/Logo-app-header.png"
+    alt="Sonarmo Logo"
+    fill
+    className="object-contain"
+    priority
+  />
+</div>
+          
+          <h2 className="text-5xl font-semibold mb-4">
+            <span className="text-[#FCE2BA]">Atmospheric </span>
+            <span className="text-white">Intelligence</span>
+            
+          </h2>
+          
+          <p className="mx-auto text-gray-400 text-lg mb-12">
+            Create a custom musical atmosphere, whether you are an individual or a professional.
+          </p>
+          <div className="mx-auto relative w-full h-[170px] z-20 mb-5">
+  <AnimatedWave />
+</div>
+
+        </section>
+        {/* DUAL CTA SECTION */}
+        <section className="px-6 py-18 text-center bg-black">
+          <h2 className="text-3xl md:text-4xl font-bold mb-12">Select your experience</h2>
+          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="bg-[#1c1c1c] p-8 rounded-2xl shadow-lg"
+            >
+              <h3 className="text-2xl font-semibold mb-4 text-[#f58711]">Individuals</h3>
+              <p className="text-gray-400 mb-6">
+                Whether you are at the edge of a swimming pool, at work or cooking... A well-chosen atmosphere can change everything.
+                With Sonarmo, create a customized playlist, adapted to the moment and your mood.
+              </p>
+              <Link href="/login-en" className="inline-block bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-3 rounded-full text-white font-semibold hover:scale-105 transition-transform">
+                Generate my playlist
+              </Link>
             </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="bg-[#1c1c1c] p-8 rounded-2xl shadow-lg"
+            >
+              <h3 className="text-2xl font-semibold mb-4 text-[#FF00FF]">Professionals</h3>
+              <p className="text-gray-400 mb-6">
+                A bar that invites you to stay, a café that exudes sweetness, a professional space that stimulates concentration...
+                Thanks to Sonarmo Pro, offer your customers a memorable sound ambiance, thought for them.
+              </p>
+              <Link href="/experience-en" className="inline-block bg-gradient-to-r from-[#FF00FF] to-[#F28500] px-6 py-3 rounded-full text-white font-semibold hover:scale-105 transition-transform">
+                Discover Sonarmo Pro
+              </Link>
+            </motion.div>
+          </div>
         </section>
 
-        {/* IMPACT SECTION */}
-        <section
-            className="relative text-center px-6 py-20 overflow-hidden bg-gradient-to-br from-[#2a0a00] via-[#1a0015] to-[#120d0d]">
-            <div
-                className="absolute left-0 top-0 w-[600px] h-[600px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-20 -translate-x-1/3 -translate-y-1/3 z-0 " />
-            <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-4">
-                    Music is not a background sound... it&apos;s a lever of ambience
-            </p>
-
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1.2
-                }} viewport={{ once: true }} className="relative z-10">
-                    <h2 className="text-3xl font-semibold mb-10">The impact of music on the customer experience
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-6xl mx-auto text-gray-300">
-                    {[{
-                    value: "+15%",
-                    text: "of turnover in bars and restaurants with a well-calibrated musical atmosphere.*"
-                    }, {
-                    value: "+21%",
-                    text: "time spent by guests in a venue with consistent ambient music.**"
-                    }, {
-                    value: "96%",
-                    text: "of customers say that music influences their perception of a place.***"
-                    }].map((item, index) => (
-                    <motion.div key={index} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: index * 0.3 }}>
-                        <p className="text-5xl font-bold text-white mb-2">{item.value}</p>
-                        <p>{item.text}</p>
-                    </motion.div>
-                    ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-10">* Source : HUI Research / ** Soundtrack Your Brand / *** IFOP
-                    & Sacem</p>
-            </motion.div>
-        </section>
-
-        {/* CONTACT SECTION */}
-        <section id="contact" className="relative text-center px-4 py-20 overflow-hidden">
-            <div className="relative z-10 flex flex-col items-center">
-                <h2 className="text-4xl font-semibold mb-4">Contact Us</h2>
-                <p className="text-gray-400 mb-8 max-w-md">
-                    A question, an idea, or just want to talk about it ? Let us know, we love talking !
-                </p>
-                <Link href="/contact-en" legacyBehavior><a
-                    className="inline-block bg-gradient-to-r from-[#FF9400] to-[#FF0BED] px-6 py-3 rounded-full text-white font-semibold shadow-md transform transition-transform duration-300 hover:scale-105 active:scale-95">
-                    Let&apos;s talk ?
-                </a>
-                </Link>
+        {/* IMPACT SECTION AMÉLIORÉE */}
+        <section className="relative text-center px-10 py-20 overflow-hidden bg-gradient-to-br from-[#2a0a00] via-[#1a0015] to-[#120d0d]">
+          <div className="absolute left-0 top-0 w-[600px] h-[600px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-20 -translate-x-1/3 -translate-y-1/3 z-0" />
+          <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-8">
+            Why Sonarmo ?
+          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2 }}
+            viewport={{ once: true }}
+            className="relative z-10"
+          >
+            <h2 className="text-3xl font-semibold mb-10">An atmosphere that changes everything</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-6xl mx-auto text-gray-300">
+              {[{
+                value: "100%",
+                text: "generated playlists are unique, based on your atmosphere."
+              }, {
+                value: "+9%",
+                text: "of Dopamine released in the brain when you listen to music that you like."
+              }, {
+                value: "1 min",
+                text: "to generate a coherent musical atmosphere and ready to broadcast."
+              }].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.3 }}
+                >
+                  <p className="text-5xl font-bold text-white mb-2">{item.value}</p>
+                  <p>{item.text}</p>
+                </motion.div>
+              ))}
             </div>
+          </motion.div>
         </section>
 
-        {/* FOOTER */}
         <footer className="bg-[#121212] text-sm text-gray-400 px-6 py-10">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div className="flex flex-col gap-2 mb-6 md:mb-0">
-                    <div className="flex items-center gap-4">
-                        <a href="https://www.instagram.com/sonarmo_music/?hl=fr" target="_blank"
-                            rel="noopener noreferrer">
-                            <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24}
-                                className="hover:opacity-70 transition" />
-                        </a>
-                        <a href="https://www.linkedin.com/company/sonarmo/" target="_blank" rel="noopener noreferrer">
-                            <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24}
-                                className="hover:opacity-70 transition" />
-                        </a>
-                        <a href="https://www.facebook.com/profile.php?id=61574580608705" target="_blank"
-                            rel="noopener noreferrer">
-                            <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24}
-                                className="hover:opacity-70 transition" />
-                        </a>
-                    </div>
-                    <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
-                    <Link href="/about-en" className="hover:text-white">About us</Link>
-                    <Link href="/contact-en" className="hover:text-white">Contact us</Link>
-                </div>
-                <div className="flex flex-col items-end text-right gap-2">
-                    <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-                    <p className="text-xs">©2025 Sonarmo Team. All Rights Reserved</p>
-                    <p className="text-xs">Terms of Use & Privacy Policy</p>
-                </div>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div className="flex flex-col gap-2 mb-6 md:mb-0">
+              <div className="flex items-center gap-4">
+                <a href="https://www.instagram.com/sonarmo_music/?hl=fr" target="_blank" rel="noopener noreferrer">
+                  <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} />
+                </a>
+                <a href="https://www.linkedin.com/company/sonarmo/" target="_blank" rel="noopener noreferrer">
+                  <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24} />
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61574580608705" target="_blank" rel="noopener noreferrer">
+                  <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} />
+                </a>
+              </div>
+              <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
+              <Link href="/about-en" className="hover:text-white">About us</Link>
+              <Link href="/contact-en" className="hover:text-white">Contact us</Link>
             </div>
+            <div className="flex flex-col items-end text-right gap-2">
+              <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
+              <p className="text-xs">©2025 Sonarmo Team. All rights reserved</p>
+              <p className="text-xs">Terms & Conditions of Use & Privacy Policy</p>
+            </div>
+          </div>
         </footer>
-    </main>
-</>
-);
+      </main>
+    </>
+  );
 }
