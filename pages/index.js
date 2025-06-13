@@ -99,8 +99,8 @@ export default function Home() {
             >
               <h3 className="text-2xl font-semibold mb-4 text-[#f58711]">Particuliers</h3>
               <p className="text-gray-400 mb-6">
-                Que vous soyez au bord d'une piscine, au travail ou entrain de cuisiner… Une ambiance bien choisie peut tout changer.
-                Avec Sonarmo, créez une playlist sur mesure, adaptée à l’instant et à votre humeur.
+                Que vous soyez au bord d&apos;une piscine, au travail ou entrain de cuisiner… Une ambiance bien choisie peut tout changer.
+                Avec Sonarmo, créez une playlist sur mesure, adaptée à l&apos;instant et à votre humeur.
               </p>
               <Link href="/login" className="inline-block bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-3 rounded-full text-white font-semibold hover:scale-105 transition-transform">
                 Générer ma playlist
@@ -144,7 +144,7 @@ export default function Home() {
                 text: "des playlists générées sont uniques, basées sur votre ambiance."
               }, {
                 value: "+9%",
-                text: "de Dopamine libérée dans le cerveau lorsqu'on écoute de la musique qu'on aime"
+                text: "de Dopamine libérée dans le cerveau lorsqu&apos;on écoute de la musique qu&apos;on aime"
               }, {
                 value: "1 min",
                 text: "pour générer une ambiance musicale cohérente et prête à diffuser."
