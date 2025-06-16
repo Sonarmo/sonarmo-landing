@@ -39,7 +39,7 @@ export default function Register() {
       await setDoc(doc(db, "users", user.uid), {
         email,
         role: "particulier",
-        credits: 1,
+        credits: 2,
         createdAt: new Date(),
       }, { merge: true });
 

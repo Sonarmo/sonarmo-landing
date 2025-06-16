@@ -1,6 +1,5 @@
 // pages/api/generate-playlist-prompt.js
 import OpenAI from "openai";
-import { getSpotifyAccessToken } from "/lib/spotifyTokens";
 import { db, authAdmin } from "/lib/firebaseAdmin";
 import cookie from "cookie";
 
@@ -22,7 +21,14 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Prompt trop court ou manquant" });
   }
 
+  // Récupère le token Spotify de l'utilisateur (envoyé dans l'en-tête Authorization)
+  const accessToken = req.headers.authorization?.split(" ")[1];
+  if (!accessToken) {
+    return res.status(401).json({ error: "Token Spotify manquant." });
+  }
+
   try {
+    // ─────────── Vérification des crédits Firebase ───────────
     const cookies = cookie.parse(req.headers.cookie || "");
     const idToken = cookies.token;
     let uid = null;
@@ -43,17 +49,16 @@ export default async function handler(req, res) {
         if (credits <= 0) {
           return res.status(403).json({ error: "Plus de crédits disponibles." });
         }
-        // Décrémentation d’un crédit
         await userRef.update({ credits: credits - 1 });
       } else {
         await userRef.set({ freePromptUsed: true }, { merge: true });
       }
     }
 
-    // 🔮 Génération GPT
+    // ─────────── Génération de la playlist via GPT ───────────
     const systemPrompt = `
 Tu es un expert en curation musicale.
-En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist de 20 morceaux Spotify cohérente, originale et fluide.
+En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist de 25 morceaux Spotify cohérente, originale et fluide.
 
 Prompt utilisateur : """${prompt}"""
 
@@ -78,27 +83,30 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
       return res.status(500).json({ error: "Erreur GPT, JSON invalide" });
     }
 
-    const accessToken = await getSpotifyAccessToken();
-
+    // ─────────── Résolution des URIs Spotify ───────────
     const resolvedUris = await Promise.all(
       tracks.map(async (t) => {
         const q = encodeURIComponent(`${t.name} ${t.artist}`);
-        const res = await fetch(`https://api.spotify.com/v1/search?q=${q}&type=track&limit=1`, {
+        const resSearch = await fetch(`https://api.spotify.com/v1/search?q=${q}&type=track&limit=1`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
-        const data = await res.json();
+        const data = await resSearch.json();
         return data.tracks?.items?.[0]?.uri || null;
       })
     );
 
     const uris = resolvedUris.filter(Boolean);
-    if (uris.length === 0) return res.status(400).json({ error: "Aucun morceau trouvé" });
+    if (uris.length === 0) {
+      return res.status(400).json({ error: "Aucun morceau trouvé" });
+    }
 
+    // ─────────── Infos Spotify utilisateur ───────────
     const userRes = await fetch("https://api.spotify.com/v1/me", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const user = await userRes.json();
 
+    // ─────────── Création de la playlist sur le compte de l'utilisateur ───────────
     const rawTitle = prompt.length > 40 ? prompt.slice(0, 40) + "…" : prompt;
     const cleanTitle = rawTitle.replace(/[^\w\sÀ-ÿ!?.,:;'-]/g, "").trim();
     const playlistName = `${cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1)}`;
@@ -118,6 +126,7 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
 
     const playlist = await playlistRes.json();
 
+    // ─────────── Ajout des morceaux ───────────
     await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
       method: "POST",
       headers: {
@@ -127,6 +136,7 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
       body: JSON.stringify({ uris }),
     });
 
+    // ─────────── Historique du prompt (optionnel) ───────────
     if (uid) {
       try {
         await db.collection("promptHistory").add({

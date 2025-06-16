@@ -248,17 +248,19 @@ export default function Generateur() {
 )}
 
         {playlistUrl && (
-          <div className="mt-6">
-            <a
-              href={playlistUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline text-orange-400 hover:text-orange-200"
-            >
-              🎧 Voir ma playlist sur Spotify
-            </a>
-          </div>
-        )}
+  <div className="mt-10 bg-[#1c1c1c] border border-gray-700 rounded-xl p-6 text-center shadow-lg">
+    <h2 className="text-xl font-semibold mb-2 text-white">Playlist prête !</h2>
+    <p className="text-sm text-gray-400 mb-4">Tu peux l'écouter directement sur Spotify.</p>
+    <a
+      href={playlistUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-block px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition duration-300"
+    >
+      ▶️ Ouvrir dans Spotify
+    </a>
+  </div>
+)}
       </main>
 
       <footer className="bg-[#121212] text-sm text-gray-400 px-6 py-10 mt-20 w-full relative z-10">
