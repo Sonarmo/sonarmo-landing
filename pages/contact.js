@@ -143,6 +143,7 @@ export default function Contact() {
                             <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
                             <p className="text-xs">&copy;2025 Sonarmo Team. All Rights Reserved</p>
                             <Link href="/cgu" className="text-sm hover:underline">Conditions d&apos;utilisation &amp; Politique de confidentialité</Link>
+                            <Link href="/mentions-legales" className="text-sm hover:underline">Mentions légales</Link>
                         </div>
                     </div>
                 </footer>
