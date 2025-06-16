@@ -50,23 +50,32 @@ export default function Generateur() {
   }, [router.query.access_token]);
 
   useEffect(() => {
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setCredits(data.credits ?? 0);
-        }
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      if (!user.emailVerified) {
+        alert("⚠️ Veuillez vérifier votre adresse email avant d'utiliser Sonarmo.");
+        await auth.signOut();
+        router.push("/login");
+        return;
       }
-    });
 
-    return () => unsubscribe();
-  }, []);
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setCredits(data.credits ?? 0);
+      }
+    } else {
+      router.push("/login");
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
   useEffect(() => {
   const refreshToken = async () => {
     try {

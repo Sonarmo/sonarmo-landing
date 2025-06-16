@@ -1,7 +1,6 @@
-// pages/register.js
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import nookies from "nookies";
@@ -33,23 +32,26 @@ export default function Register() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      // Envoi de l'email de vérification
+      await sendEmailVerification(user);
+
+      // Création du document utilisateur
       await setDoc(doc(db, "users", user.uid), {
-  email,
-  role: "particulier", // 🔒 rôle fixé par défaut
-  credits: 1,
-  createdAt: new Date(),
-}, { merge: true }); // ← AJOUT ICI
+        email,
+        role: "particulier",
+        credits: 1,
+        createdAt: new Date(),
+      }, { merge: true });
 
-      const token = await user.getIdToken();
-      nookies.set(undefined, "token", token, {
-        maxAge: 60 * 60 * 24,
-        path: "/",
-      });
+      // Déconnexion immédiate
+      await auth.signOut();
 
-      router.push("/generateur");
+      // Message et redirection
+      alert("Un email de vérification a été envoyé. Veuillez confirmer votre adresse avant de vous connecter.");
+      router.push("/login");
     } catch (err) {
       console.error(err);
-      setError("Erreur lors de l&apos;inscription.");
+      setError("Erreur lors de l'inscription.");
     }
   };
 
