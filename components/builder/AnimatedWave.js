@@ -18,8 +18,8 @@ export default function AnimatedWave() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    const NUM_PARTICLES = 9000;
-    const baseAmplitude = canvas.height * 0.08;
+    const NUM_PARTICLES = 8000;
+    const baseAmplitude = canvas.height * 0.1;
 
     let particles = [];
 
@@ -73,7 +73,7 @@ export default function AnimatedWave() {
         // Respawn si sortie à droite
         if (p.x > canvas.width + p.radius) {
           p.x = -p.radius;
-          p.baseY = canvas.height * 0.3 + Math.random() * (canvas.height * 0.4);
+          p.baseY = canvas.height * 0.4 + Math.random() * (canvas.height * 0.4);
           p.dx = Math.random() * 0.7 + 0.5;
           p.radius = Math.random() * 1.0 + 0.3;
         }
@@ -100,7 +100,7 @@ export default function AnimatedWave() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute bottom-0 left-0 w-full opacity-80 z-0 pointer-events-none"
+      className="absolute bottom-0 left-0 w-full opacity-100 z-0 pointer-events-none"
       style={{ height: "100%", maxHeight: "100%", overflow: "hidden" }}
     />
   );
