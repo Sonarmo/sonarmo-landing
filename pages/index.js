@@ -89,7 +89,7 @@ export default function Home() {
           <p className="mx-auto text-gray-400 text-lg mb-12">
             Créez une ambiance musicale sur mesure, que vous soyez un particulier ou un professionnel.
           </p>
-          <div className="mx-auto relative w-full h-[170px] z-20 mb-5">
+          <div className="w-full overflow-hidden relative h-[120px] z-10">
   <AnimatedWave />
 </div>
 

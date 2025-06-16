@@ -57,7 +57,7 @@ export default function ExplicationGeneration() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            Cada playlist Sonarmo se construye con nuestra Inteligencia Atmosférica capaz de leer su ambiente, sus necesidades, y transformar el momento en una experiencia sonora memorable.
+            Cada playlist Sonarmo se construye con nuestra Inteligencia Atmosférica capaz de leer tu ambiente, tus necesidades, y transformar el momento en una experiencia sonora memorable.
           </motion.p>
 
           <motion.div
@@ -69,11 +69,11 @@ export default function ExplicationGeneration() {
             <ul className="text-left text-gray-300 space-y-6 mb-10">
   <li className="flex items-center gap-5">
     <Zap className="text-orange-400 mt-1" size={40} />
-    <span><strong>Inmediato :</strong> Su lista de reproducción lista en menos de 5 segundos.</span>
+    <span><strong>Inmediato :</strong> Tu lista de reproducción lista en menos de 5 segundos.</span>
   </li>
   <li className="flex items-center gap-5">
     <Target className="text-pink-400 mt-1" size={40} />
-    <span><strong>Personalizado :</strong> Cada música se selecciona de acuerdo a su descripción.</span>
+    <span><strong>Personalizado :</strong> Cada música se selecciona de acuerdo a tu descripción.</span>
   </li>
   <li className="flex items-center gap-5">
     <LinkIcon className="text-purple-400 mt-1" size={40} />
@@ -81,7 +81,7 @@ export default function ExplicationGeneration() {
   </li>
   <li className="flex items-center gap-5">
     <Brain className="text-blue-400 mt-1" size={40} />
-    <span><strong>IA escalable :</strong> Aprende a través de sus ambientes.</span>
+    <span><strong>IA escalable :</strong> Aprende a través de tu ambiente.</span>
   </li>
 </ul>
 

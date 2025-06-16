@@ -1,4 +1,3 @@
-// components/AnimatedWave.js
 import { useEffect, useRef } from "react";
 
 export default function AnimatedWave() {
@@ -6,25 +5,34 @@ export default function AnimatedWave() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
     let animationFrameId;
-    let time = 1;
+    let time = 0;
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
-      canvas.height = 100;
+      canvas.height = canvas.parentElement.offsetHeight || Math.min(window.innerHeight * 1, 8000);
     };
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    const particles = Array.from({ length: 7000 }, () => ({
-      x: Math.random() * canvas.width,
-      baseY: Math.random() * canvas.height,
-      radius: Math.random() * 1.0 + 0.3,
-      dx: Math.random() * 0.8 + 0.5,
-      dy: Math.sin(Math.random() * 1 * Math.PI) * 0.9
-    }));
+    const NUM_PARTICLES = 9000;
+    const baseAmplitude = canvas.height * 0.08;
+
+    let particles = [];
+
+    const initParticles = () => {
+      particles = Array.from({ length: NUM_PARTICLES }, () => ({
+        x: Math.random() * canvas.width,
+        baseY: canvas.height * 0.3 + Math.random() * (canvas.height * 0.4),
+        radius: Math.random() * 1.0 + 0.3,
+        dx: Math.random() * 0.7 + 0.5,
+      }));
+    };
+
+    initParticles();
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -34,19 +42,47 @@ export default function AnimatedWave() {
       gradient.addColorStop(1, "#FF0BED");
       ctx.fillStyle = gradient;
 
+      const dynamicAmplitude = baseAmplitude * (1 + 0.2 * Math.sin(time * 0.001));
+      const verticalShift = Math.cos(time * 0.0015) * canvas.height * 0.015;
+
       particles.forEach((p) => {
         p.x += p.dx;
-        const wave = Math.sin(p.x * 0.01 + time * 0.01) * 15;
-        const y = p.baseY + wave;
 
-        if (p.x > canvas.width) {
-          p.x = 0;
-          p.baseY = Math.random() * canvas.height;
+        // Base verticale légèrement animée
+        let baseY = p.baseY + Math.sin(time * 0.0005 + p.x * 0.0001) * canvas.height * 0.01;
+
+        // Onde complexe (superposition sinusoïdale)
+        const wave = (
+          Math.sin(p.x * 0.004 + time * 0.002) +
+          0.5 * Math.sin(p.x * 0.008 + time * 0.004 + 10) +
+          0.25 * Math.sin(p.x * 0.012 + time * 0.006 + 20)
+        ) * dynamicAmplitude;
+
+        // Variation aléatoire subtile : flicker
+        const flicker = Math.sin(time * 0.003 + p.x * 0.01) * (Math.random() * 2 - 1) * canvas.height * 0;
+
+        // Calcul final Y
+        let y = baseY + wave + verticalShift + flicker;
+
+        y = Math.min(canvas.height - 1, Math.max(1, y));
+
+        // Variation d’opacité selon distance à baseY (vapeur)
+        const distanceFromCore = Math.abs(y - p.baseY);
+        ctx.globalAlpha = Math.max(1, 1 - distanceFromCore / (canvas.height * 0.05));
+
+        // Respawn si sortie à droite
+        if (p.x > canvas.width + p.radius) {
+          p.x = -p.radius;
+          p.baseY = canvas.height * 0.3 + Math.random() * (canvas.height * 0.4);
+          p.dx = Math.random() * 0.7 + 0.5;
+          p.radius = Math.random() * 1.0 + 0.3;
         }
 
         ctx.beginPath();
-        ctx.arc(p.x, y, p.radius, 0, Math.PI * 1.5);
+        ctx.arc(p.x, y, p.radius, 0, Math.PI * 2);
         ctx.fill();
+
+        ctx.globalAlpha = 0.2; // reset alpha
       });
 
       time += 1;
@@ -63,13 +99,9 @@ export default function AnimatedWave() {
 
   return (
     <canvas
-  ref={canvasRef}
-  className="absolute bottom-5 left-0 w-full z-5 pointer-events-none"
-  style={{
-    height: "100px",           // ce que l'utilisateur voit
-    maxHeight: "500px",        // évite tout débordement visuel
-    overflow: "hidden",        // empêche les particules de s’afficher hors zone
-  }}
-/>
+      ref={canvasRef}
+      className="absolute bottom-0 left-0 w-full opacity-80 z-0 pointer-events-none"
+      style={{ height: "100%", maxHeight: "100%", overflow: "hidden" }}
+    />
   );
 }

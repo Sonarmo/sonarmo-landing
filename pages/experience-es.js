@@ -88,7 +88,7 @@ export default function Experience() {
                         <div className="absolute w-[200px] h-[200px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-20" />
                     </div>
                     <div className="relative z-10 max-w-3xl mx-auto">
-                        <h1 className="text-5xl font-bold mb-6">El experiencia Sonarmo</h1>
+                        <h1 className="text-5xl font-bold mb-6">La experiencia Sonarmo</h1>
                         <p className="text-gray-300 text-lg">
                             Un ambiente musical inteligente, único en cada lugar. La música adecuada, en el momento adecuado, para hacer vibrar tu espacio.
                         </p>
@@ -125,8 +125,8 @@ export default function Experience() {
                             Resultado: un ambiente impersonal, una clientela menos comprometida... y una oportunidad perdida.
                         </p>
                         <p className="text-gray-300 text-lg mt-6">
-                            Porque un buen ambiente no se elige en una lista de reproducción por defecto.
-                            Se crea, se adapta, vive con tu lugar.
+                            No se trata de poner música al azar. Se trata de sentirla. 
+                            Esta playlist no se elige por defecto, se elige porque conecta.
                         </p>
                         <p className="italic text-[#FCE2BA] mt-10">
                             “El ambiente es invisible, pero lo cambia todo.”
@@ -145,10 +145,10 @@ export default function Experience() {
                         <div className="md:w-1/2 md:pl-8 text-center md:text-left">
                             <h2 className="text-4xl font-bold mb-6">Tu firma sonora</h2>
                             <p className="text-gray-300 text-base leading-relaxed mb-6">
-                                Sonarmo le ayuda a construir una identidad musical fuerte, alineada con su imagen, sus valores y su clientela.
+                                Sonarmo te ayuda a construir una identidad musical fuerte, alineada con tu imagen, tus valores y tu clienta.
                             </p>
                             <p className="italic text-[#FCE2BA]">
-                                “Los clientes pueden no recordar la canción. Pero recordarán cómo se sintieron en su espacio.”
+                                “Los clientes pueden no recordar la canción. Pero recordarán cómo se sintieron en tu espacio.”
                             </p>
                         </div>
                         <div className="md:w-1/2 md:pr-8 flex justify-end">
@@ -165,7 +165,7 @@ export default function Experience() {
                     viewport={{ once: true }}
                 >
                     <div className="max-w-4xl mx-auto">
-                        <h2 className="text-4xl font-bold mb-10">Lo que Sonarmo cambia para usted</h2>
+                        <h2 className="text-4xl font-bold mb-10">Lo que Sonarmo cambia para ti</h2>
                         <div className="grid md:grid-cols-2 gap-12 text-left">
                             <div className="flex gap-4 items-start">
                                 <Activity className="text-[#F28500] w-20 h-20 mt-1" />
@@ -190,16 +190,16 @@ export default function Experience() {
                                 <div>
                                     <h3 className="text-xl font-semibold text-white mb-2">Una identidad sonora única</h3>
                                     <p className="text-gray-300">
-                                        Sonarmo construye un ambiente fiel a su lugar, su marca, sus valores.
+                                        Sonarmo construye un ambiente fiel a tu lugar, tu marca, tus valores.
                                     </p>
                                 </div>
                             </div>
                             <div className="flex gap-4 items-start">
                                 <ChartLine className="text-[#F28500] w-20 h-20 mt-1" />
                                 <div>
-                                    <h3 className="text-xl font-semibold text-white mb-2">Resultados mensurables</h3>
+                                    <h3 className="text-xl font-semibold text-white mb-2">Progresos mensurables</h3>
                                     <p className="text-gray-300">
-                                        Monitoree el impacto de sus elecciones de sonido en la asistencia, los comentarios de los clientes y la retención.
+                                       Analiza el efecto de tu identidad sonora en la asistencia, las reacciones de tus clientes y el tiempo que disfrutan en tu espacio.
                                     </p>
                                 </div>
                             </div>
@@ -228,10 +228,10 @@ export default function Experience() {
                     <div className="max-w-6xl mx-auto flex flex-col gap-16 px-4">
                         <div className="text-center md:text-left md:flex md:items-center md:gap-12">
                             <div className="md:w-1/2">
-                                <h2 className="text-3xl font-semibold mb-4">Usted mantiene el control. Sonarmo hace el resto.</h2>
+                                <h2 className="text-3xl font-semibold mb-4">Mantén el control. Sonarmo hace el resto.</h2>
                                 <p className="text-gray-300 text-base leading-relaxed">
-                                    Sonarmo se encarga de la ambientación de su lugar adaptándose en tiempo real, pero usted sigue teniendo el control de cada detalle.
-                                    Desde el dashboard, puedes generar, ajustar o cambiar la ambientación en cualquier momento, con un solo clic.
+                                    Sonarmo se encarga de la ambientación de tu lugar adaptándose en tiempo real, pero tu sigues teniendo el control de cada detalle.
+                                    Desde el dashboard, puedes generar, ajustar o cambiar la ambientación en cualquier momento, con solo un clic.
                                 </p>
                             </div>
                             <div className="md:w-1/2 flex justify-center">
@@ -242,7 +242,7 @@ export default function Experience() {
                             <div className="md:w-1/2">
                                 <h2 className="text-3xl font-semibold mb-4">Siempre en el bolsillo.</h2>
                                 <p className="text-gray-300 text-base leading-relaxed">
-                                    Acceda a Sonarmo desde su teléfono para cambiar de ambiente en segundos. Una interfaz simple, diseñada para ser utilizada en el campo, cuando es importante.
+                                    Accede a Sonarmo desde tu teléfono para cambiar de ambiente en segundos. Una interfaz simple, diseñada para ser utilizada en calquier lugar, en cualquier momento.
                                 </p>
                             </div>
                             <div className="md:w-1/2 flex justify-center">
@@ -255,7 +255,7 @@ export default function Experience() {
                 {/* SECTION - DONNÉES */}
                 <motion.section className="py-20 bg-black" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
                     <div className="max-w-5xl mx-auto px-4 text-center">
-                        <h2 className="text-3xl font-semibold mb-6">Datos e impacto mensurable</h2>
+                        <h2 className="text-3xl font-semibold mb-6">Datos y progreso medible</h2>
                         <p className="text-gray-300 text-base max-w-2xl mx-auto mb-8">
                             Accede a análisis precisos desde tu dashboard para optimizar tus ambientes musicales.
                         </p>
@@ -264,13 +264,13 @@ export default function Experience() {
                                 <UserPlus className="text-[#F28500] w-15 h-15 mt-5" />
                                 <div>
                                     <h3 className="text-white font-semibold mb-1">Poder de atracción</h3>
-                                    <p className="text-gray-300">Mida la capacidad de cada ambiente para captar la atención y hacer que sus clientes vuelvan.</p>
+                                    <p className="text-gray-300">Mide la capacidad de cada ambiente para captar la atención y hacer que tus clientes vuelvan.</p>
                                 </div>
                             </div>
                             <div className="flex gap-4 items-start">
                                 <Cross className="text-[#F28500] w-25 h-25 mt-4" />
                                 <div>
-                                    <h3 className="text-white font-semibold mb-1">Análisis cruzados</h3>
+                                    <h3 className="text-white font-semibold mb-1">Análisis combinando</h3>
                                     <p className="text-gray-300">Compara tus datos de música con los indicadores de ventas para identificar las tendencias que impulsan el negocio y la interacción con el cliente.</p>
                                 </div>
                             </div>
@@ -278,14 +278,14 @@ export default function Experience() {
                                 <BarChart2 className="text-[#F28500] w-10 h-10 mt-4" />
                                 <div>
                                     <h3 className="text-white font-semibold mb-1">Actuaciones musicales</h3>
-                                    <p className="text-gray-300">Identifique los títulos y estilos que funcionan mejor.</p>
+                                    <p className="text-gray-300">Identifica los títulos y estilos que funcionan mejor.</p>
                                 </div>
                             </div>
                             <div className="flex gap-4 items-start">
                                 <Target className="text-[#F28500] w-10 h-10 mt-4" />
                                 <div>
                                     <h3 className="text-white font-semibold mb-1">Pruebas y ajustes</h3>
-                                    <p className="text-gray-300">Experimenta con diferentes estados de ánimo y mide su eficacia.</p>
+                                    <p className="text-gray-300">Experimenta con diferentes estados de ánimo y mide tu eficacia.</p>
                                 </div>
                             </div>
                         </div>
@@ -336,7 +336,7 @@ export default function Experience() {
                             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                             className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-8 py-4 rounded-full text-white font-semibold shadow-md cursor-pointer"
                         >
-                            NOS LLAMAMOS?
+                           ¿NOS LLAMAMOS?
                         </motion.button>
                     </Link>
 

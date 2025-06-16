@@ -106,7 +106,7 @@ export default function Home() {
             >
               <h3 className="text-2xl font-semibold mb-4 text-[#f58711]">Personal</h3>
               <p className="text-gray-400 mb-6">
-                Ya sea que esté en la piscina, trabajando o cocinando... Un ambiente bien elegido puede cambiar todo.
+                Ya sea que estes en la piscina, trabajando o cocinando... Un ambiente bien elegido puede cambiar todo.
                 Con Sonarmo, crea una lista de reproducción personalizada, adaptada al momento y a tu estado de ánimo.
               </p>
               <Link href="/login-es" className="inline-block bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-3 rounded-full text-white font-semibold hover:scale-105 transition-transform">
@@ -122,7 +122,7 @@ export default function Home() {
               <h3 className="text-2xl font-semibold mb-4 text-[#FF00FF]">Profesionales</h3>
               <p className="text-gray-400 mb-6">
                 Un bar que invita a quedarse, un café que respira dulzura, un espacio profesional que estimula la concentración...
-                Gracias a Sonarmo Pro, ofrezca a sus clientes un ambiente sonoro memorable, pensado para ellos.
+                Gracias a Sonarmo Pro, ofrece a sus clientes un ambiente sonoro memorable, pensado para ellos.
               </p>
               <Link href="/experience-es" className="inline-block bg-gradient-to-r from-[#FF00FF] to-[#F28500] px-6 py-3 rounded-full text-white font-semibold hover:scale-105 transition-transform">
                 Descubre Sonarmo Pro
@@ -135,7 +135,7 @@ export default function Home() {
         <section className="relative text-center px-10 py-20 overflow-hidden bg-gradient-to-br from-[#2a0a00] via-[#1a0015] to-[#120d0d]">
           <div className="absolute left-0 top-0 w-[600px] h-[600px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-20 -translate-x-1/3 -translate-y-1/3 z-0" />
           <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-8">
-            Por qué Sonarmo ?
+            ¿Por qué Sonarmo?
           </p>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -148,13 +148,13 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-6xl mx-auto text-gray-300">
               {[{
                 value: "100%",
-                text: "de Playlist generadas son únicas, basadas en tu ambiente."
+                text: "de las Playlist generadas son únicas, basadas en tu ambiente."
               }, {
                 value: "+9%",
-                text: "de Dopamina liberada en el cerebro cuando oímos música que nos gusta"
+                text: "Dopamina es liberada en el cerebro cuando oímos música que nos gusta"
               }, {
                 value: "1 min",
-                text: "para generar un ambiente musical coherente y listo para transmitir."
+                text: "basta."
               }].map((item, index) => (
                 <motion.div
                   key={index}

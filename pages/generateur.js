@@ -125,8 +125,7 @@ export default function Generateur() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center p-6 relative overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <div className="absolute w-[300px] h-[300px] bg-[#F28500] rounded-full blur-[120px] top-1/4 left-1/2 opacity-60" />
-        <div className="absolute w-[300px] h-[300px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-50" />
+        <div className="absolute w-[400px] h-[400px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-40" />
       </div>
 
       <header className="flex justify-between items-center px-6 py-4 w-full relative z-10">
