@@ -73,7 +73,13 @@ export default function Generateur() {
         const promptRef = collection(db, "promptHistory");
         const q = query(promptRef, where("uid", "==", user.uid), orderBy("createdAt", "desc"), limit(5));
         const snapshot = await getDocs(q);
-        const history = snapshot.docs.map(doc => doc.data());
+        const history = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            ...data,
+            createdAt: data.createdAt?.toDate?.() || new Date()
+          };
+        });
         setPromptHistory(history);
 
       } else {
@@ -125,6 +131,7 @@ export default function Generateur() {
 
     if (res.ok) {
       const data = await res.json();
+      console.log("🎧 Playlist URL reçue :", data.url);
       setPlaylistUrl(data.url);
     } else {
       alert("Erreur lors de la génération. Réessaie !");

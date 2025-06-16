@@ -2,6 +2,7 @@
 import OpenAI from "openai";
 import { db, authAdmin } from "/lib/firebaseAdmin";
 import cookie from "cookie";
+import admin from "firebase-admin";
 
 export const config = {
   runtime: "nodejs",
@@ -145,7 +146,7 @@ console.log("🎵 Playlist Spotify API response :", playlist);
           spotifyCountry: user.country || "",
           spotifyProduct: user.product || "",
           spotifyDisplayName: user.display_name || "",
-          createdAt: new Date(),
+          createdAt: admin.firestore.Timestamp.now(),
         });
       } catch (err) {
         console.warn("⚠️ Impossible d'enregistrer l'historique du prompt :", err);
