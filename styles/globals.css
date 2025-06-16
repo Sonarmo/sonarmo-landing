@@ -51,3 +51,26 @@ body {
 .animate-waveLoop {
   animation: waveLoop 20s linear infinite;
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  @keyframes slide {
+    0% {
+      transform: translateX(-100%) translateY(-100%);
+    }
+    100% {
+      transform: translateX(200%) translateY(200%);
+    }
+  }
+
+  .animate-slide-diagonal {
+    animation: slide 2s linear infinite;
+  }
+
+  .loader {
+    border-radius: 9999px;
+    border-top-color: transparent;
+  }
+}

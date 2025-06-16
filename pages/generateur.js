@@ -149,7 +149,8 @@ export default function Generateur() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center p-6 relative overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <div className="absolute w-[400px] h-[400px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-40" />
+        <div className="absolute w-[400px] h-[400px] bg-[#FF00FF] rounded-full blur-[100px] top-[14%] right-1/2 opacity-50" />
+        <div className="absolute w-[600px] h-[600px] bg-[#FF9400] rounded-full blur-[100px] top-[45%] right-[25%] opacity-10" />
       </div>
 
       <header className="flex justify-between items-center px-6 py-4 w-full relative z-10">
@@ -202,90 +203,121 @@ export default function Generateur() {
         )}
       </AnimatePresence>
 
-      <main className="flex flex-col items-center justify-center flex-grow w-full relative z-10">
-        {credits !== null && <CreditBadge credits={credits} />}
-        <h1 className="text-3xl font-semibold mt-10 mb-15 text-center">Crée ta playlist avec Sonarmo IA</h1>
+      <main className="flex flex-col items-center justify-start flex-grow w-full px-4 md:px-0 pt-20 pb-24 relative z-10">
+  {credits !== null && <CreditBadge credits={credits} />}
 
-        {!isAuthenticated && (
-          <Link
-            href="/api/login-user"
-            className="mb-15 bg-green-500 hover:bg-green-600 px-4 py-2 rounded text-white"
-          >
-            Se connecter à Spotify
-          </Link>
-        )}
+  <h1 className="text-4xl font-bold mb-8 text-center text-white">Crée ta playlist avec Sonarmo IA</h1>
+  <p className="text-sm text-gray-400 text-center max-w-xl mb-8">
+    Décris l’ambiance de ton lieu, ton mood ou ton événement.  
+    L’IA se charge de te générer une playlist sur mesure.
+  </p>
 
-        {spotifyProfile && (
-          <div className="mt-8 text-sm text-gray-300 bg-[#1c1c1c] p-4 rounded-xl text-center">
-            Connecté avec <strong>{spotifyProfile.email}</strong><br />
-            {spotifyProfile.name && <span>Bienvenue, {spotifyProfile.name} !</span>}<br />
-            <button
-              onClick={handleSpotifyDisconnect}
-              className="mt-4 text-red-500 underline hover:text-red-300"
-            >
-              Se déconnecter de Spotify
-            </button>
-          </div>
-        )}
+  {!isAuthenticated && (
+    <Link
+      href="/api/login-user"
+      className="mb-10 bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl text-white font-semibold"
+    >
+      Se connecter à Spotify
+    </Link>
+  )}
 
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Décris l'ambiance que tu souhaite..."
-          className="w-full max-w-xl p-4 rounded-lg bg-[#1c1c1c] text-white border border-gray-700 mb-4"
-        />
-
-        <motion.button
-          onClick={handleGenerate}
-          disabled={isLoading || !prompt}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold mt-5 px-10 py-3 rounded-xl disabled:opacity-50"
-        >
-          {isLoading ? "Génération en cours..." : "Générer ma playlist"}
-        </motion.button>
-        {credits !== null && credits <= 1 && (
-  <div className="mt-6 flex flex-col items-center animate-fade-in">
-    <p className="text-sm text-pink-300 mb-10 text-center max-w-xs">
-      Tu n&apos;as plus assez de crédits pour générer de nouvelles playlists ?<br />
-      Recharge ton compte pour continuer l&apos;expérience Sonarmo
-    </p>
-    <div className="relative group">
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-orange-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:scale-105 animate-pulse"></div>
+  {spotifyProfile && (
+    <div className="mb-8 text-sm text-gray-300 bg-[#1c1c1c] p-4 rounded-xl text-center max-w-md">
+      Connecté avec <strong>{spotifyProfile.email}</strong><br />
+      {spotifyProfile.name && <span>Bienvenue, {spotifyProfile.name} !</span>}<br />
       <button
-        onClick={() => router.push("/achat-credits")}
-        className="relative inline-flex items-center justify-center px-6 py-3 text-base font-bold text-white bg-black border border-pink-500 rounded-xl transition duration-300 hover:scale-105 hover:border-orange-500"
+        onClick={handleSpotifyDisconnect}
+        className="mt-3 text-red-500 underline hover:text-red-300"
       >
-        Recharge ton compte
+        Se déconnecter de Spotify
       </button>
     </div>
-  </div>
-)}
+  )}
 
-       {promptHistory.length > 0 && (
-          <div className="mt-12 w-full max-w-xl">
-            <h2 className="text-xl font-semibold mb-4 text-white">Ton historique de playlists</h2>
-            <ul className="space-y-4">
-              {promptHistory.map((item, idx) => (
-                <li key={idx} className="bg-[#1c1c1c] border border-gray-700 p-4 rounded-xl">
-                  <p className="text-sm text-gray-300 mb-1">{item.playlistName}</p>
-                  <p className="text-xs text-gray-500">
-                  {new Date(item.createdAt?.seconds ? item.createdAt.seconds * 1000 : item.createdAt).toLocaleString()}
-                  </p>
-                  <a
-                    href={item.playlistUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-orange-400 underline hover:text-orange-200 text-sm"
-                  >
-                    Voir sur Spotify
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </main>
+  <div className="w-full max-w-xl">
+  <label htmlFor="prompt" className="text-white font-medium mb-2 block">
+    Décris ton ambiance
+  </label>
+
+  <textarea
+    id="prompt"
+    value={prompt}
+    onChange={(e) => setPrompt(e.target.value)}
+    placeholder="Ex : J’ai envie de danser, mais tranquille. Une vibe groovy et détendue."
+    className="w-full h-32 p-4 rounded-xl bg-[#1c1c1c] text-white border border-gray-700 mb-6 resize-none placeholder:text-gray-500"
+  />
+
+  {/* 🌟 Effet de survol lumineux sur le bouton */}
+  <div className="relative group">
+    <motion.button
+      onClick={handleGenerate}
+      disabled={isLoading || !prompt}
+      whileTap={{ scale: 0.97 }}
+      className="w-full relative z-10 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 overflow-hidden flex justify-center items-center"
+    >
+      {isLoading ? (
+        <div className="flex items-center gap-2">
+          <span className="loader ease-linear rounded-full border-4 border-t-4 border-white border-t-transparent h-5 w-5 animate-spin" />
+          <span>Génération en cours...</span>
+        </div>
+      ) : (
+        "Générer ma playlist"
+      )}
+    </motion.button>
+
+    {/* Onde confinée au bouton */}
+    <div className="pointer-events-none absolute left-0 top-0 h-full w-full rounded-xl bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 animate-slide-right" />
+  </div>
+</div>
+
+  {credits !== null && credits <= 1 && (
+    <div className="mt-10 flex flex-col items-center animate-fade-in text-center max-w-sm">
+      <p className="text-sm text-pink-300 mb-6">
+        Tu n&apos;as plus assez de crédits pour générer de nouvelles playlists ?<br />
+        Recharge ton compte pour continuer l&apos;expérience Sonarmo.
+      </p>
+      <div className="relative group">
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-orange-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:scale-105 animate-pulse"></div>
+        <button
+          onClick={() => router.push("/achat-credits")}
+          className="relative inline-flex items-center justify-center px-6 py-3 text-base font-bold text-white bg-black border border-pink-500 rounded-xl transition duration-300 hover:scale-105 hover:border-orange-500"
+        >
+          Recharge ton compte
+        </button>
+      </div>
+    </div>
+  )}
+
+  {promptHistory.length > 0 && (
+    <div className="mt-14 w-full max-w-xl">
+      <h2 className="text-xl font-semibold mb-4 text-white">Historique de tes playlists</h2>
+      <ul className="space-y-4">
+        {promptHistory.map((item, idx) => (
+          <li key={idx} className="bg-[#1c1c1c] border border-gray-700 p-4 rounded-xl">
+            <p className="text-sm text-gray-300 mb-1">{item.playlistName}</p>
+            <p className="text-xs text-gray-500">
+              {new Date(item.createdAt?.seconds ? item.createdAt.seconds * 1000 : item.createdAt).toLocaleString()}
+            </p>
+            <a
+              href={item.playlistUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-400 underline hover:text-orange-200 text-sm"
+            >
+              Voir sur Spotify
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {promptHistory.length === 0 && (
+    <div className="mt-20 text-center text-gray-400">
+      <p>Tu n’as pas encore généré de playlist.<br /> Lance-toi et découvre la magie sonore de Sonarmo !</p>
+    </div>
+  )}
+</main>
 
       <footer className="bg-[#121212] text-sm text-gray-400 px-6 py-10 mt-20 w-full relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">

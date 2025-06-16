@@ -41,6 +41,7 @@ export default async function handler(req, res) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
+  // 🎯 GESTION DE L'ACHAT
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const email = session.customer_details?.email;
@@ -50,27 +51,23 @@ export default async function handler(req, res) {
       return res.status(400).send("Email manquant");
     }
 
-    // Récupération des line items (obligatoire pour obtenir le price ID)
-    let priceId = null;
+    let priceId;
     try {
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
       priceId = lineItems.data?.[0]?.price?.id;
     } catch (err) {
-      console.error("❌ Erreur lors de la récupération des line_items :", err);
-      return res.status(500).send("Erreur récupération des line items");
+      console.error("❌ Erreur récupération line_items :", err);
+      return res.status(500).send("Erreur récupération line items");
     }
 
     const creditsToAdd = PRICE_CREDIT_MAPPING[priceId];
     if (!creditsToAdd) {
-      console.warn("⚠️ Price ID non reconnu :", priceId);
       return res.status(400).send("Price ID invalide");
     }
 
     try {
       const userSnapshot = await db.collection('users').where('email', '==', email).limit(1).get();
-      if (userSnapshot.empty) {
-        return res.status(404).send('Utilisateur introuvable');
-      }
+      if (userSnapshot.empty) return res.status(404).send('Utilisateur introuvable');
 
       const userRef = userSnapshot.docs[0].ref;
       const userData = userSnapshot.docs[0].data();
@@ -86,6 +83,34 @@ export default async function handler(req, res) {
       return res.status(200).send("OK");
     } catch (err) {
       console.error("❌ Erreur Firestore :", err);
+      return res.status(500).send("Erreur serveur");
+    }
+  }
+
+  // 🔕 GESTION DE L'ANNULATION D’ABONNEMENT
+  if (event.type === 'customer.subscription.deleted') {
+    const subscription = event.data.object;
+    const customerId = subscription.customer;
+
+    try {
+      const customer = await stripe.customers.retrieve(customerId);
+      const email = customer.email;
+
+      if (!email) {
+        console.warn("⚠️ Email manquant pour désactivation");
+        return res.status(400).send("Email manquant");
+      }
+
+      const userSnapshot = await db.collection('users').where('email', '==', email).limit(1).get();
+      if (userSnapshot.empty) return res.status(404).send('Utilisateur introuvable');
+
+      const userRef = userSnapshot.docs[0].ref;
+
+      await userRef.set({ abonnementActif: false }, { merge: true });
+      console.log(`🔕 Abonnement désactivé pour ${email}`);
+      return res.status(200).send("Abonnement désactivé");
+    } catch (err) {
+      console.error("❌ Erreur Firestore (désabonnement) :", err);
       return res.status(500).send("Erreur serveur");
     }
   }
