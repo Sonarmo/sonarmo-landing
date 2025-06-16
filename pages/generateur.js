@@ -269,7 +269,9 @@ export default function Generateur() {
               {promptHistory.map((item, idx) => (
                 <li key={idx} className="bg-[#1c1c1c] border border-gray-700 p-4 rounded-xl">
                   <p className="text-sm text-gray-300 mb-1">{item.playlistName}</p>
-                  <p className="text-xs text-gray-500">{new Date(item.createdAt.toDate()).toLocaleString()}</p>
+                  <p className="text-xs text-gray-500">
+                  {new Date(item.createdAt?.seconds ? item.createdAt.seconds * 1000 : item.createdAt).toLocaleString()}
+                  </p>
                   <a
                     href={item.playlistUrl}
                     target="_blank"
