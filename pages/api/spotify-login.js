@@ -11,6 +11,8 @@ export default function handler(req, res) {
     "user-read-currently-playing",
     "playlist-read-private",
     "playlist-read-collaborative",
+    "playlist-modify-private",
+    "playlist-modify-public",
     "app-remote-control",
     "user-library-read",
     "user-top-read"

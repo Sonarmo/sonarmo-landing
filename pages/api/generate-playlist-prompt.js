@@ -119,7 +119,7 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
     });
 
     const playlist = await playlistRes.json();
-
+console.log("🎵 Playlist Spotify API response :", playlist);
     if (!playlist.id || !playlist.external_urls?.spotify) {
       console.warn("⚠️ Playlist créée mais URL manquante ou incomplète :", playlist);
     }

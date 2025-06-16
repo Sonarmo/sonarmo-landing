@@ -1,4 +1,3 @@
-// pages/generateur.js
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -6,7 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import CreditBadge from "/components/builder/CreditBadge";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
 import app from "/lib/firebase";
 
 export default function Generateur() {
@@ -17,6 +16,7 @@ export default function Generateur() {
   const [playlistUrl, setPlaylistUrl] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [spotifyProfile, setSpotifyProfile] = useState(null);
+  const [promptHistory, setPromptHistory] = useState([]);
   const router = useRouter();
   const [credits, setCredits] = useState(null);
 
@@ -50,54 +50,62 @@ export default function Generateur() {
   }, [router.query.access_token]);
 
   useEffect(() => {
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      if (!user.emailVerified) {
-        alert("⚠️ Veuillez vérifier votre adresse email avant d'utiliser Sonarmo.");
-        await auth.signOut();
-        router.push("/login");
-        return;
-      }
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        if (!user.emailVerified) {
+          alert("⚠️ Veuillez vérifier votre adresse email avant d'utiliser Sonarmo.");
+          await auth.signOut();
+          router.push("/login");
+          return;
+        }
 
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setCredits(data.credits ?? 0);
-      }
-    } else {
-      router.push("/login");
-    }
-  });
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setCredits(data.credits ?? 0);
+        }
 
-  return () => unsubscribe();
-}, []);
-  useEffect(() => {
-  const refreshToken = async () => {
-    try {
-      const res = await fetch("/api/refresh-spotify-token");
-      if (res.ok) {
-        const data = await res.json();
-        setAccessToken(data.access_token);
-        console.log("🔄 Token Spotify rafraîchi automatiquement");
+        const promptRef = collection(db, "promptHistory");
+        const q = query(promptRef, where("uid", "==", user.uid), orderBy("createdAt", "desc"), limit(5));
+        const snapshot = await getDocs(q);
+        const history = snapshot.docs.map(doc => doc.data());
+        setPromptHistory(history);
+
       } else {
-        console.warn("⚠️ Échec du rafraîchissement du token Spotify");
+        router.push("/login");
       }
-    } catch (err) {
-      console.error("❌ Erreur lors du rafraîchissement du token :", err);
-    }
-  };
+    });
 
-  if (isAuthenticated) {
-    refreshToken(); // Appel initial
-    const interval = setInterval(refreshToken, 55 * 60 * 1000); // Toutes les 55 min
-    return () => clearInterval(interval);
-  }
-}, [isAuthenticated]);
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const refreshToken = async () => {
+      try {
+        const res = await fetch("/api/refresh-spotify-token");
+        if (res.ok) {
+          const data = await res.json();
+          setAccessToken(data.access_token);
+          console.log("🔄 Token Spotify rafraîchi automatiquement");
+        } else {
+          console.warn("⚠️ Échec du rafraîchissement du token Spotify");
+        }
+      } catch (err) {
+        console.error("❌ Erreur lors du rafraîchissement du token :", err);
+      }
+    };
+
+    if (isAuthenticated) {
+      refreshToken();
+      const interval = setInterval(refreshToken, 55 * 60 * 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
 
   const handleGenerate = async () => {
     if (!isAuthenticated) {
@@ -247,20 +255,27 @@ export default function Generateur() {
   </div>
 )}
 
-        {playlistUrl && (
-  <div className="mt-10 bg-[#1c1c1c] border border-gray-700 rounded-xl p-6 text-center shadow-lg">
-    <h2 className="text-xl font-semibold mb-2 text-white">Playlist prête !</h2>
-    <p className="text-sm text-gray-400 mb-4">Tu peux l&apos;écouter directement sur Spotify.</p>
-    <a
-      href={playlistUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-block px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition duration-300"
-    >
-      Ouvrir dans Spotify
-    </a>
-  </div>
-)}
+       {promptHistory.length > 0 && (
+          <div className="mt-12 w-full max-w-xl">
+            <h2 className="text-xl font-semibold mb-4 text-white">Ton historique de playlists</h2>
+            <ul className="space-y-4">
+              {promptHistory.map((item, idx) => (
+                <li key={idx} className="bg-[#1c1c1c] border border-gray-700 p-4 rounded-xl">
+                  <p className="text-sm text-gray-300 mb-1">{item.playlistName}</p>
+                  <p className="text-xs text-gray-500">{new Date(item.createdAt.toDate()).toLocaleString()}</p>
+                  <a
+                    href={item.playlistUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-orange-400 underline hover:text-orange-200 text-sm"
+                  >
+                    Voir sur Spotify
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </main>
 
       <footer className="bg-[#121212] text-sm text-gray-400 px-6 py-10 mt-20 w-full relative z-10">
