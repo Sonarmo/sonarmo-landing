@@ -193,6 +193,7 @@ export default function Home() {
               <p className="text-xs">©2025 Sonarmo Team. Tous droits réservés</p>
               <Link href="/cgu" className="text-sm hover:underline">Conditions d&apos;utilisation &amp; Politique de confidentialité</Link>
               <Link href="/mentions-legales" className="text-sm hover:underline">Mentions légales</Link>
+              <Link href="/conditions-vente" className="text-sm hover:underline">Conditions de vente</Link>
             </div>
           </div>
         </footer>
