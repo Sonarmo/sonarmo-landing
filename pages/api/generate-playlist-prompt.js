@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { db, authAdmin } from "/lib/firebaseAdmin";
 import cookie from "cookie";
 import admin from "firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
 
 export const config = {
   runtime: "nodejs",
