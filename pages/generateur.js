@@ -233,7 +233,7 @@ export default function Generateur() {
   <div className="mt-6 flex flex-col items-center animate-fade-in">
     <p className="text-sm text-pink-300 mb-10 text-center max-w-xs">
       Tu n&apos;as plus assez de crédits pour générer de nouvelles playlists ?<br />
-      Recharge ton compte pour continuer l&apos;expérience Sonarmo 🎶
+      Recharge ton compte pour continuer l&apos;expérience Sonarmo
     </p>
     <div className="relative group">
       <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-orange-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:scale-105 animate-pulse"></div>
@@ -241,7 +241,7 @@ export default function Generateur() {
         onClick={() => router.push("/achat-credits")}
         className="relative inline-flex items-center justify-center px-6 py-3 text-base font-bold text-white bg-black border border-pink-500 rounded-xl transition duration-300 hover:scale-105 hover:border-orange-500"
       >
-        💳 Acheter des crédits
+        Recharge ton compte
       </button>
     </div>
   </div>
@@ -250,14 +250,14 @@ export default function Generateur() {
         {playlistUrl && (
   <div className="mt-10 bg-[#1c1c1c] border border-gray-700 rounded-xl p-6 text-center shadow-lg">
     <h2 className="text-xl font-semibold mb-2 text-white">Playlist prête !</h2>
-    <p className="text-sm text-gray-400 mb-4">Tu peux l'écouter directement sur Spotify.</p>
+    <p className="text-sm text-gray-400 mb-4">Tu peux l&apos;écouter directement sur Spotify.</p>
     <a
       href={playlistUrl}
       target="_blank"
       rel="noopener noreferrer"
       className="inline-block px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition duration-300"
     >
-      ▶️ Ouvrir dans Spotify
+      Ouvrir dans Spotify
     </a>
   </div>
 )}
