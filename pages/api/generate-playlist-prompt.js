@@ -21,14 +21,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Prompt trop court ou manquant" });
   }
 
-  // Récupère le token Spotify de l'utilisateur (envoyé dans l'en-tête Authorization)
   const accessToken = req.headers.authorization?.split(" ")[1];
   if (!accessToken) {
     return res.status(401).json({ error: "Token Spotify manquant." });
   }
 
   try {
-    // ─────────── Vérification des crédits Firebase ───────────
     const cookies = cookie.parse(req.headers.cookie || "");
     const idToken = cookies.token;
     let uid = null;
@@ -55,10 +53,9 @@ export default async function handler(req, res) {
       }
     }
 
-    // ─────────── Génération de la playlist via GPT ───────────
     const systemPrompt = `
 Tu es un expert en curation musicale.
-En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist de 25 morceaux Spotify cohérente, originale et fluide.
+En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist de 20 morceaux Spotify cohérente, originale et fluide.
 
 Prompt utilisateur : """${prompt}"""
 
@@ -83,7 +80,6 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
       return res.status(500).json({ error: "Erreur GPT, JSON invalide" });
     }
 
-    // ─────────── Résolution des URIs Spotify ───────────
     const resolvedUris = await Promise.all(
       tracks.map(async (t) => {
         const q = encodeURIComponent(`${t.name} ${t.artist}`);
@@ -100,13 +96,11 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
       return res.status(400).json({ error: "Aucun morceau trouvé" });
     }
 
-    // ─────────── Infos Spotify utilisateur ───────────
     const userRes = await fetch("https://api.spotify.com/v1/me", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const user = await userRes.json();
 
-    // ─────────── Création de la playlist sur le compte de l'utilisateur ───────────
     const rawTitle = prompt.length > 40 ? prompt.slice(0, 40) + "…" : prompt;
     const cleanTitle = rawTitle.replace(/[^\w\sÀ-ÿ!?.,:;'-]/g, "").trim();
     const playlistName = `${cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1)}`;
@@ -126,7 +120,10 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
 
     const playlist = await playlistRes.json();
 
-    // ─────────── Ajout des morceaux ───────────
+    if (!playlist.id || !playlist.external_urls?.spotify) {
+      console.warn("⚠️ Playlist créée mais URL manquante ou incomplète :", playlist);
+    }
+
     await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
       method: "POST",
       headers: {
@@ -136,13 +133,12 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
       body: JSON.stringify({ uris }),
     });
 
-    // ─────────── Historique du prompt (optionnel) ───────────
     if (uid) {
       try {
         await db.collection("promptHistory").add({
           uid,
           prompt,
-          playlistUrl: playlist.external_urls.spotify,
+          playlistUrl: playlist?.external_urls?.spotify || "",
           playlistName: playlist.name,
           totalTracks: uris.length,
           spotifyEmail: user.email || "",
@@ -157,7 +153,7 @@ Aucun commentaire. Aucun texte. Seulement la liste JSON.`;
     }
 
     return res.status(200).json({
-      url: playlist.external_urls.spotify,
+      url: playlist?.external_urls?.spotify || "",
       total: uris.length,
       message: "✅ Playlist générée avec succès",
     });
