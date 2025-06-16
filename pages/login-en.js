@@ -22,7 +22,7 @@ export default function Login() {
                     maxAge: 60 * 60 * 24,
                     path: "/",
                 });
-                router.push("/generateur");
+                router.push("/generateur-en");
             }
         });
         return () => unsubscribe();
@@ -38,7 +38,7 @@ export default function Login() {
                 maxAge: 60 * 60 * 24,
                 path: "/",
             });
-            router.push("/generateur");
+            router.push("/generateur-en");
         } catch (err) {
             setError("Email or password incorrect.");
         }
@@ -64,7 +64,7 @@ export default function Login() {
     if (role === "pro") {
       router.push("/dashboard");
     } else {
-      router.push("/generateur");
+      router.push("/generateur-en");
     }
   } catch (err) {
     console.error("Google connection error :", err);

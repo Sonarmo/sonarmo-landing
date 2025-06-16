@@ -57,7 +57,7 @@ export default function Team() {
                             exit={{ opacity: 0, y: -10 }}
                             className="relative z-20 md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm"
                         >
-                            <Link href="/experience" className="hover:text-gray-300">L&apos;EXPÉRIENCE SONARMO</Link>
+                            <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
                             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
                             <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
                                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
