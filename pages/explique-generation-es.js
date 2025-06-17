@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { Zap, Target, Link as LinkIcon, Brain } from "lucide-react";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 import { motion, AnimatePresence } from "framer-motion";
