@@ -25,7 +25,7 @@ export default function Cancel() {
       </main>
 
       <footer className="mt-20 text-sm text-gray-500">
-        © 2025 Sonarmo Team — Tous droits réservés
+        Sonarmo™
       </footer>
     </div>
   );

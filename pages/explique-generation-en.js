@@ -116,7 +116,7 @@ export default function ExplicationGeneration() {
             </div>
             <div className="flex flex-col items-end text-right gap-2">
               <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-              <p className="text-xs">2025 Sonarmo Team. All right reserved</p>
+              <p className="text-xs">Sonarmo™</p>
               <p className="text-xs">Conditions of use & Privacy policy</p>
             </div>
           </div>
