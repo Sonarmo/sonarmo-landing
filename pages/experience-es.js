@@ -39,7 +39,7 @@ export default function Experience() {
                     </Link>
 
                     <nav className="hidden md:flex gap-6 text-sm items-center">
-                        <Link href="/explique-generateur-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+                        <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
                         <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
                         <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
                         <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
@@ -72,7 +72,7 @@ export default function Experience() {
                             exit={{ opacity: 0, y: -10 }}
                             className="md:hidden px-6 py-4 bg-black shadow-lg flex flex-col gap-4 text-sm z-50"
                         >
-                            <Link href="/generateur-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+                            <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
                             <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
                             <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
                             <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
