@@ -19,7 +19,7 @@ export default function ExplicationGeneration() {
 
       <main className="min-h-screen bg-black text-white flex flex-col relative overflow-hidden">
         {/* Light background */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute w-[300px] h-[300px] bg-[#F28500] rounded-full blur-[120px] top-1/4 left-1/2 opacity-60" />
           <div className="absolute w-[300px] h-[300px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-50" />
         </div>
@@ -64,7 +64,7 @@ export default function ExplicationGeneration() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="md:hidden px-6 py-4 bg-black shadow-lg flex flex-col gap-4 text-sm z-50"
+              className="md:hidden px-6 py-4 bg-black shadow-lg flex flex-col gap-4 text-sm z-[60] pointer-events-auto"
             >
               <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
               <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
