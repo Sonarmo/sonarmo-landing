@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 export default function LanguageSwitcher() {
   const pathname = usePathname();
 
-  // Détection de la langue actuelle dans le path
   let currentLang = "fr";
   if (pathname.includes("-en")) currentLang = "en";
   if (pathname.includes("-es")) currentLang = "es";
@@ -17,13 +16,24 @@ export default function LanguageSwitcher() {
     es: { label: "ES", src: "/flags/es.png" },
   };
 
-  // Base path sans langue (ex : /generateur, /achat-credits, etc.)
-  const basePath = pathname
-    .replace("-fr", "")
-    .replace("-en", "")
-    .replace("-es", "");
+  // ✅ Gestion spéciale pour la homepage
+  const isHomePage =
+    pathname === "/" ||
+    pathname === "/index-en" ||
+    pathname === "/index-es";
 
   const getPathForLang = (lang) => {
+    if (isHomePage) {
+      if (lang === "fr") return "/";
+      return `/index-${lang}`;
+    }
+
+    // Sinon, on reconstruit la route en remplaçant le suffixe
+    const basePath = pathname
+      .replace("-fr", "")
+      .replace("-en", "")
+      .replace("-es", "");
+
     if (lang === "fr") return basePath;
     return `${basePath}-${lang}`;
   };
