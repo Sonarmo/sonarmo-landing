@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function AchatCredits() {
   const handleCheckout = async (priceId) => {
