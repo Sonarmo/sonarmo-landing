@@ -57,10 +57,22 @@ export default function Login() {
 
     // 🔍 Vérifie le rôle dans Firestore
     const db = getFirestore();
-    const userRef = doc(db, "users", result.user.uid);
-    const userSnap = await getDoc(userRef);
-    const role = userSnap.exists() ? userSnap.data().role : "particulier";
+const userRef = doc(db, "users", result.user.uid);
+const userSnap = await getDoc(userRef);
 
+let role = "particulier"; // valeur par défaut
+
+if (!userSnap.exists()) {
+  // Création du document Firestore avec les données manquantes
+  await setDoc(userRef, {
+    email: result.user.email || "",
+    role: "particulier",
+    credits: 2,
+    createdAt: new Date(),
+  });
+} else {
+  role = userSnap.data().role || "particulier";
+}
     // 🧭 Redirection selon le rôle
     if (role === "pro") {
       router.push("/dashboard");
