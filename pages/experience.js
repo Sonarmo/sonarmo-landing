@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { BarChart2, MessageSquare, Repeat, Target, Activity, Fingerprint, ChartLine, Cross, UserPlus } from "lucide-react";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Experience() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -45,6 +46,7 @@ export default function Experience() {
                             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
                             SE CONNECTER
                         </Link>
+                        <LanguageSwitcher />
                     </nav>
 
                     <div className="md:hidden">
@@ -77,7 +79,9 @@ export default function Experience() {
                                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                                 SE CONNECTER
                             </Link>
+                            <LanguageSwitcher />
                         </motion.div>
+                        
                     )}
                 </AnimatePresence>
 

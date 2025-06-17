@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function AchatCredits() {
   const handleCheckout = async (priceId) => {
@@ -30,6 +31,7 @@ export default function AchatCredits() {
           <Link href="/generateur" className="hover:text-gray-300">GÉNÉRATEUR</Link>
           <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACT</Link>
+          <LanguageSwitcher />
         </nav>
       </header>
 

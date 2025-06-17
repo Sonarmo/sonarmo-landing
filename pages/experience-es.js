@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { BarChart2, MessageSquare, Repeat, Target, Activity, Fingerprint, ChartLine, Cross, UserPlus } from "lucide-react";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Experience() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,11 +41,12 @@ export default function Experience() {
                     <nav className="hidden md:flex gap-6 text-sm items-center">
                         <Link href="/explique-generateur-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
                         <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
-                        <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
+                        <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
                         <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
                             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
                             CONECTARSE
                         </Link>
+                        <LanguageSwitcher />
                     </nav>
 
                     <div className="md:hidden">
@@ -72,11 +74,12 @@ export default function Experience() {
                         >
                             <Link href="/generateur-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
                             <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
-                            <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
+                            <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
                             <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
                                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                                 CONECTARSE
                             </Link>
+                            <LanguageSwitcher />
                         </motion.div>
                     )}
                 </AnimatePresence>

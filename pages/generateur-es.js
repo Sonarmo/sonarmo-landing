@@ -43,7 +43,7 @@ export default function Generateur() {
           }
         })
         .catch((err) => {
-          console.error("Erreur récupération profil Spotify :", err);
+          console.error("Error de recuperación de cuenta de Spotify :", err);
         });
     } else {
       setIsAuthenticated(false);
@@ -57,9 +57,9 @@ export default function Generateur() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         if (!user.emailVerified) {
-          alert("⚠️ Please verify your email address before using Sonarmo.");
+          alert("⚠️ Por favor, verifique su dirección de correo electrónico antes de usar Sonarmo.");
           await auth.signOut();
-          router.push("/login-en");
+          router.push("/login-es");
           return;
         }
 
@@ -84,7 +84,7 @@ export default function Generateur() {
         setPromptHistory(history);
 
       } else {
-        router.push("/login-en");
+        router.push("/login-es");
       }
     });
 
@@ -121,7 +121,7 @@ export default function Generateur() {
     }
 
     setIsLoading(true);
-    const res = await fetch("/api/generate-playlist-prompt", {
+     const res = await fetch("/api/generate-playlist-prompt", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -129,7 +129,7 @@ export default function Generateur() {
   },
   body: JSON.stringify({
     prompt,
-    lang: "en" // 👈 indique que ce prompt est en anglais
+    lang: "es" // 👈 indique que ce prompt est en espagnol
   })
 });
 
@@ -138,7 +138,7 @@ export default function Generateur() {
       console.log("🎧 Playlist URL reçue :", data.url);
       setPlaylistUrl(data.url);
     } else {
-      alert("Something went wrong during generation. Try again!");
+      alert("Error al generar. ¡Inténtalo de nuevo!");
     }
     setIsLoading(false);
   };
@@ -147,7 +147,7 @@ export default function Generateur() {
     setAccessToken(null);
     setIsAuthenticated(false);
     setSpotifyProfile(null);
-    router.replace("/generateur-en");
+    router.replace("/generateur-es");
   };
 
   return (
@@ -163,12 +163,12 @@ export default function Generateur() {
           <span className="text-white text-lg font-semibold italic">Sonarmo</span>
         </div>
         <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
-          <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
-          <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-          <Link href="/logout" className="hover:text-gray-300 flex items-center gap-1">
+          <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+          <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+          <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
+          <Link href="/logout-es" className="hover:text-gray-300 flex items-center gap-1">
             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-            LOGOUT
+            DESCONECTAR
           </Link>
           <LanguageSwitcher />
         </nav>
@@ -195,12 +195,12 @@ export default function Generateur() {
             exit={{ opacity: 0, y: -10 }}
             className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50 w-full"
           >
-            <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
-            <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
-            <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
+            <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+            <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+            <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
             <Link href="/logout" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-              LOGOUT
+              DESCONECTAR
             </Link>
             <LanguageSwitcher />
           </motion.div>
@@ -210,10 +210,10 @@ export default function Generateur() {
       <main className="flex flex-col items-center justify-start flex-grow w-full px-4 md:px-0 pt-20 pb-24 relative z-10">
   {credits !== null && <CreditBadge credits={credits} />}
 
-  <h1 className="text-4xl font-bold mb-8 text-center text-white">Create your playlist with Sonarmo AI</h1>
+  <h1 className="text-4xl font-bold mb-8 text-center text-white">Crea tu playlist con Sonarmo IA</h1>
   <p className="text-sm text-gray-400 text-center max-w-xl mb-8">
-    Describe the atmosphere of your place, your mood or your event.  
-    The AI takes care of generating a custom playlist for you.
+    Describe el ambiente de tu lugar, tu estado de ánimo o tu evento. 
+    La IA se encarga de generar una playlist personalizada para ti.
   </p>
 
   {!isAuthenticated && (
@@ -221,33 +221,33 @@ export default function Generateur() {
       href="/api/login-user"
       className="mb-10 bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl text-white font-semibold"
     >
-      Connect to Spotify
+      Conectar con Spotify
     </Link>
   )}
 
   {spotifyProfile && (
     <div className="mb-8 text-sm text-gray-300 bg-[#1c1c1c] p-4 rounded-xl text-center max-w-md">
-      Connected with <strong>{spotifyProfile.email}</strong><br />
-      {spotifyProfile.name && <span>Welcome, {spotifyProfile.name} !</span>}<br />
+      Conectado con <strong>{spotifyProfile.email}</strong><br />
+      {spotifyProfile.name && <span>¡Bienvenido/a, {spotifyProfile.name} !</span>}<br />
       <button
         onClick={handleSpotifyDisconnect}
         className="mt-3 text-red-500 underline hover:text-red-300"
       >
-        Disconnect from Spotify
+        Desconectarse de Spotify
       </button>
     </div>
   )}
 
   <div className="w-full max-w-xl">
   <label htmlFor="prompt" className="text-white font-medium mb-2 block">
-    Describe your atmosphere
+    Describe tu ambiente
   </label>
 
   <textarea
     id="prompt"
     value={prompt}
     onChange={(e) => setPrompt(e.target.value)}
-    placeholder="Ex : I feel like dancing, but calm. A groovy and relaxed vibe."
+    placeholder="Ej: Tengo ganas de bailar, pero tranquilo. Un ambiente relajado y con ritmo."
     className="w-full h-32 p-4 rounded-xl bg-[#1c1c1c] text-white border border-gray-700 mb-6 resize-none placeholder:text-gray-500"
   />
 
@@ -262,10 +262,10 @@ export default function Generateur() {
       {isLoading ? (
         <div className="flex items-center gap-2">
           <span className="loader ease-linear rounded-full border-4 border-t-4 border-white border-t-transparent h-5 w-5 animate-spin" />
-          <span>Generating...</span>
+          <span>Generando playlist...</span>
         </div>
       ) : (
-        "Generate my playlist"
+        "Generar mi playlist"
       )}
     </motion.button>
 
@@ -277,16 +277,16 @@ export default function Generateur() {
   {credits !== null && credits <= 1 && (
     <div className="mt-10 flex flex-col items-center animate-fade-in text-center max-w-sm">
       <p className="text-sm text-pink-300 mb-6">
-        Not enough credits left to generate a new playlist?<br />
-        Recharge your account to continue the Sonarmo experience.
+        ¿No tienes suficientes créditos para generar una nueva playlist?<br />
+        Recarga tu cuenta para seguir disfrutando de la experiencia Sonarmo.
       </p>
       <div className="relative group">
         <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-orange-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:scale-105 animate-pulse"></div>
         <button
-          onClick={() => router.push("/achat-credits-en")}
+          onClick={() => router.push("/achat-credits-es")}
           className="relative inline-flex items-center justify-center px-6 py-3 text-base font-bold text-white bg-black border border-pink-500 rounded-xl transition duration-300 hover:scale-105 hover:border-orange-500"
         >
-          Recharge your account
+          Recargar tu cuenta
         </button>
       </div>
     </div>
@@ -294,7 +294,7 @@ export default function Generateur() {
 
   {promptHistory.length > 0 && (
     <div className="mt-14 w-full max-w-xl">
-      <h2 className="text-xl font-semibold mb-4 text-white">History of your playlists</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white">Historial de tus playlists</h2>
       <ul className="space-y-4">
         {promptHistory.map((item, idx) => (
           <li key={idx} className="bg-[#1c1c1c] border border-gray-700 p-4 rounded-xl">
@@ -308,7 +308,7 @@ export default function Generateur() {
               rel="noopener noreferrer"
               className="text-orange-400 underline hover:text-orange-200 text-sm"
             >
-              Open in Spotify
+              Abrir en Spotify
             </a>
           </li>
         ))}
@@ -318,7 +318,7 @@ export default function Generateur() {
 
   {promptHistory.length === 0 && (
     <div className="mt-20 text-center text-gray-400">
-      <p>You haven't generated a playlist yet.<br /> Go ahead and discover the sound magic of Sonarmo!</p>
+      <p>Aún no has generado una playlist.<br /> ¡Adelante y descubre la magia sonora de Sonarmo!</p>
     </div>
   )}
 </main>
@@ -337,14 +337,16 @@ export default function Generateur() {
                 <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} className="hover:opacity-70 transition" />
               </a>
             </div>
-            <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
-            <Link href="/about-en" className="hover:text-white">About us</Link>
-            <Link href="/contact-en" className="hover:text-white">Contact us</Link>
+            <Link href="/sonarmo-team" className="hover:text-white">Equipo Sonarmo</Link>
+            <Link href="/about" className="hover:text-white">Sobre nosotros</Link>
+            <Link href="/contact-es" className="hover:text-white">Contáctenos</Link>
           </div>
           <div className="flex flex-col items-end text-right gap-2">
             <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
             <p className="text-xs">Sonarmo™</p>
-            <p className="text-xs">Terms of Use & Privacy Policy</p>
+            <Link href="/cgu" className="text-sm hover:underline">Condiciones de uso y política de privacidad</Link>
+            <Link href="/mentions-legales" className="text-sm hover:underline">Términos y Condiciones</Link>
+            <Link href="/conditions-vente" className="text-sm hover:underline">Política de privacidad</Link>
           </div>
         </div>
       </footer>

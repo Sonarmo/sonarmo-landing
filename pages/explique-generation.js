@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Zap, Target, Link as LinkIcon, Brain } from "lucide-react";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function ExplicationGeneration() {
   return (
@@ -35,6 +36,7 @@ export default function ExplicationGeneration() {
               <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
               SE CONNECTER
             </Link>
+            <LanguageSwitcher />
           </nav>
         </header>
 

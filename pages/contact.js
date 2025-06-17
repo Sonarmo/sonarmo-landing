@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Contact() {
     const [formSubmitted, setFormSubmitted] = useState(false);
@@ -43,6 +44,7 @@ export default function Contact() {
                             <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                             SE CONNECTER
                         </Link>
+                        <LanguageSwitcher />
                     </nav>
 
                     {/* Mobile Nav Toggle */}
@@ -77,6 +79,7 @@ export default function Contact() {
                                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                                 SE CONNECTER
                             </Link>
+                            <LanguageSwitcher />
                         </motion.div>
                     )}
                 </AnimatePresence>

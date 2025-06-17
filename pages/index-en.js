@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/next";
 import AnimatedWave from "/components/builder/AnimatedWave";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
+
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 

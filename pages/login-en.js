@@ -7,6 +7,7 @@ import { auth } from "../lib/firebase";
 import nookies from "nookies";
 import Head from "next/head";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -97,6 +98,7 @@ export default function Login() {
                         <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
                         <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
                         <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
+                        <LanguageSwitcher />
                     </nav>
                 </header>
 

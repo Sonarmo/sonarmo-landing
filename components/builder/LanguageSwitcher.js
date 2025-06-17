@@ -6,15 +6,26 @@ import { usePathname } from "next/navigation";
 export default function LanguageSwitcher() {
   const pathname = usePathname();
 
-  // Déterminer la langue actuelle à partir du chemin
+  // Détection de la langue actuelle dans le path
   let currentLang = "fr";
-  if (pathname.includes("index-en")) currentLang = "en";
-  if (pathname.includes("index-es")) currentLang = "es";
+  if (pathname.includes("-en")) currentLang = "en";
+  if (pathname.includes("-es")) currentLang = "es";
 
   const flags = {
     fr: { label: "FR", src: "/flags/fr.png" },
     en: { label: "EN", src: "/flags/gb.png" },
     es: { label: "ES", src: "/flags/es.png" },
+  };
+
+  // Base path sans langue (ex : /generateur, /achat-credits, etc.)
+  const basePath = pathname
+    .replace("-fr", "")
+    .replace("-en", "")
+    .replace("-es", "");
+
+  const getPathForLang = (lang) => {
+    if (lang === "fr") return basePath;
+    return `${basePath}-${lang}`;
   };
 
   return (
@@ -28,7 +39,7 @@ export default function LanguageSwitcher() {
           {Object.entries(flags).map(([lang, { label, src }]) => (
             <Menu.Item key={lang}>
               <Link
-                href={lang === "fr" ? "/" : `/index-${lang}`}
+                href={getPathForLang(lang)}
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
               >
                 <Image src={src} alt={label} width={20} height={14} />

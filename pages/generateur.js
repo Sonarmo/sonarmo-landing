@@ -7,6 +7,7 @@ import CreditBadge from "/components/builder/CreditBadge";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
 import app from "/lib/firebase";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Generateur() {
   const [prompt, setPrompt] = useState("");
@@ -166,6 +167,7 @@ export default function Generateur() {
             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
             SE DECONNECTER
           </Link>
+          <LanguageSwitcher />
           
         </nav>
         <div className="md:hidden">
@@ -198,7 +200,7 @@ export default function Generateur() {
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
               SE DECONNECTER
             </Link>
-            
+            <LanguageSwitcher />
           </motion.div>
         )}
       </AnimatePresence>

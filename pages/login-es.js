@@ -7,6 +7,7 @@ import { auth } from "../lib/firebase";
 import nookies from "nookies";
 import Head from "next/head";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ export default function Login() {
                     maxAge: 60 * 60 * 24,
                     path: "/",
                 });
-                router.push("/generateur");
+                router.push("/generateur-es");
             }
         });
         return () => unsubscribe();
@@ -38,9 +39,9 @@ export default function Login() {
                 maxAge: 60 * 60 * 24,
                 path: "/",
             });
-            router.push("/generateur");
+            router.push("/generateur-es");
         } catch (err) {
-            setError("Email or password incorrect.");
+            setError("Correo electrónico o contraseña incorrecta.");
         }
     };
 
@@ -64,7 +65,7 @@ export default function Login() {
     if (role === "pro") {
       router.push("/dashboard");
     } else {
-      router.push("/generateur");
+      router.push("/generateur-es");
     }
   } catch (err) {
     console.error("Google connection error :", err);
@@ -89,14 +90,15 @@ export default function Login() {
             </Head>
             <main className="overflow-x-hidden bg-black text-white min-h-screen flex flex-col">
                 <header className="flex justify-between items-center px-6 py-4">
-                    <Link href="/index-en" className="flex items-center gap-2">
+                    <Link href="/index-es" className="flex items-center gap-2">
                         <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
                         <span className="text-white text-lg font-semibold italic">Sonarmo</span>
                     </Link>
                     <nav className="hidden md:flex gap-6 text-sm items-center">
-                        <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
-                        <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
-                        <Link href="/contact-en" className="hover:text-gray-300">CONTÀCTENOS</Link>
+                        <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+                        <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+                        <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
+                        <LanguageSwitcher />
                     </nav>
                 </header>
 
@@ -148,7 +150,7 @@ export default function Login() {
               </div>
               <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
               <Link href="/about" className="hover:text-white">Sobre nosotros</Link>
-              <Link href="/contact" className="hover:text-white">Contáctenos</Link>
+              <Link href="/contact-es" className="hover:text-white">Contáctenos</Link>
             </div>
             <div className="flex flex-col items-end text-right gap-2">
               <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />

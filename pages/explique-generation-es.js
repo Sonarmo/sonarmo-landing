@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Zap, Target, Link as LinkIcon, Brain } from "lucide-react";
+import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function ExplicationGeneration() {
   return (
@@ -30,11 +31,12 @@ export default function ExplicationGeneration() {
           <nav className="hidden md:flex gap-6 text-sm items-center">
             <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
             <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
-            <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
+            <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
             <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
               CONECTARSE
             </Link>
+            <LanguageSwitcher />
           </nav>
         </header>
 

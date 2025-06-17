@@ -32,7 +32,7 @@ export default function Home() {
           <nav className="hidden md:flex gap-6 text-sm items-center">
             <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
             <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
-            <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
+            <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
             <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
               CONECTARSE
@@ -59,7 +59,7 @@ export default function Home() {
             >
               <Link href="/explique-generation-es" className="hover:text-gray-300">GENERADOR DE PLAYLIST</Link>
               <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
-              <Link href="/contact-es" className="hover:text-gray-300">CONTÀCTENOS</Link>
+              <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
               <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                 CONECTARSE
