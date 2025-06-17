@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,6 +7,8 @@ import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ExplicationGeneration() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <>
       <Head>
@@ -15,66 +18,65 @@ export default function ExplicationGeneration() {
       </Head>
 
       <main className="min-h-screen bg-black text-white flex flex-col relative overflow-hidden">
-
-        {/* Fond lumineux */}
+        {/* Light background */}
         <div className="absolute inset-0 z-0">
           <div className="absolute w-[300px] h-[300px] bg-[#F28500] rounded-full blur-[120px] top-1/4 left-1/2 opacity-60" />
           <div className="absolute w-[300px] h-[300px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-50" />
         </div>
 
         {/* HEADER */}
-                <header className="flex justify-between items-center px-6 py-4">
-                    <Link href="/" className="flex items-center gap-2">
-                        <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-                        <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-                    </Link>
+        <header className="flex justify-between items-center px-6 py-4">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+            <span className="text-white text-lg font-semibold italic">Sonarmo</span>
+          </Link>
 
-                    <nav className="hidden md:flex gap-6 text-sm items-center">
-                        <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
-                        <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
-                        <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                        <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
-                            <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-                            LOGIN
-                        </Link>
-                        <LanguageSwitcher />
-                    </nav>
+          <nav className="hidden md:flex gap-6 text-sm items-center">
+            <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
+            <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
+            <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
+            <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
+              <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
+              LOGIN
+            </Link>
+            <LanguageSwitcher />
+          </nav>
 
-                    <div className="md:hidden">
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                            {isMenuOpen ? (
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            ) : (
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            )}
-                        </button>
-                    </div>
-                </header>
+          {/* Mobile menu */}
+          <div className="md:hidden">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </header>
 
-                <AnimatePresence>
-                    {isMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="md:hidden px-6 py-4 bg-black shadow-lg flex flex-col gap-4 text-sm z-50"
-                        >
-                            <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
-                            <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
-                            <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
-                            <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
-                                <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-                                LOGIN
-                            </Link>
-                            <LanguageSwitcher />
-                        </motion.div>
-                        
-                    )}
-                </AnimatePresence>
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="md:hidden px-6 py-4 bg-black shadow-lg flex flex-col gap-4 text-sm z-50"
+            >
+              <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
+              <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
+              <Link href="/contact-en" className="hover:text-gray-300">CONTACT US</Link>
+              <Link href="/login-en" className="hover:text-gray-300 flex items-center gap-1">
+                <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
+                LOGIN
+              </Link>
+              <LanguageSwitcher />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* CONTENU PRINCIPAL */}
         
