@@ -20,12 +20,12 @@ export default function Register() {
     setError(null);
 
     if (password.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caractères.");
+      setError("La contraseña debe tener al menos 8 caracteres.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Les mots de passe ne correspondent pas.");
+      setError("Las contraseñas no coinciden.");
       return;
     }
 
@@ -48,11 +48,11 @@ export default function Register() {
       await auth.signOut();
 
       // Message et redirection
-      alert("Un email de vérification a été envoyé. Veuillez confirmer votre adresse avant de vous connecter.");
-      router.push("/login");
+      alert("Se ha enviado un correo de verificación. Por favor, confirma tu dirección antes de iniciar sesión.");
+      router.push("/login-es");
     } catch (err) {
       console.error(err);
-      setError("Erreur lors de l'inscription.");
+      setError("Error al registrarse.");
     }
   };
 
@@ -66,14 +66,14 @@ export default function Register() {
 
       {/* Header */}
       <header className="flex justify-between items-center px-6 py-4 z-10 relative">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/index-es" className="flex items-center gap-2">
           <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
           <span className="text-white text-lg font-semibold italic">Sonarmo</span>
         </Link>
         <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-          <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-          <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+          <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+          <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+          <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTANOS</Link>
           <LanguageSwitcher />
         </nav>
       </header>
@@ -90,13 +90,13 @@ export default function Register() {
               priority
             />
           </div>
-          <h1 className="text-2xl font-bold mb-4">Créer un compte Sonarmo</h1>
+          <h1 className="text-2xl font-bold mb-4">Crear una cuenta Sonarmo</h1>
           <form onSubmit={handleRegister} className="flex flex-col gap-4 w-full">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
+              placeholder="Correo electrónico"
               required
               className="px-4 py-2 rounded bg-white text-black"
             />
@@ -104,7 +104,7 @@ export default function Register() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Mot de passe (min. 8 caractères)"
+              placeholder="Contraseña (mín. 8 caracteres)"
               required
               className="px-4 py-2 rounded bg-white text-black"
             />
@@ -112,17 +112,17 @@ export default function Register() {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirmez le mot de passe"
+              placeholder="Confirmar contraseña"
               required
               className="px-4 py-2 rounded bg-white text-black"
             />
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <button type="submit" className="bg-gradient-to-r from-orange-500 to-pink-500 px-4 py-2 rounded text-white">
-              S&apos;inscrire
+              Registrarse
             </button>
             <p className="text-sm text-gray-400 text-center">
-              Vous avez déjà un compte ?{" "}
-              <Link href="/login" className="text-orange-400 hover:underline">Se connecter</Link>
+              ¿Ya tienes una cuenta?{" "}
+              <Link href="/login-es" className="text-orange-400 hover:underline">Inicia sesión</Link>
             </p>
           </form>
         </div>
@@ -143,16 +143,16 @@ export default function Register() {
                 <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} className="hover:opacity-70 transition" />
               </a>
             </div>
-            <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
-            <Link href="/about" className="hover:text-white">À propos de nous</Link>
-            <Link href="/contact" className="hover:text-white">Nous contacter</Link>
+            <Link href="/sonarmo-team" className="hover:text-white">Equipo Sonarmo</Link>
+            <Link href="/about" className="hover:text-white">Sobre nosotros</Link>
+            <Link href="/contact" className="hover:text-white">Contacto</Link>
           </div>
           <div className="flex flex-col items-end text-right gap-2">
             <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
             <p className="text-xs">Sonarmo™</p>
-            <Link href="/cgu" className="text-sm hover:underline">Conditions d&apos;utilisation &amp; Politique de confidentialité</Link>
-            <Link href="/mentions-legales" className="text-sm hover:underline">Mentions légales</Link>
-            <Link href="/conditions-vente" className="text-sm hover:underline">Conditions de vente</Link>
+            <Link href="/cgu" className="text-sm hover:underline">Términos de uso y Política de privacidad</Link>
+            <Link href="/mentions-legales" className="text-sm hover:underline">Aviso legal</Link>
+            <Link href="/conditions-vente" className="text-sm hover:underline">Condiciones de venta</Link>
           </div>
         </div>
       </footer>

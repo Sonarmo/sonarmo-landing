@@ -118,7 +118,7 @@ export default function Login() {
                                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full px-4 py-2 rounded bg-white/90 text-black mt-1" /></label>
                             {error && <p className="text-red-500 text-sm">{error}</p>}
                             <button type="submit" className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-2 rounded text-white font-semibold">Conectarse</button>
-                            <button type="button" onClick={() => router.push("/register")} className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-2 rounded text-white font-semibold">Crear una cuenta</button>
+                            <button type="button" onClick={() => router.push("/register-es")} className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-6 py-2 rounded text-white font-semibold">Crear una cuenta</button>
                             <div className="relative my-4 text-center">
                                 <span className="text-gray-400 text-sm">quizás</span>
                             </div>
