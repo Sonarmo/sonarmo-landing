@@ -267,15 +267,18 @@ export default function Generateur() {
       )}
     </motion.button>
     {playlistUrl && (
-  <div className="mt-10 text-center text-green-400">
-    <p className="mb-2">Ta playlist a été créée avec succès</p>
+  <div className="mt-10 text-center bg-[#1c1c1c] p-6 rounded-xl shadow-xl border border-green-500 animate-fade-in">
+    <div className="flex items-center justify-center gap-2 mb-3">
+      <Image src="/icons/spotify.png" alt="Spotify" width={24} height={24} />
+      <p className="text-green-400 font-semibold text-lg">Playlist créée avec succès</p>
+    </div>
     <a
       href={playlistUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="underline text-orange-300 hover:text-orange-200"
+      className="inline-block mt-2 px-5 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white font-semibold hover:scale-105 transition"
     >
-      Ouvrir dans Spotify
+      Écouter sur Spotify
     </a>
   </div>
 )}
