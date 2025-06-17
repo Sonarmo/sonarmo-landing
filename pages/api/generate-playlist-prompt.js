@@ -87,12 +87,15 @@ Basándote únicamente en el siguiente prompt del usuario, genera una lista de r
 
 Prompt del usuario: """${prompt}"""
 
-Responde con una lista estricta en formato JSON:
+Tu única tarea es devolver una lista en formato JSON estricto como este:
 [
   { "artist": "Nombre del artista", "name": "Título de la canción" },
   ...
 ]
-Sin comentarios. Solo la lista JSON.`,
+
+⚠️ No agregues ningún comentario, explicación, texto introductorio o final.
+Solo responde con la lista JSON, nada más.
+`
     }[lang] || prompt;
 
     const completion = await openai.chat.completions.create({
@@ -101,13 +104,20 @@ Sin comentarios. Solo la lista JSON.`,
       temperature: 0.7,
     });
 
-    let tracks;
-    try {
-      tracks = JSON.parse(completion.choices[0].message.content);
-    } catch (err) {
-      console.error("❌ Parsing JSON GPT", err);
-      return res.status(500).json({ error: "Erreur GPT, JSON invalide" });
-    }
+    const raw = completion.choices[0].message.content.trim();
+
+if (!raw.startsWith("[")) {
+  console.error("❌ Réponse GPT invalide :", raw);
+  return res.status(500).json({ error: "Réponse GPT non valide. Veuillez reformuler votre demande." });
+}
+
+let tracks;
+try {
+  tracks = JSON.parse(raw);
+} catch (err) {
+  console.error("❌ Parsing JSON GPT", err);
+  return res.status(500).json({ error: "Erreur GPT, JSON invalide" });
+}
 
     const resolvedUris = await Promise.all(
       tracks.map(async (t) => {

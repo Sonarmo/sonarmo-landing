@@ -268,6 +268,19 @@ export default function Generateur() {
         "Generate my playlist"
       )}
     </motion.button>
+    {playlistUrl && (
+  <div className="mt-10 text-center text-green-400">
+    <p className="mb-2">Your playlist has been successfully created</p>
+    <a
+      href={playlistUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline text-orange-300 hover:text-orange-200"
+    >
+      Open in Spotify
+    </a>
+  </div>
+)}
 
     {/* Onde confinée au bouton */}
     <div className="pointer-events-none absolute left-0 top-0 h-full w-full rounded-xl bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 animate-slide-right" />
