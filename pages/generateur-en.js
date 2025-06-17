@@ -318,7 +318,7 @@ export default function Generateur() {
 
   {promptHistory.length === 0 && (
     <div className="mt-20 text-center text-gray-400">
-      <p>You haven't generated a playlist yet.<br /> Go ahead and discover the sound magic of Sonarmo!</p>
+      <p>You haven&apos;t generated a playlist yet.<br /> Go ahead and discover the sound magic of Sonarmo!</p>
     </div>
   )}
 </main>
