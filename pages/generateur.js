@@ -209,10 +209,29 @@ export default function Generateur() {
   {credits !== null && <CreditBadge credits={credits} />}
 
   <h1 className="text-4xl font-bold mb-8 text-center text-white">Crée ta playlist avec Sonarmo IA</h1>
-  <p className="text-sm text-gray-400 text-center max-w-xl mb-8">
-    Décris l’ambiance de ton lieu, ton mood ou ton événement.  
-    L’IA se charge de te générer une playlist sur mesure.
-  </p>
+<div className="mb-8 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
+  <h2 className="text-white font-semibold mb-4 text-base">Comment ça marche</h2>
+  <div className="space-y-4">
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
+      <p className="text-white leading-relaxed">
+        Connecte ton compte <strong>Spotify</strong> pour que la playlist soit créée directement sur ton profil.
+      </p>
+    </div>
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
+      <p className="text-white leading-relaxed">
+        Décris une ambiance (ex : <em>Jazz calme pour un dîner entre amis</em>).
+      </p>
+    </div>
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">3.</span>
+      <p className="text-white leading-relaxed">
+        Clique sur <strong>“Générer”</strong> et découvre ta playlist personnalisée en quelques secondes.
+      </p>
+    </div>
+  </div>
+</div>
 
   {!isAuthenticated && (
     <Link

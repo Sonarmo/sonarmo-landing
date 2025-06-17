@@ -211,10 +211,29 @@ export default function Generateur() {
   {credits !== null && <CreditBadge credits={credits} />}
 
   <h1 className="text-4xl font-bold mb-8 text-center text-white">Create your playlist with Sonarmo AI</h1>
-  <p className="text-sm text-gray-400 text-center max-w-xl mb-8">
-    Describe the atmosphere of your place, your mood or your event.  
-    The AI takes care of generating a custom playlist for you.
-  </p>
+  <div className="mb-8 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
+  <h2 className="text-white font-semibold mb-4 text-base">How it works</h2>
+  <div className="space-y-4">
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
+      <p className="text-white leading-relaxed">
+        Connect your <strong>Spotify</strong> account to allow the playlist to be created directly on your profile.
+      </p>
+    </div>
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
+      <p className="text-white leading-relaxed">
+        Describe a mood or vibe (e.g., <em>Chill jazz for a cozy dinner with friends</em>).
+      </p>
+    </div>
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">3.</span>
+      <p className="text-white leading-relaxed">
+        Click <strong>“Generate”</strong> and enjoy your custom playlist within seconds.
+      </p>
+    </div>
+  </div>
+</div>
 
   {!isAuthenticated && (
     <Link
