@@ -6,7 +6,7 @@ import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, sig
 import { auth } from "../lib/firebase";
 import nookies from "nookies";
 import Head from "next/head";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Login() {
