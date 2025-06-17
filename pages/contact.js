@@ -11,7 +11,7 @@ export default function Contact() {
     return (
         <>
             <Head>
-                <title>Sonarmo - Contacte</title>
+                <title>Sonarmo - Contact</title>
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
                 {/* Google Analytics */}
                 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>
@@ -121,7 +121,7 @@ export default function Contact() {
                 </section>
 
                 {/* FOOTER */}
-                <footer className="bg-[#121212] text-sm text-gray-400 border-t border-gray-700 px-6 py-10">
+                <footer className="bg-black text-sm text-gray-400 border-t border-gray-700 px-6 py-10">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                         <div className="flex flex-col gap-2 mb-6 md:mb-0">
                             <div className="flex items-center gap-4">

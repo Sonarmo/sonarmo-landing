@@ -80,7 +80,7 @@ export default function Team() {
                 >
                     <div className="flex justify-center mb-8">
                         <Image
-                            src="arthur-fromont.jpg"
+                            src="/arthur-fromont.jpg"
                             alt="Arthur Fromont"
                             width={180}
                             height={180}

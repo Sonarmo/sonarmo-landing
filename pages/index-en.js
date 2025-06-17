@@ -170,7 +170,7 @@ export default function Home() {
           </motion.div>
         </section>
 
-        <footer className="bg-[#121212] text-sm text-gray-400 px-6 py-10">
+        <footer className="bg-black text-sm text-gray-400 px-6 py-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
             <div className="flex flex-col gap-2 mb-6 md:mb-0">
               <div className="flex items-center gap-4">
