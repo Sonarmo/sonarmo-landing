@@ -72,10 +72,10 @@ export default function Login() {
     const role = updatedSnap.data()?.role || "particulier";
 
     if (role === "pro") {
-      router.push("/dashboard");
-    } else {
-      router.push("/generateur-en");
-    }
+  router.push("/dashboard");
+} else {
+  window.location.href = "/generateur"; // force un vrai reload
+}
   } catch (err) {
     console.error("Erreur connexion Google :", err);
     setError("Échec de la connexion avec Google.");

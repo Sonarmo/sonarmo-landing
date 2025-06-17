@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "/lib/firebase";
+import { useRouter } from "next/router";
 
 export default function CreditBadge() {
   const [userData, setUserData] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -34,7 +36,11 @@ export default function CreditBadge() {
   }
 
   return (
-    <div className="absolute top-4 right-4 z-20 bg-[#1c1c1c] text-white px-3 py-1 rounded-full border border-gray-600 text-sm">
+    <div
+      onClick={() => router.push("/achat-credits")}
+      className="absolute top-4 right-4 z-20 bg-[#1c1c1c] text-white px-3 py-1 rounded-full border border-gray-600 text-sm cursor-pointer hover:bg-[#2a2a2a] hover:border-white transition-colors duration-200"
+      title="Cliquer pour acheter des crédits"
+    >
       {message}
     </div>
   );

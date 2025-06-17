@@ -23,22 +23,58 @@ export default function ExplicationGeneration() {
         </div>
 
         {/* HEADER */}
-        <header className="flex justify-between items-center px-6 py-4 relative z-10">
-          <Link href="/index-es" className="flex items-center gap-2">
-            <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-            <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-          </Link>
-          <nav className="hidden md:flex gap-6 text-sm items-center">
-            <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
-            <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
-            <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
-            <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
-              <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-              CONECTARSE
-            </Link>
-            <LanguageSwitcher />
-          </nav>
-        </header>
+                <header className="flex justify-between items-center px-6 py-4">
+                    <Link href="/" className="flex items-center gap-2">
+                        <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+                        <span className="text-white text-lg font-semibold italic">Sonarmo</span>
+                    </Link>
+
+                    <nav className="hidden md:flex gap-6 text-sm items-center">
+                        <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+                        <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+                        <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
+                        <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
+                            <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
+                            CONECTARSE
+                        </Link>
+                        <LanguageSwitcher />
+                    </nav>
+
+                    <div className="md:hidden">
+                        <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                            {isMenuOpen ? (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            ) : (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
+                </header>
+
+                <AnimatePresence>
+                    {isMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="md:hidden px-6 py-4 bg-black shadow-lg flex flex-col gap-4 text-sm z-50"
+                        >
+                            <Link href="/explique-generation-es" className="hover:text-gray-300">PLAYLIST GENERADOR</Link>
+                            <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+                            <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTENOS</Link>
+                            <Link href="/login-es" className="hover:text-gray-300 flex items-center gap-1">
+                                <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
+                                CONECTARSE
+                            </Link>
+                            <LanguageSwitcher />
+                        </motion.div>
+                        
+                    )}
+                </AnimatePresence>
 
         {/* CONTENU PRINCIPAL */}
         
