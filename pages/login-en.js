@@ -55,34 +55,30 @@ export default function Login() {
       path: "/",
     });
 
-    // 🔍 Vérifie le rôle dans Firestore
-   const db = getFirestore();
-const userRef = doc(db, "users", result.user.uid);
-const userSnap = await getDoc(userRef);
+    const db = getFirestore();
+    const userRef = doc(db, "users", result.user.uid);
+    const userSnap = await getDoc(userRef);
 
-let role = "particulier"; // valeur par défaut
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        email: result.user.email || "",
+        role: "particulier",
+        credits: 2,
+        createdAt: new Date(),
+      });
+    }
 
-if (!userSnap.exists()) {
-  // Création du document Firestore avec les données manquantes
-  await setDoc(userRef, {
-    email: result.user.email || "",
-    role: "particulier",
-    credits: 2,
-    createdAt: new Date(),
-  });
-} else {
-  role = userSnap.data().role || "particulier";
-}
+    const updatedSnap = await getDoc(userRef);
+    const role = updatedSnap.data()?.role || "particulier";
 
-    // 🧭 Redirection selon le rôle
     if (role === "pro") {
       router.push("/dashboard");
     } else {
       router.push("/generateur-en");
     }
   } catch (err) {
-    console.error("Google connection error :", err);
-    setError("Failed to connect with Google.");
+    console.error("Erreur connexion Google :", err);
+    setError("Échec de la connexion avec Google.");
   }
 };
 
