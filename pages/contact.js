@@ -128,7 +128,7 @@ export default function Contact() {
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                         <div className="flex flex-col gap-2 mb-6 md:mb-0">
                             <div className="flex items-center gap-4">
-                                <a href="https://www.instagram.com/sonarmo_music/?hl=fr" target="_blank" rel="noopener noreferrer">
+                                <a href="https://www.instagram.com/sonarmo_ia/?hl=fr" target="_blank" rel="noopener noreferrer">
                                     <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} className="hover:opacity-70 transition" />
                                 </a>
                                 <a href="https://www.linkedin.com/company/sonarmo/" target="_blank" rel="noopener noreferrer">
