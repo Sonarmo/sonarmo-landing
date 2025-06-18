@@ -232,6 +232,11 @@ export default function Generateur() {
         Click <strong>“Generate”</strong> and enjoy your custom playlist within seconds.
       </p>
     </div>
+    <Link href="/achat-credit-en" className="block mt-6">
+  <div className="bg-[#292929] border border-gray-700 rounded-lg px-4 py-3 text-sm text-white text-center hover:border-pink-500 hover:text-pink-300 transition duration-200">
+    Enjoy <strong>2 free playlist </strong>generations to get started!
+  </div>
+</Link>
   </div>
 </div>
 
@@ -309,7 +314,7 @@ export default function Generateur() {
   </div>
 </div>
 
-  {credits !== null && credits <= 1 && (
+  
     <div className="mt-10 flex flex-col items-center animate-fade-in text-center max-w-sm">
       <p className="text-sm text-pink-300 mb-6">
         Not enough credits left to generate a new playlist?<br />
@@ -325,7 +330,7 @@ export default function Generateur() {
         </button>
       </div>
     </div>
-  )}
+
 
   {promptHistory.length > 0 && (
     <div className="mt-14 w-full max-w-xl">

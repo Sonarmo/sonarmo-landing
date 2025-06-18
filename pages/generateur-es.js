@@ -226,12 +226,18 @@ export default function Generateur() {
         Describe una atmósfera o estado de ánimo (ej.: <em>Jazz suave para una cena tranquila con amigos</em>).
       </p>
     </div>
-    <div className="flex items-start gap-4">
-      <span className="text-white text-xl font-bold w-6 flex-shrink-0">3.</span>
-      <p className="text-white leading-relaxed">
-        Haz clic en <strong>“Generar”</strong> y recibe tu playlist personalizada en segundos.
-      </p>
-    </div>
+   <div className="flex items-start gap-4">
+  <span className="text-white text-xl font-bold w-6 flex-shrink-0">3.</span>
+  <p className="text-white leading-relaxed">
+    Haz clic en <strong>“Generar”</strong> y recibe tu playlist personalizada en segundos.
+  </p>
+</div>
+
+<Link href="/achat-credit-es" className="block mt-6">
+  <div className="bg-[#292929] border border-gray-700 rounded-lg px-4 py-3 text-sm text-white text-center hover:border-pink-500 hover:text-pink-300 transition duration-200">
+    ¡Disfruta de <strong>2 generaciones de playlists gratuitas</strong> para comenzar!
+  </div>
+</Link>
   </div>
 </div>
 
@@ -309,7 +315,7 @@ export default function Generateur() {
   </div>
 </div>
 
-  {credits !== null && credits <= 1 && (
+
     <div className="mt-10 flex flex-col items-center animate-fade-in text-center max-w-sm">
       <p className="text-sm text-pink-300 mb-6">
         ¿No tienes suficientes créditos para generar una nueva playlist?<br />
@@ -325,7 +331,7 @@ export default function Generateur() {
         </button>
       </div>
     </div>
-  )}
+
 
   {promptHistory.length > 0 && (
     <div className="mt-14 w-full max-w-xl">

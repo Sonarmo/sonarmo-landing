@@ -28,7 +28,7 @@ export default function AchatCredits() {
           <span className="text-white text-lg font-semibold italic">Sonarmo</span>
         </div>
         <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/generateur" className="hover:text-gray-300">GÉNÉRATEUR</Link>
+          <Link href="/generateur" className="hover:text-gray-300">GÉNÉRATEUR DE PLAYLIST</Link>
           <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACT</Link>
           <LanguageSwitcher />

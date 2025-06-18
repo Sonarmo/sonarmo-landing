@@ -208,8 +208,11 @@ export default function Generateur() {
       <main className="flex flex-col items-center justify-start flex-grow w-full px-4 md:px-0 pt-20 pb-24 relative z-10">
   {credits !== null && <CreditBadge credits={credits} />}
 
-  <h1 className="text-4xl font-bold mb-8 text-center text-white">Crée ta playlist avec Sonarmo IA</h1>
-<div className="mb-8 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
+  <h1 className="text-4xl font-bold mb-15 text-center text-white">
+  Crée ta playlist avec Sonarmo IA
+</h1>
+
+<div className="mb-9 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
   <h2 className="text-white font-semibold mb-4 text-base">Comment ça marche</h2>
   <div className="space-y-4">
     <div className="flex items-start gap-4">
@@ -228,6 +231,12 @@ export default function Generateur() {
       <span className="text-white text-xl font-bold w-6 flex-shrink-0">3.</span>
       <p className="text-white leading-relaxed">
         Clique sur <strong>“Générer”</strong> et découvre ta playlist personnalisée en quelques secondes.
+        
+    <Link href="/achat-credits" className="block mt-6">
+  <div className="bg-[#292929] border border-gray-700 rounded-lg px-4 py-3 text-sm text-white text-center hover:border-pink-500 hover:text-pink-300 transition duration-200">
+    Profite de <strong>2 générations de playlists offertes</strong> pour commencer !
+  </div>
+</Link>
       </p>
     </div>
   </div>
@@ -285,6 +294,8 @@ export default function Generateur() {
         "Générer ma playlist"
       )}
     </motion.button>
+
+
     {playlistUrl && (
   <div className="mt-10 text-center bg-[#1c1c1c] p-6 rounded-xl shadow-xl border border-green-500 animate-fade-in">
     <div className="flex items-center justify-center gap-2 mb-3">
@@ -307,10 +318,10 @@ export default function Generateur() {
   </div>
 </div>
 
-  {credits !== null && credits <= 1 && (
+  
     <div className="mt-10 flex flex-col items-center animate-fade-in text-center max-w-sm">
       <p className="text-sm text-pink-300 mb-6">
-        Tu n&apos;as plus assez de crédits pour générer de nouvelles playlists ?<br />
+        Plus assez de crédits pour générer de nouvelles playlists ?<br />
         Recharge ton compte pour continuer l&apos;expérience Sonarmo.
       </p>
       <div className="relative group">
@@ -323,7 +334,7 @@ export default function Generateur() {
         </button>
       </div>
     </div>
-  )}
+  
 
   {promptHistory.length > 0 && (
     <div className="mt-14 w-full max-w-xl">
