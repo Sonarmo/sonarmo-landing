@@ -128,7 +128,7 @@ export default function ExplicationGeneration() {
             <div className="mt-10 text-center">
               <Link href="/login-es">
                 <button className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-8 py-3 rounded-full text-white font-semibold text-lg hover:scale-105 transition">
-                  ✨ Generar mi playlist ahora
+                  Generar mi playlist ahora
                 </button>
               </Link>
             </div>
