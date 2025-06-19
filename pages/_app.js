@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "/components/builder/DashboardLayout";
 import { PlayerProvider } from "/lib/contexts/PlayerContext";
-import CookieConsentBanner from "@/components/CookieConsentBanner"; // ← Crée ce fichier
+import CookieConsentBanner from "/components/builder/CookieConsentBanner"; // ← Crée ce fichier
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
