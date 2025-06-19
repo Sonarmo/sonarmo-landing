@@ -14,18 +14,6 @@ export default function Contact() {
             <Head>
                 <title>Sonarmo - Contact</title>
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
-                {/* Google Analytics */}
-                <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-PTGDLQ7W2N');
-      `,
-                    }}
-                />
             </Head>
             <main className="bg-black text-white min-h-screen relative overflow-x-hidden">
                 {/* HEADER */}

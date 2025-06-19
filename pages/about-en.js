@@ -16,18 +16,6 @@ export default function About() {
                 <title>Sonarmo - About</title>
                 <meta name="description" content="Découvrez la mission et la vision de Sonarmo, une expérience musicale intelligente." />
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
-                {/* Google Analytics */}
-                <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-PTGDLQ7W2N');
-      `,
-                    }}
-                />
             </Head>
 
             <main className="min-h-screen px-6 md:px-20 py-16 relative">

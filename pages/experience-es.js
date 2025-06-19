@@ -16,18 +16,6 @@ export default function Experience() {
             <Head>
                 <title>Sonarmo - Experiencia</title>
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
-                {/* Google Analytics */}
-                <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"></script>
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-PTGDLQ7W2N');
-      `,
-                    }}
-                />
             </Head>
             <main className="bg-black text-white overflow-x-hidden min-h-screen px-0">
 

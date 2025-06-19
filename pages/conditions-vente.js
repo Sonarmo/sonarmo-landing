@@ -9,7 +9,7 @@ export default function ConditionsVente() {
   return (
     <div className="bg-black text-white min-h-screen px-6 py-10 md:px-24 md:py-16">
       <Head>
-        <title>Conditions Générales de Vente | Sonarmo</title>
+        <title>Sonarmo - Conditions Générales de Vente</title>
         <meta name="robots" content="noindex" />
       </Head>
 

@@ -9,7 +9,7 @@ export default function ConditionsEtConfidentialite() {
   return (
     <div className="bg-black text-white min-h-screen px-6 py-10 md:px-24 md:py-16">
       <Head>
-        <title>Conditions d&apos;utilisation & Confidentialité | Sonarmo</title>
+        <title>Sonarmo - Conditions d&apos;utilisation & Confidentialité</title>
         <meta name="robots" content="noindex" />
       </Head>
 
@@ -115,7 +115,12 @@ export default function ConditionsEtConfidentialite() {
         <h3 className="text-xl font-semibold mt-6 mb-2">5. Cookies</h3>
         <p>Des cookies peuvent être utilisés pour améliorer l&apos;expérience. Vous pouvez les désactiver dans votre navigateur.</p>
 
-        <h3 className="text-xl font-semibold mt-6 mb-2">6. Vos droits</h3>
+        <h3 className="text-xl font-semibold mt-6 mb-2">6. Google Analytics</h3>
+        <p>Nous utilisons Google Analytics (GA4) pour analyser l&apos;audience du site et améliorer l&apos;expérience utilisateur. Cet outil collecte des données anonymes de navigation (pages visitées, durée de session, type de navigateur...).</p>
+        <p>Les informations générées sont transmises à Google et peuvent être stockées hors de l&apos;Union européenne. Nous avons configuré Google Analytics pour limiter le traitement des adresses IP et respecter les recommandations de la CNIL.</p>
+        <p>L&apos;utilisation de Google Analytics est soumise à votre consentement. Vous pouvez accepter ou refuser le suivi lors de votre première visite sur notre site via la bannière de cookies, ou à tout moment en modifiant les paramètres de votre navigateur.</p>
+
+        <h3 className="text-xl font-semibold mt-6 mb-2">7. Vos droits</h3>
         <p>Conformément au RGPD, vous pouvez accéder, modifier ou supprimer vos données. Contactez-nous à <a href="mailto:arthur.fromont@sonarmo.com" className="text-blue-400 underline">arthur.fromont@sonarmo.com</a>.</p>
       </section>
     </div>
