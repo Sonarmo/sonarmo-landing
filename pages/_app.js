@@ -5,14 +5,13 @@ import Script from "next/script";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "/components/builder/DashboardLayout";
+import CookieConsentBanner from "/components/builder/CookieConsentBanner"; // nouvelle version avec TarteAuCitron
 import { PlayerProvider } from "/lib/contexts/PlayerContext";
-import CookieConsentBanner from "/components/builder/CookieConsentBanner"; // ← Crée ce fichier
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith("/dashboard");
 
-  // ➤ Suivi des changements de page (pour Analytics)
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (typeof window.gtag !== "undefined") {
@@ -36,23 +35,24 @@ function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
-        {/* CookieConsent CSS */}
+
+        {/* TarteAuCitron CSS */}
         <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.1/cookieconsent.min.css"
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/tarteaucitronjs/1.9.6/tarteaucitron.min.css"
         />
       </Head>
 
-      {/* CookieConsent JS */}
+      {/* TarteAuCitron JS */}
       <Script
-      strategy="afterInteractive"
-      src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.1/cookieconsent.min.js"
+        strategy="afterInteractive"
+        src="https://cdnjs.cloudflare.com/ajax/libs/tarteaucitronjs/1.9.6/tarteaucitron.min.js"
       />
 
-      {/* Initialise CookieConsent via React */}
+      {/* Initialise TarteAuCitron via React */}
       <CookieConsentBanner />
 
-      {/* Google Analytics - bloqué tant que pas accepté */}
+      {/* Google Analytics - activé uniquement si accepté */}
       <Script
         strategy="afterInteractive"
         src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"
@@ -66,7 +66,7 @@ function MyApp({ Component, pageProps }) {
             function gtag(){dataLayer.push(arguments);}
 
             window.addEventListener('load', function() {
-              if (window.cookieconsent?.hasConsented?.()) {
+              if (window.tarteaucitron?.user?.googleanalytics === true) {
                 gtag('js', new Date());
                 gtag('config', 'G-PTGDLQ7W2N', {
                   page_path: window.location.pathname,
