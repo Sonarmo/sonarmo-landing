@@ -22,7 +22,7 @@ export default function CookieConsentBanner() {
   theme: "classic",
   position: "bottom-center",
   type: "opt-in",
-  layout: "basic", // ou 'categories' si tu veux afficher les cases directement
+  layout: "basic",
   content: {
     message: "Ce site utilise des cookies pour améliorer votre expérience et analyser le trafic.",
     allow: "Tout accepter",
@@ -31,8 +31,8 @@ export default function CookieConsentBanner() {
     href: "#",
   },
   elements: {
-    link: '<a class="cc-link" href="#" data-cc="c-settings">{{link}}</a>',
-  },
+    link: '<a class="cc-link" href="#" onclick="window.cookieconsent.openPreferences(); return false;">{{link}}</a>',
+  }
 });
       }
     };
