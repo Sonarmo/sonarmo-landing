@@ -30,7 +30,8 @@
     "react-dom": "^19.0.0",
     "react-select": "^5.10.1",
     "recharts": "^2.15.3",
-    "stripe": "^18.2.1"
+    "stripe": "^18.2.1",
+    "tarteaucitronjs": "^1.21.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
