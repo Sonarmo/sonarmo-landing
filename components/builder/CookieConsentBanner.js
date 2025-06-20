@@ -31,8 +31,8 @@ export default function CookieConsentBanner() {
     href: "#",
   },
   elements: {
-    link: '<a class="cc-link" href="#" onclick="window.cookieconsent.openPreferences(); return false;">{{link}}</a>',
-  }
+  link: '<a class="cc-link" href="#" onclick="window.cookieconsent.showSettings(); return false;">{{link}}</a>',
+}
 });
       }
     };

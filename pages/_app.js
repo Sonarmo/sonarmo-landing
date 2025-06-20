@@ -38,15 +38,15 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
         {/* CookieConsent CSS */}
         <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.1/cookieconsent.min.css"
         />
       </Head>
 
       {/* CookieConsent JS */}
       <Script
-        strategy="afterInteractive"
-        src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"
+      strategy="afterInteractive"
+      src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.1/cookieconsent.min.js"
       />
 
       {/* Initialise CookieConsent via React */}
