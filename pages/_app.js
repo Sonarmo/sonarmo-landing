@@ -38,9 +38,9 @@ function MyApp({ Component, pageProps }) {
 
         {/* TarteAuCitron CSS */}
         <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/tarteaucitronjs/1.9.6/tarteaucitron.min.css"
-        />
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/tarteaucitron.css"
+/>
       </Head>
 
       {/* TarteAuCitron JS */}
