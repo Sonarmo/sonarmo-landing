@@ -127,7 +127,7 @@ export default function Login() {
                                 Se connecter avec Google
                             </button>
                             <div className="text-sm text-gray-400 flex flex-col gap-1 mt-2">
-                                <Link href="#" className="hover:text-white">Mot de passe oublié ?</Link>
+                                <Link href="/forgot-password" className="hover:text-white">Mot de passe oublié ?</Link>
                             </div>
                         </form>
                     </div>

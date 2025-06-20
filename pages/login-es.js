@@ -74,7 +74,7 @@ export default function Login() {
     if (role === "pro") {
   router.push("/dashboard");
 } else {
-  window.location.href = "/generateur"; // force un vrai reload
+  window.location.href = "/generateur-es"; // force un vrai reload
 }
   } catch (err) {
     console.error("Erreur connexion Google :", err);
@@ -127,7 +127,7 @@ export default function Login() {
                                 Iniciar sesión con Google
                             </button>
                             <div className="text-sm text-gray-400 flex flex-col gap-1 mt-2">
-                                <Link href="#" className="hover:text-white">Olvidó su contraseña?</Link>
+                                <Link href="/forgot-password-es" className="hover:text-white">Olvidó su contraseña?</Link>
                             </div>
                         </form>
                     </div>
