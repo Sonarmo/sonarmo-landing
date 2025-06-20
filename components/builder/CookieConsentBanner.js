@@ -8,7 +8,7 @@ export default function CookieConsentBanner() {
     // Fonction d'initialisation
     const initCookie = () => {
       if (window.cookieconsent) {
-        window.cookieconsent.initialise({
+     window.cookieconsent.initialise({
   palette: {
     popup: {
       background: "#000000",
@@ -22,7 +22,7 @@ export default function CookieConsentBanner() {
   theme: "classic",
   position: "bottom-center",
   type: "opt-in",
-  layout: "basic", // ou 'categories' si tu veux que les choix soient visibles dès la bannière
+  layout: "basic", // ou 'categories' si tu veux afficher les cases directement
   content: {
     message: "Ce site utilise des cookies pour améliorer votre expérience et analyser le trafic.",
     allow: "Tout accepter",
@@ -31,13 +31,7 @@ export default function CookieConsentBanner() {
     href: "#",
   },
   elements: {
-    allow: '<button type="button" class="cc-btn cc-allow">{{allow}}</button>',
-    deny: '<button type="button" class="cc-btn cc-deny">{{deny}}</button>',
-    link: '<a aria-label="learn more about cookies" class="cc-link" href="#" data-cc="c-settings">{{link}}</a>',
-  },
-  settings: {
-    // Active le panneau de gestion des catégories
-    layout: "categories",
+    link: '<a class="cc-link" href="#" data-cc="c-settings">{{link}}</a>',
   },
 });
       }
