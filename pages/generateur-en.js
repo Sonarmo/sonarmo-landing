@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import CreditBadge from "/components/builder/CreditBadge";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
-import app from "/lib/firebase";
+import { app } from '/lib/firebase'
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Generateur() {
