@@ -4,35 +4,44 @@ export default function CookieConsentBanner() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const checkTarte = () => {
-      console.log("DEBUG - tarteaucitron présent ?", typeof window.tarteaucitron);
+    const launchTarte = () => {
+      console.log("✅ tarteaucitron.init lancé après window.load");
 
-      if (window.tarteaucitron) {
-        console.log("DEBUG - Appel init()");
+      window.tarteaucitron.init({
+        privacyUrl: "/cgu",
+        orientation: "bottom",
+        showAlertSmall: true,
+        cookieslist: true,
+        AcceptAllCta: true,
+        DenyAllCta: true,
+        highPrivacy: true,
+        handleBrowserDNTRequest: false,
+        removeCredit: true,
+        useExternalCss: false,
+        readmoreLink: "/cgu",
+        debug: true,
+      });
 
-        window.tarteaucitron.init({
-          privacyUrl: "/cgu",
-          orientation: "bottom",
-          showAlertSmall: true,
-          cookieslist: true,
-          AcceptAllCta: true,
-          DenyAllCta: true,
-          highPrivacy: true,
-          handleBrowserDNTRequest: false,
-          removeCredit: true,
-          useExternalCss: false,
-          readmoreLink: "/cgu",
-          debug: true, // ← AJOUT pour afficher tous les logs
-        });
-
-        // Ne rien injecter de GA ici, on veut juste voir la bannière
-      } else {
-        console.log("DEBUG - tarteaucitron PAS chargé, retrying...");
-        setTimeout(checkTarte, 100);
-      }
+      // (Tu pourras remettre GA ici après si tu veux)
     };
 
-    checkTarte();
+    if (window.tarteaucitron) {
+      // on attend l'événement window.load avant d'init
+      window.addEventListener("load", launchTarte);
+    } else {
+      // si le script n'est pas encore chargé, on réessaie
+      const interval = setInterval(() => {
+        if (window.tarteaucitron) {
+          clearInterval(interval);
+          window.addEventListener("load", launchTarte);
+        }
+      }, 100);
+    }
+
+    // cleanup
+    return () => {
+      window.removeEventListener("load", launchTarte);
+    };
   }, []);
 
   return null;
