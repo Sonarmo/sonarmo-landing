@@ -9,28 +9,37 @@ export default function CookieConsentBanner() {
     const initCookie = () => {
       if (window.cookieconsent) {
         window.cookieconsent.initialise({
-          palette: {
-            popup: {
-              background: "#000000",
-              text: "#ffffff",
-            },
-            button: {
-              background: "#F216CA",
-              text: "#000000",
-            },
-          },
-          theme: "classic",
-          position: "bottom-center",
-          type: "opt-in",
-          content: {
-            message:
-              "Ce site utilise des cookies pour améliorer votre expérience et analyser le trafic.",
-            dismiss: "Accepter",
-            deny: "Refuser",
-            link: "En savoir plus",
-            href: "/cgu",
-          },
-        });
+  palette: {
+    popup: {
+      background: "#000000",
+      text: "#ffffff",
+    },
+    button: {
+      background: "#F216CA",
+      text: "#000000",
+    },
+  },
+  theme: "classic",
+  position: "bottom-center",
+  type: "opt-in",
+  layout: "basic", // ou 'categories' si tu veux que les choix soient visibles dès la bannière
+  content: {
+    message: "Ce site utilise des cookies pour améliorer votre expérience et analyser le trafic.",
+    allow: "Tout accepter",
+    deny: "Tout refuser",
+    link: "Paramétrer mes choix",
+    href: "#",
+  },
+  elements: {
+    allow: '<button type="button" class="cc-btn cc-allow">{{allow}}</button>',
+    deny: '<button type="button" class="cc-btn cc-deny">{{deny}}</button>',
+    link: '<a aria-label="learn more about cookies" class="cc-link" href="#" data-cc="c-settings">{{link}}</a>',
+  },
+  settings: {
+    // Active le panneau de gestion des catégories
+    layout: "categories",
+  },
+});
       }
     };
 
