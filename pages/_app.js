@@ -5,7 +5,6 @@ import Script from "next/script";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "/components/builder/DashboardLayout";
-import CookieConsentBanner from "/components/builder/CookieConsentBanner";
 import { PlayerProvider } from "/lib/contexts/PlayerContext";
 
 function MyApp({ Component, pageProps }) {
@@ -35,22 +34,14 @@ function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
-
-        {/* ✅ TarteAuCitron CSS CORRIGÉ */}
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/css/tarteaucitron.css"
-        />
       </Head>
 
-      {/* ✅ Script TarteAuCitron */}
+      {/* ✅ CookieYes Banner */}
       <Script
+        id="cookieyes"
         strategy="afterInteractive"
-        src="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/tarteaucitron.js"
+        src="https://cdn-cookieyes.com/client_data/c09dfc653764ff663ca49778/script.js"
       />
-
-      {/* ✅ Initialise le bandeau cookie */}
-      <CookieConsentBanner />
 
       <Component {...pageProps} />
     </>
