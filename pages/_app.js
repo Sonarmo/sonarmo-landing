@@ -43,6 +43,20 @@ function MyApp({ Component, pageProps }) {
         src="https://cdn-cookieyes.com/client_data/c09dfc653764ff663ca49778/script.js"
       />
 
+      {/* ✅ Google Analytics (bloqué si consentement refusé) */}
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PTGDLQ7W2N', { anonymize_ip: true });
+        `}
+      </Script>
+
       <Component {...pageProps} />
     </>
   );
