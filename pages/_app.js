@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith("/dashboard");
 
+  // Suivi des pages (si GA est activé)
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (typeof window.gtag !== "undefined") {
@@ -43,12 +44,19 @@ function MyApp({ Component, pageProps }) {
         src="https://cdn-cookieyes.com/client_data/c09dfc653764ff663ca49778/script.js"
       />
 
-      {/* ✅ Google Analytics (bloqué si consentement refusé) */}
+      {/* ✅ Google Analytics (chargé uniquement si "analytics" accepté) */}
       <Script
+        type="text/plain"
+        data-cookiecategory="analytics"
         strategy="afterInteractive"
         src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"
       />
-      <Script id="gtag-init" strategy="afterInteractive">
+      <Script
+        id="gtag-init"
+        type="text/plain"
+        data-cookiecategory="analytics"
+        strategy="afterInteractive"
+      >
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
