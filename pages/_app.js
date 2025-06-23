@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith("/dashboard");
 
-  // 📊 Suivi de page GA (si injecté)
+  // Suivi page view GA (sera activé automatiquement si le consentement est donné)
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (typeof window.gtag !== "undefined") {
@@ -26,39 +26,6 @@ function MyApp({ Component, pageProps }) {
     };
   }, [router.events]);
 
-  // 🍪 Injecte GA si CookieYes analytics accepté
-  useEffect(() => {
-    function injectGA() {
-      if (window.gtag) return; // Évite doublons
-      const script1 = document.createElement("script");
-      script1.src = "https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N";
-      script1.async = true;
-      document.head.appendChild(script1);
-
-      const script2 = document.createElement("script");
-      script2.innerHTML = `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-PTGDLQ7W2N', { anonymize_ip: true });
-      `;
-      document.head.appendChild(script2);
-
-      console.log("✅ Google Analytics injecté");
-    }
-
-    const interval = setInterval(() => {
-      if (window.CookieYes && window.CookieYes.consent) {
-        if (window.CookieYes.consent.analytics) {
-          injectGA();
-        }
-        clearInterval(interval);
-      }
-    }, 300);
-
-    setTimeout(() => clearInterval(interval), 8000); // Timeout
-  }, []);
-
   const page = (
     <>
       <Head>
@@ -68,14 +35,36 @@ function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
-      </Head>
 
-      {/* ✅ CookieYes */}
-      <Script
-        id="cookieyes"
-        strategy="afterInteractive"
-        src="https://cdn-cookieyes.com/client_data/c09dfc653764ff663ca49778/script.js"
-      />
+        {/* ✅ Cookiebot */}
+        <script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="6b424237-bb4c-47c8-8c50-959161d7da5e"
+          data-blockingmode="auto"
+          type="text/javascript"
+        ></script>
+
+        {/* ✅ Google Analytics (sera bloqué tant que le consentement n'est pas donné) */}
+        <script
+          type="text/plain"
+          data-cookieconsent="statistics"
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"
+        ></script>
+        <script
+          type="text/plain"
+          data-cookieconsent="statistics"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-PTGDLQ7W2N', { anonymize_ip: true });
+            `,
+          }}
+        />
+      </Head>
 
       <Component {...pageProps} />
     </>
