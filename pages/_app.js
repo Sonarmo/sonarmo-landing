@@ -40,7 +40,7 @@ function MyApp({ Component, pageProps }) {
         {/* TarteAuCitron CSS */}
         <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/tarteaucitron.min.css"
+  href="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/css/tarteaucitron.min.css"
 />
       </Head>
 
