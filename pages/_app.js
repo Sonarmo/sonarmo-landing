@@ -44,24 +44,26 @@ function MyApp({ Component, pageProps }) {
         src="https://cdn-cookieyes.com/client_data/c09dfc653764ff663ca49778/script.js"
       />
 
-      {/* ✅ Google Analytics (chargé uniquement si "analytics" accepté) */}
-      <Script
-        type="text/plain"
-        data-cookiecategory="analytics"
-        strategy="afterInteractive"
-        src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"
-      />
-      <Script
-        id="gtag-init"
-        type="text/plain"
-        data-cookiecategory="analytics"
-        strategy="afterInteractive"
-      >
+      {/* ✅ Google Analytics déclenché via CookieYes */}
+      <Script id="cookieyes-ga-handler" strategy="afterInteractive">
         {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-PTGDLQ7W2N', { anonymize_ip: true });
+          window.cookieyesCallbacks = window.cookieyesCallbacks || [];
+          window.cookieyesCallbacks.push(function() {
+            if (CookieYes.consent.analytics) {
+              const gtagScript = document.createElement('script');
+              gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N";
+              gtagScript.async = true;
+              document.head.appendChild(gtagScript);
+
+              gtagScript.onload = function () {
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                window.gtag = gtag;
+                gtag('js', new Date());
+                gtag('config', 'G-PTGDLQ7W2N', { anonymize_ip: true });
+              };
+            }
+          });
         `}
       </Script>
 
