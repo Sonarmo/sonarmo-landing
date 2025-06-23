@@ -12,7 +12,6 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith("/dashboard");
 
-  // Suivi des pages (sera actif uniquement si GA autorisé via TarteAuCitron)
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (typeof window.gtag !== "undefined") {
@@ -37,20 +36,20 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
 
-        {/* TarteAuCitron CSS */}
+        {/* ✅ TarteAuCitron CSS CORRIGÉ */}
         <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/css/tarteaucitron.min.css"
-/>
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/css/tarteaucitron.css"
+        />
       </Head>
 
-      {/* TarteAuCitron JS */}
+      {/* ✅ Script TarteAuCitron */}
       <Script
         strategy="afterInteractive"
         src="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/tarteaucitron.js"
       />
 
-      {/* Initialise le bandeau cookie */}
+      {/* ✅ Initialise le bandeau cookie */}
       <CookieConsentBanner />
 
       <Component {...pageProps} />

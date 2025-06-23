@@ -5,23 +5,21 @@ export default function CookieConsentBanner() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const handleLoad = () => {
-      const tryInit = () => {
-        if (window.tarteaucitron && typeof window.tarteaucitron.init === "function") {
-          console.log("✅ tarteaucitron prêt, initialisation en cours");
-          initCookieBanner();
-        } else {
-          console.log("⏳ En attente de tarteaucitron...");
-          setTimeout(tryInit, 500);
-        }
-      };
-
-      tryInit();
+    const tryInit = () => {
+      if (window.tarteaucitron && typeof window.tarteaucitron.init === "function") {
+        console.log("✅ tarteaucitron prêt, initialisation en cours");
+        initCookieBanner();
+      } else {
+        console.log("⏳ En attente de tarteaucitron...");
+        setTimeout(tryInit, 300); // ⏱️ relance rapide
+      }
     };
 
-    window.addEventListener("load", handleLoad);
+    // Lance une fois le chargement de la page terminé
+    window.addEventListener("load", tryInit);
+
     return () => {
-      window.removeEventListener("load", handleLoad);
+      window.removeEventListener("load", tryInit);
     };
   }, []);
 
