@@ -5,13 +5,14 @@ import Script from "next/script";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import DashboardLayout from "/components/builder/DashboardLayout";
-import CookieConsentBanner from "/components/builder/CookieConsentBanner"; // nouvelle version avec TarteAuCitron
+import CookieConsentBanner from "/components/builder/CookieConsentBanner";
 import { PlayerProvider } from "/lib/contexts/PlayerContext";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith("/dashboard");
 
+  // Suivi des pages (sera actif uniquement si GA autorisé via TarteAuCitron)
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (typeof window.gtag !== "undefined") {
@@ -38,44 +39,19 @@ function MyApp({ Component, pageProps }) {
 
         {/* TarteAuCitron CSS */}
         <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/tarteaucitron.css"
-/>
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/tarteaucitron.css"
+        />
       </Head>
 
       {/* TarteAuCitron JS */}
       <Script
         strategy="afterInteractive"
-        src="https://cdnjs.cloudflare.com/ajax/libs/tarteaucitronjs/1.9.6/tarteaucitron.min.js"
+        src="https://cdn.jsdelivr.net/npm/tarteaucitronjs@1.13.0/tarteaucitron.js"
       />
 
-      {/* Initialise TarteAuCitron via React */}
+      {/* Initialise le bandeau cookie */}
       <CookieConsentBanner />
-
-      {/* Google Analytics - activé uniquement si accepté */}
-      <Script
-        strategy="afterInteractive"
-        src="https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N"
-      />
-      <Script
-        id="gtag-init"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-
-            window.addEventListener('load', function() {
-              if (window.tarteaucitron?.user?.googleanalytics === true) {
-                gtag('js', new Date());
-                gtag('config', 'G-PTGDLQ7W2N', {
-                  page_path: window.location.pathname,
-                });
-              }
-            });
-          `,
-        }}
-      />
 
       <Component {...pageProps} />
     </>
