@@ -5,7 +5,7 @@ module.exports = {
   async redirects() {
     return [
       {
-        source: '/team',
+        source: '/sonarmo-team',
         destination: '/',
         permanent: false, // redirection temporaire
       },
