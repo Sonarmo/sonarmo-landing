@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith("/dashboard");
 
-  // Pageview pour les route changes (si GA est initialisé)
+  // Suivi des pages (si GA est activé)
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (typeof window.gtag === "function") {
@@ -22,19 +22,16 @@ function MyApp({ Component, pageProps }) {
     return () => router.events.off("routeChangeComplete", handleRouteChange);
   }, [router.events]);
 
-  return (isDashboard ? (
-    <PlayerProvider><DashboardLayout><AppContents /></DashboardLayout></PlayerProvider>
-  ) : (
-    <AppContents />
-  ));
-}
-
-function AppContents() {
-  return (
+  // ✅ App content avec props bien transmis
+  const AppContents = () => (
     <>
       <Head>
         <title>Sonarmo</title>
         <link rel="icon" href="/sonarmo-experience.png" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
       </Head>
 
       {/* CookieYes Banner */}
@@ -44,14 +41,12 @@ function AppContents() {
         src="https://cdn-cookieyes.com/client_data/c09dfc653764ff663ca49778/script.js"
       />
 
-      {/* Handler : injecte GA après consentement analytics */}
+      {/* Google Analytics chargé après consentement */}
       <Script id="cookieyes-ga-handler" strategy="afterInteractive">
         {`
           window.cookieyesCallbacks = window.cookieyesCallbacks || [];
           window.cookieyesCallbacks.push(function () {
-            console.log('🎛️ CookieYes consent:', CookieYes.consent);
-            if (CookieYes.consent.analytics) {
-              console.log('✅ Analytics autorisé : on charge GA...');
+            if (CookieYes?.consent?.analytics) {
               const s = document.createElement('script');
               s.src = "https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N";
               s.async = true;
@@ -60,19 +55,27 @@ function AppContents() {
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
                 window.gtag = gtag;
-                window.gtag('js', new Date());
-                window.gtag('config', 'G-PTGDLQ7W2N', { anonymize_ip: true });
-                console.log('📈 Google Analytics chargé');
+                gtag('js', new Date());
+                gtag('config', 'G-PTGDLQ7W2N', { anonymize_ip: true });
               };
-            } else {
-              console.log('❌ Analytics refusé ou non autorisé');
             }
           });
         `}
       </Script>
 
-      <Component {...(Component.pageProps ?? {})} />
+      {/* Page rendering */}
+      <Component {...pageProps} />
     </>
+  );
+
+  return isDashboard ? (
+    <PlayerProvider>
+      <DashboardLayout>
+        <AppContents />
+      </DashboardLayout>
+    </PlayerProvider>
+  ) : (
+    <AppContents />
   );
 }
 
