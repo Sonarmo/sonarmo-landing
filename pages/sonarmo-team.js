@@ -82,7 +82,7 @@ export default function Team() {
         >
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Page en construction</h1>
           <p className="text-lg md:text-xl text-gray-300 max-w-xl">
-            Cette section est en cours de préparation. Revenez bientôt pour découvrir l'équipe Sonarmo !
+            Cette section est en cours de préparation. Revenez bientôt pour découvrir l&apos;équipe Sonarmo !
           </p>
         </motion.div>
       </main>
