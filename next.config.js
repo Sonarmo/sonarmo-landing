@@ -1,14 +1,17 @@
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
-    domains: ["i.scdn.co", "mosaic.scdn.co"],
+    domains: ['i.scdn.co', 'mosaic.scdn.co'],
   },
   async redirects() {
     return [
       {
         source: '/sonarmo-team',
         destination: '/',
-        permanent: false, // redirection temporaire
+        permanent: false,
       },
     ];
   },
 };
+
+module.exports = nextConfig;
