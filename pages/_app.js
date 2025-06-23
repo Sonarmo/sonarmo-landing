@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith("/dashboard");
 
-  // Suivi page view GA
+  // 📊 Suivi de page GA (si injecté)
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (typeof window.gtag !== "undefined") {
@@ -26,27 +26,37 @@ function MyApp({ Component, pageProps }) {
     };
   }, [router.events]);
 
-  // ✅ Callback CookieYes : déclenche GA si consentement "analytics"
+  // 🍪 Injecte GA si CookieYes analytics accepté
   useEffect(() => {
-    window.cookieyesCallbacks = window.cookieyesCallbacks || [];
-    window.cookieyesCallbacks.push(() => {
-      if (CookieYes?.consent?.analytics) {
-        // Injecte GA
-        const script1 = document.createElement("script");
-        script1.src = "https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N";
-        script1.async = true;
-        document.head.appendChild(script1);
+    function injectGA() {
+      if (window.gtag) return; // Évite doublons
+      const script1 = document.createElement("script");
+      script1.src = "https://www.googletagmanager.com/gtag/js?id=G-PTGDLQ7W2N";
+      script1.async = true;
+      document.head.appendChild(script1);
 
-        const script2 = document.createElement("script");
-        script2.innerHTML = `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-PTGDLQ7W2N', { anonymize_ip: true });
-        `;
-        document.head.appendChild(script2);
+      const script2 = document.createElement("script");
+      script2.innerHTML = `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-PTGDLQ7W2N', { anonymize_ip: true });
+      `;
+      document.head.appendChild(script2);
+
+      console.log("✅ Google Analytics injecté");
+    }
+
+    const interval = setInterval(() => {
+      if (window.CookieYes && window.CookieYes.consent) {
+        if (window.CookieYes.consent.analytics) {
+          injectGA();
+        }
+        clearInterval(interval);
       }
-    });
+    }, 300);
+
+    setTimeout(() => clearInterval(interval), 8000); // Timeout
   }, []);
 
   const page = (
