@@ -151,7 +151,7 @@ export default function Home() {
                 text: "des playlists générées sont uniques, basées sur votre ambiance."
               }, {
                 value: "+9%",
-                text: "de Dopamine libérée dans le cerveau lorsqu'on écoute de la musique qu&apos;on aime"
+                text: "de Dopamine libérée dans le cerveau lorsqu'on écoute de la musique qu'on aime"
               }, {
                 value: "1 min",
                 text: "pour générer une ambiance musicale cohérente et prête à diffuser."
