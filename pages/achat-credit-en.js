@@ -74,6 +74,18 @@ export default function AchatCredits() {
             </button>
           </motion.div>
         </div>
+        {/* Unsubscribe button – English */}
+<div className="mt-10 text-center">
+  <p className="text-gray-400 mb-2 text-sm">Already subscribed?</p>
+  <a
+    href="https://billing.stripe.com/p/login/14AdR9dTVgJP6DN1Dr24000"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-block bg-[#3a3a3a] hover:bg-[#4a4a4a] text-white-400 font-medium px-6 py-2 rounded-2xl transition-colors"
+  >
+    Manage or cancel my subscription
+  </a>
+</div>
       </main>
 
       {/* Footer Sonarmo */}
