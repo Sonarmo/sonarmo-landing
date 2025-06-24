@@ -59,7 +59,9 @@ export default async function handler(req, res) {
     const systemPrompt = {
       fr: `
 Tu es un expert en curation musicale.
-En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist de 20 morceaux Spotify cohérente, originale et fluide.
+En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist Spotify de 20 morceaux cohérente, originale et immersive.
+
+Ta sélection doit inclure un mélange équilibré de titres populaires et de morceaux moins connus, rares ou émergents, afin de proposer une écoute à la fois engageante et surprenante. Priorise la cohérence de l'ambiance tout en favorisant la découverte musicale.
 
 Prompt utilisateur : """${prompt}"""
 
@@ -71,7 +73,9 @@ Réponds avec une liste JSON stricte, format :
 Aucun commentaire. Aucun texte. Seulement la liste JSON.`,
       en: `
 You are a music curation expert.
-Based only on the user's prompt below, generate a coherent, original and flowing playlist of 20 Spotify tracks.
+Based only on the user's description below, generate a coherent, original, and immersive playlist of 20 Spotify tracks.
+
+Your selection should include a balanced mix of popular songs and lesser-known, rare, or emerging tracks to offer a fresh and surprising listening experience. Prioritize the overall vibe and atmosphere while encouraging musical discovery.
 
 User prompt: """${prompt}"""
 
@@ -83,7 +87,9 @@ Respond with a strict JSON list, format:
 No explanation. No comments. Just the JSON list.`,
       es: `
 Eres un experto en curaduría musical.
-Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción coherente, original y fluida de 20 canciones de Spotify.
+Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción de Spotify con 20 canciones coherente, original e inmersiva.
+
+Tu selección debe incluir una mezcla equilibrada entre canciones populares y temas menos conocidos, raros o emergentes, con el fin de ofrecer una experiencia auditiva fresca y sorprendente. Prioriza la coherencia de la atmósfera y el estado de ánimo, fomentando el descubrimiento musical.
 
 Prompt del usuario: """${prompt}"""
 
