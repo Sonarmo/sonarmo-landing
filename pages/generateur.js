@@ -369,8 +369,8 @@ export default function Generateur() {
   )}
 </main>
 
-      <footer className="bg-black text-sm text-gray-400 px-6 py-10">
-  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-y-8 w-full">
+<footer className="relative z-10 bg-black text-sm text-gray-400 px-6 py-10">
+    <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-y-8 w-full">
 
     {/* Bloc gauche + logo FT (stacké proprement en mobile) */}
     <div className="flex flex-col sm:flex-row sm:items-start sm:gap-6 items-center text-center sm:text-left">
