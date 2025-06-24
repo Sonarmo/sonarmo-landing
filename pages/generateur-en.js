@@ -151,17 +151,19 @@ export default function Generateur() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center p-6 relative overflow-hidden">
-      <div className="absolute inset-0 z-0">
+<div className="min-h-screen bg-black text-white flex flex-col items-stretch p-6 relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
         <div className="absolute w-[400px] h-[400px] bg-[#FF00FF] rounded-full blur-[100px] top-[14%] right-1/2 opacity-50" />
         <div className="absolute w-[600px] h-[600px] bg-[#FF9400] rounded-full blur-[100px] top-[45%] right-[25%] opacity-10" />
       </div>
 
       <header className="flex justify-between items-center px-6 py-4 w-full relative z-10">
-        <div className="flex items-center gap-2">
-          <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-          <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-        </div>
+        <Link href="/index-en" passHref>
+  <a className="flex items-center gap-2">
+    <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+    <span className="text-white text-lg font-semibold italic">Sonarmo</span>
+  </a>
+</Link>
         <nav className="hidden md:flex gap-6 text-sm items-center">
           <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
           <Link href="/experience-en" className="hover:text-gray-300">SONARMO PRO</Link>
