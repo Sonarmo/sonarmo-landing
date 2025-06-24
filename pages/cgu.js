@@ -113,12 +113,11 @@ export default function ConditionsEtConfidentialite() {
         <p>Les données ne sont jamais revendues. Elles sont partagées uniquement avec Spotify, Stripe, et Firebase si nécessaire.</p>
 
         <h3 className="text-xl font-semibold mt-6 mb-2">5. Cookies</h3>
-        <p>Des cookies peuvent être utilisés pour améliorer l&apos;expérience. Vous pouvez les désactiver dans votre navigateur.</p>
+<p>Notre site n’utilise pas de cookies de suivi marketing ou publicitaire. Aucune donnée personnelle n’est stockée à travers des cookies.</p>
 
-        <h3 className="text-xl font-semibold mt-6 mb-2">6. Google Analytics</h3>
-        <p>Nous utilisons Google Analytics (GA4) pour analyser l&apos;audience du site et améliorer l&apos;expérience utilisateur. Cet outil collecte des données anonymes de navigation (pages visitées, durée de session, type de navigateur...).</p>
-        <p>Les informations générées sont transmises à Google et peuvent être stockées hors de l&apos;Union européenne. Nous avons configuré Google Analytics pour limiter le traitement des adresses IP et respecter les recommandations de la CNIL.</p>
-        <p>L&apos;utilisation de Google Analytics est soumise à votre consentement. Vous pouvez accepter ou refuser le suivi lors de votre première visite sur notre site via la bannière de cookies, ou à tout moment en modifiant les paramètres de votre navigateur.</p>
+<h3 className="text-xl font-semibold mt-6 mb-2">6. Analyse d’audience avec Plausible</h3>
+<p>Nous utilisons <strong>Plausible Analytics</strong>, un outil d’analyse respectueux de la vie privée, hébergé en Europe. Il ne collecte aucune donnée personnelle identifiable, ne place pas de cookie et ne nécessite pas de consentement.</p>
+<p>Les données collectées (pages visitées, durée de session, type de navigateur) sont totalement anonymisées et utilisées uniquement pour comprendre l’usage global du site, sans traçage individuel.</p>
 
         <h3 className="text-xl font-semibold mt-6 mb-2">7. Vos droits</h3>
         <p>Conformément au RGPD, vous pouvez accéder, modifier ou supprimer vos données. Contactez-nous à <a href="mailto:arthur.fromont@sonarmo.com" className="text-blue-400 underline">arthur.fromont@sonarmo.com</a>.</p>
