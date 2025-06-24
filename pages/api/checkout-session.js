@@ -7,7 +7,7 @@ const VALID_PRICE_IDS = {
   one: 'price_1RYvdbDnUAWbLtYHm8e4eHjn',
   five: 'price_1RYvg0DnUAWbLtYHytj446r3',
   ten: 'price_1RYvgxDnUAWbLtYHZbHwwP9K',
-  subscription: 'price_1RYvjLDnUAWbLtYHuVqkc3vk',
+  subscription: 'price_1RdZHcDnUAWbLtYHPsrMOcE2',
 };
 
 export default async function handler(req, res) {
