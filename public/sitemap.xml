@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.sonarmo.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.sonarmo.com/login</loc>
+  </url>
+  <url>
+    <loc>https://www.sonarmo.com/explique-generation</loc>
+  </url>
+  <url>
+    <loc>https://www.sonarmo.com/experience</loc>
+  </url>
+  <url>
+    <loc>https://www.sonarmo.com/contact</loc>
+  </url>
+  <url>
+    <loc>https://www.sonarmo.com/cgu</loc>
+  </url>
+  <url>
+    <loc>https://www.sonarmo.com/mentions-legales</loc>
+  </url>
+  <url>
+    <loc>https://www.sonarmo.com/conditions-vente</loc>
+  </url>
+</urlset>
