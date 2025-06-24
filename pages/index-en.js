@@ -93,7 +93,14 @@ export default function Home() {
           <div className="mx-auto relative w-full h-[170px] z-20 mb-5">
   <AnimatedWave />
 </div>
-
+<div className="mt-10">
+  <Link
+  href="/login-en"
+  className="inline-block bg-gradient-to-r from-[#F28500] to-[#FF00FF] px-8 py-4 rounded-full text-white font-semibold border border-transparent shadow-md transition-all duration-300 hover:shadow-[0_0_25px_rgba(242,133,0,0.5)] hover:-translate-y-1 hover:border-[#F28500]"
+>
+  Create your atmosphere
+</Link>
+</div>
         </section>
         {/* DUAL CTA SECTION */}
         <section className="px-6 py-18 text-center bg-black">
