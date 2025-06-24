@@ -76,32 +76,53 @@ export default function AchatCreditsES() {
         </div>
       </main>
 
-      {/* Pie de página */}
-      <footer className="bg-black text-sm text-gray-400 px-6 py-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-          <div className="flex flex-col gap-2 mb-6 md:mb-0">
-            <div className="flex items-center gap-4">
-              <a href="https://www.instagram.com/sonarmo_ia/" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} />
-              </a>
-              <a href="https://www.linkedin.com/company/sonarmo/" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24} />
-              </a>
-              <a href="https://www.facebook.com/profile.php?id=61574580608705" target="_blank" rel="noopener noreferrer">
-                <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} />
-              </a>
-            </div>
-            <Link href="/sonarmo-team" className="hover:text-white">Equipo Sonarmo</Link>
-            <Link href="/about" className="hover:text-white">Sobre nosotros</Link>
-            <Link href="/contact-es" className="hover:text-white">Contáctenos</Link>
-          </div>
-          <div className="flex flex-col items-end text-right gap-2">
-            <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-            <p className="text-xs">Sonarmo™</p>
-            <p className="text-xs">Términos de uso y política de privacidad</p>
-          </div>
+      <footer className="bg-black text-sm text-gray-400 px-6 py-10 mt-20 w-full relative z-10">
+  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-y-8 w-full">
+
+    {/* Bloc gauche + logo FT (sur une ligne en desktop, stack en mobile) */}
+    <div className="flex flex-col sm:flex-row sm:items-start sm:gap-6 items-center text-center sm:text-left">
+
+      {/* Réseaux + Liens */}
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-center sm:justify-start gap-4">
+          <a href="https://www.instagram.com/sonarmo_ia/?hl=fr" target="_blank" rel="noopener noreferrer">
+            <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} className="hover:opacity-70 transition" />
+          </a>
+          <a href="https://www.linkedin.com/company/sonarmo/" target="_blank" rel="noopener noreferrer">
+            <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24} className="hover:opacity-70 transition" />
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61574580608705" target="_blank" rel="noopener noreferrer">
+            <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} className="hover:opacity-70 transition" />
+          </a>
         </div>
-      </footer>
+        <Link href="/sonarmo-team" className="hover:text-white">Equipo Sonarmo</Link>
+        <Link href="/about" className="hover:text-white">Sobre nosotros</Link>
+        <Link href="/contact-es" className="hover:text-white">Contáctenos</Link>
+      </div>
+
+      {/* Logo French Tech Est */}
+      <div className="mt-4 sm:mt-0 sm:ml-3 flex justify-center sm:justify-start">
+        <Image
+          src="/icons/Logo_FT.png"
+          alt="Logo French Tech Est"
+          width={80}
+          height={80}
+          className="opacity-90"
+        />
+      </div>
+
+    </div>
+
+    {/* Bloc droit : Logo Sonarmo + Mentions */}
+    <div className="flex flex-col items-center md:items-end text-center md:text-right gap-2">
+      <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
+      <p className="text-xs">Sonarmo™</p>
+      <Link href="/cgu" className="text-sm hover:underline">Condiciones de uso y política de privacidad</Link>
+      <Link href="/mentions-legales" className="text-sm hover:underline">Términos y Condiciones</Link>
+      <Link href="/conditions-vente" className="text-sm hover:underline">Política de privacidad</Link>
+    </div>
+  </div>
+</footer>
     </div>
   );
 }

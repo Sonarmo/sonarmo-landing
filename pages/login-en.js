@@ -133,31 +133,51 @@ export default function Login() {
                     </div>
                 </section>
 
-                <footer className="bg-black text-sm text-gray-400 px-6 py-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <div className="flex flex-col gap-2 mb-6 md:mb-0">
-              <div className="flex items-center gap-4">
-                <a href="https://www.instagram.com/sonarmo_ia/?hl=fr" target="_blank" rel="noopener noreferrer">
-                  <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} />
-                </a>
-                <a href="https://www.linkedin.com/company/sonarmo/" target="_blank" rel="noopener noreferrer">
-                  <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24} />
-                </a>
-                <a href="https://www.facebook.com/profile.php?id=61574580608705" target="_blank" rel="noopener noreferrer">
-                  <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} />
-                </a>
-              </div>
-              <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
-              <Link href="/about-en" className="hover:text-white">About us</Link>
-              <Link href="/contact-en" className="hover:text-white">Contact us</Link>
-            </div>
-            <div className="flex flex-col items-end text-right gap-2">
-              <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
-              <p className="text-xs">Sonarmo™</p>
-              <p className="text-xs">Terms & Conditions of Use & Privacy Policy</p>
-            </div>
-          </div>
-        </footer>
+                <footer className="bg-black text-sm text-gray-400 px-6 py-10 w-full mt-20 relative z-10">
+  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-y-8 w-full">
+
+    {/* Bloc gauche + logo FT (responsive alignement) */}
+    <div className="flex flex-col sm:flex-row sm:items-start sm:gap-6 items-center text-center sm:text-left">
+
+      {/* Réseaux + Liens */}
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-center sm:justify-start gap-4">
+          <a href="https://www.instagram.com/sonarmo_ia/?hl=fr" target="_blank" rel="noopener noreferrer">
+            <Image src="/icons/instagram.png" alt="Instagram" width={24} height={24} className="hover:opacity-70 transition" />
+          </a>
+          <a href="https://www.linkedin.com/company/sonarmo/" target="_blank" rel="noopener noreferrer">
+            <Image src="/icons/linkedin.png" alt="LinkedIn" width={24} height={24} className="hover:opacity-70 transition" />
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61574580608705" target="_blank" rel="noopener noreferrer">
+            <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} className="hover:opacity-70 transition" />
+          </a>
+        </div>
+        <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
+        <Link href="/about-en" className="hover:text-white">About us</Link>
+        <Link href="/contact-en" className="hover:text-white">Contact us</Link>
+      </div>
+
+      {/* Logo French Tech Est */}
+      <div className="mt-4 sm:mt-0 sm:ml-3 flex justify-center sm:justify-start">
+        <Image
+          src="/icons/Logo_FT.png"
+          alt="French Tech Est Logo"
+          width={80}
+          height={80}
+          className="opacity-90"
+        />
+      </div>
+
+    </div>
+
+    {/* Bloc droit : Logo Sonarmo + Mentions */}
+    <div className="flex flex-col items-center md:items-end text-center md:text-right gap-2">
+      <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
+      <p className="text-xs">Sonarmo™</p>
+      <p className="text-xs hover:underline">Terms &amp; Conditions of Use &amp; Privacy Policy</p>
+    </div>
+  </div>
+</footer>
             </main>
         </>
     );
