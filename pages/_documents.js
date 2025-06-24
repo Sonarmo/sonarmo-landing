@@ -9,10 +9,21 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
-         {/* ✅ Script Plausible Analytics */}
-        <script defer data-domain="sonarmo.com" src="https://plausible.io/js/script.outbound-links.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
+         {/* ✅ Plausible Analytics avec options */}
+        <script
+          defer
+          data-domain="sonarmo.com"
+          src="https://plausible.io/js/script.outbound-links.js"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.plausible = window.plausible || function() {
+                (window.plausible.q = window.plausible.q || []).push(arguments);
+              }
+            `,
+          }}
+        ></script>
       </Head>
       <body>
         <Main />
