@@ -81,11 +81,11 @@ export default function Home() {
   />
 </div>
           
-          <h2 className="text-5xl font-semibold mb-4">
+          <h1 className="text-5xl font-semibold mb-4">
             <span className="text-[#FCE2BA]">Atmospheric </span>
             <span className="text-white">Intelligence</span>
             
-          </h2>
+          </h1>
           
           <p className="mx-auto text-gray-400 text-lg mb-12">
             Create a custom musical atmosphere, whether you are an individual or a professional.

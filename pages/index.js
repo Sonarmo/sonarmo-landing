@@ -20,6 +20,20 @@ export default function Home() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
+
+        {/* Open Graph / Facebook */}
+  <meta property="og:title" content="Sonarmo | Ambiance musicale intelligente" />
+  <meta property="og:description" content="Crée ton ambiance musicale personnalisée grâce à l’intelligence atmosphérique." />
+  <meta property="og:image" content="https://www.sonarmo.com/og-sonarmo.jpg" />
+  <meta property="og:url" content="https://www.sonarmo.com/" />
+  <meta property="og:type" content="website" />
+
+  {/* Twitter */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sonarmo | Ambiance musicale intelligente" />
+  <meta name="twitter:description" content="Crée ton ambiance musicale personnalisée grâce à l’intelligence atmosphérique." />
+  <meta name="twitter:image" content="https://www.sonarmo.com/og-sonarmo.jpg" />
+
       </Head>
 
       <main className="bg-black text-white overflow-x-hidden">
@@ -80,11 +94,11 @@ export default function Home() {
   />
 </div>
           
-          <h2 className="text-5xl font-semibold mb-4">
+          <h1 className="text-5xl font-semibold mb-4">
             <span className="text-white">Intelligence </span>
             <span className="text-[#FCE2BA]">Atmosphérique</span>
             
-          </h2>
+          </h1>
           
           <p className="mx-auto text-gray-400 text-lg mb-12">
             Créez une ambiance musicale sur mesure, que vous soyez un particulier ou un professionnel.
