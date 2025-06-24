@@ -65,9 +65,9 @@ export default function AchatCredits() {
             className="bg-[#2b2b2b] p-6 rounded-xl text-center shadow-xl border border-pink-500"
           >
             <h2 className="text-xl font-semibold mb-2">Unlimited subscription</h2>
-            <p className="text-gray-400 mb-4">10€ / month</p>
+            <p className="text-gray-400 mb-4">9,90€ / month</p>
             <button
-              onClick={() => handleCheckout("price_1RYvjLDnUAWbLtYHuVqkc3vk")}
+              onClick={() => handleCheckout("price_1RdZHcDnUAWbLtYHPsrMOcE2")}
               className="bg-pink-600 px-4 py-2 rounded-lg text-white font-medium hover:bg-pink-700"
             >
               Subscribe
