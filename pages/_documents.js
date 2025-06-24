@@ -12,7 +12,7 @@ export default function Document() {
          {/* ✅ Plausible Analytics avec options */}
         <script
           defer
-          data-domain="sonarmo.com"
+          data-domain="www.sonarmo.com"
           src="https://plausible.io/js/script.outbound-links.js"
         ></script>
         <script
