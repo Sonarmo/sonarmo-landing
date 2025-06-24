@@ -155,7 +155,7 @@ export default function Register() {
       {/* Logo French Tech (centré sur mobile) */}
       <div className="mt-4 sm:mt-0 sm:ml-3 flex justify-center sm:justify-start">
         <Image
-          src="/logo-french-tech-est-blanc.png"
+          src="/icons/Logo_FT.png"
           alt="Logo French Tech Est"
           width={80}
           height={80}
