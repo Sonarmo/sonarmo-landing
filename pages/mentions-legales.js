@@ -102,8 +102,10 @@ export default function MentionsLegales() {
 
       <section>
         <h2 className="text-2xl font-semibold mb-4">5. Données personnelles</h2>
-        <p>Pour toute information relative à la collecte et au traitement de vos données, veuillez consulter notre <a href="/cgu" className="text-blue-400 underline">Politique de confidentialité</a>.</p>
-      </section>
+<p>
+  Pour toute information relative à la collecte et au traitement de vos données, veuillez consulter notre{" "}
+  <Link href="/cgu" className="text-blue-400 underline">Politique de confidentialité</Link>.
+</p>      </section>
     </div>
   );
 }
