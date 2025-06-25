@@ -234,7 +234,7 @@ export default function Generateur() {
         Click <strong>“Generate”</strong> and enjoy your custom playlist within seconds.
       </p>
     </div>
-    <Link href="/achat-credit-en" className="block mt-6">
+    <Link href="/achat-credits-en" className="block mt-6">
   <div className="bg-[#292929] border border-gray-700 rounded-lg px-4 py-3 text-sm text-white text-center hover:border-pink-500 hover:text-pink-300 transition duration-200">
     Enjoy <strong>2 free playlist </strong>generations to get started!
   </div>

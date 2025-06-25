@@ -235,7 +235,7 @@ export default function Generateur() {
   </p>
 </div>
 
-<Link href="/achat-credit-es" className="block mt-6">
+<Link href="/achat-credits-es" className="block mt-6">
   <div className="bg-[#292929] border border-gray-700 rounded-lg px-4 py-3 text-sm text-white text-center hover:border-pink-500 hover:text-pink-300 transition duration-200">
     ¡Disfruta de <strong>2 generaciones de playlists gratuitas</strong> para comenzar!
   </div>
