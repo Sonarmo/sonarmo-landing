@@ -23,10 +23,12 @@ export default function AchatCreditsES() {
     <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Encabezado Sonarmo */}
       <header className="flex justify-between items-center px-6 py-4 w-full">
-        <div className="flex items-center gap-2">
-          <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-          <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-        </div>
+        <Link href="/index-es" passHref>
+  <a className="flex items-center gap-2">
+    <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+    <span className="text-white text-lg font-semibold italic">Sonarmo</span>
+  </a>
+</Link>
         <nav className="hidden md:flex gap-6 text-sm items-center">
           <Link href="/generateur-es" className="hover:text-gray-300">GENERADOR DE PLAYLIST</Link>
           <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
