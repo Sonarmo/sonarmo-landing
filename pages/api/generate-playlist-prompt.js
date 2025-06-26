@@ -108,28 +108,19 @@ export default async function handler(req, res) {
       es: `Eres un experto en curaduría musical. Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción de Spotify con 20 canciones coherente, original e inmersiva. Prompt del usuario: """${prompt}""" Devuelve una lista en formato JSON estricto: [ { "artist": "Nombre del artista", "name": "Título de la canción" }, ... ] Solo la lista JSON, nada más.`
     }[lang];
 
-    const completions = await Promise.all([
-      openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: basePrompt }],
-        temperature: 0.7,
-      }),
-      openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: basePrompt }],
-        temperature: 0.7,
-      }),
-    ]);
+    const completion = await openai.chat.completions.create({
+  model: "gpt-3.5-turbo",
+  messages: [{ role: "user", content: basePrompt }],
+  temperature: 0.7,
+});
 
-    const [raw1, raw2] = completions.map(
-      (comp) => comp?.choices?.[0]?.message?.content?.trim() || ""
-    );
+const raw = completion?.choices?.[0]?.message?.content?.trim() || "";
 
-    if (!isValidJsonList(raw1) || !isValidJsonList(raw2)) {
-      return res.status(500).json({ error: "Réponse GPT non valide." });
-    }
+if (!isValidJsonList(raw)) {
+  return res.status(500).json({ error: "Réponse GPT non valide." });
+}
 
-    const tracks = [...JSON.parse(raw1), ...JSON.parse(raw2)];
+const tracks = JSON.parse(raw);
 
     const resolvedUris = await Promise.all(
       tracks.map(async (t) => {
