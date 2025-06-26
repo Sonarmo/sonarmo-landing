@@ -228,11 +228,18 @@ if (uris.length === 0) {
   return res.status(400).json({ error: "Aucun morceau trouvé" });
 }
 
-    // 👤 Récupération de l'utilisateur Spotify
-    const userRes = await fetch("https://api.spotify.com/v1/me", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const user = await userRes.json();
+   // 👤 Récupération de l'utilisateur Spotify
+const userRes = await fetch("https://api.spotify.com/v1/me", {
+  headers: { Authorization: `Bearer ${accessToken}` },
+});
+
+if (!userRes.ok) {
+  const errorText = await userRes.text();
+  console.error("❌ Erreur lors de la récupération du profil Spotify :", errorText);
+  return res.status(401).json({ error: "Token Spotify invalide ou expiré." });
+}
+
+const user = await userRes.json();
 
     const rawTitle = prompt.length > 40 ? prompt.slice(0, 40) + "…" : prompt;
     const cleanTitle = rawTitle.replace(/[^\w\sÀ-ÿ!?.,:;'-]/g, "").trim();
