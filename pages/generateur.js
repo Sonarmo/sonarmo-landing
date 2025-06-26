@@ -8,6 +8,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
 import { app } from '/lib/firebase'
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
+import Cookies from "js-cookie";
 
 export default function Generateur() {
   const [prompt, setPrompt] = useState("");
@@ -22,33 +23,36 @@ export default function Generateur() {
   const [credits, setCredits] = useState(null);
 
   useEffect(() => {
-    const accessToken = router.query.access_token;
-    if (accessToken) {
-      setAccessToken(accessToken);
-      setIsAuthenticated(true);
+  const urlToken = router.query.access_token;
+  const cookieToken = Cookies.get("spotifyAccessToken");
+  const token = urlToken || cookieToken;
 
-      fetch("https://api.spotify.com/v1/me", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+  if (token) {
+    setAccessToken(token);
+    setIsAuthenticated(true);
+
+    fetch("https://api.spotify.com/v1/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.email) {
+          setSpotifyProfile({
+            name: data.display_name,
+            email: data.email,
+            image: data.images?.[0]?.url || null,
+          });
+        }
       })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data && data.email) {
-            setSpotifyProfile({
-              name: data.display_name,
-              email: data.email,
-              image: data.images?.[0]?.url || null,
-            });
-          }
-        })
-        .catch((err) => {
-          console.error("Erreur récupération profil Spotify :", err);
-        });
-    } else {
-      setIsAuthenticated(false);
-    }
-  }, [router.query.access_token]);
+      .catch((err) => {
+        console.error("Erreur récupération profil Spotify :", err);
+      });
+  } else {
+    setIsAuthenticated(false);
+  }
+}, [router.query.access_token]);
 
   useEffect(() => {
     const auth = getAuth(app);
