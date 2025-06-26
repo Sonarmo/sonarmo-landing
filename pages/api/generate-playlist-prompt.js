@@ -35,24 +35,29 @@ export default async function handler(req, res) {
     let userDoc = null;
 
     if (idToken) {
-      const decodedToken = await authAdmin.verifyIdToken(idToken);
-      uid = decodedToken.uid;
-      userRef = db.collection("users").doc(uid);
-      userDoc = await userRef.get();
+  const decodedToken = await authAdmin.verifyIdToken(idToken);
+  uid = decodedToken.uid;
+  userRef = db.collection("users").doc(uid);
+  userDoc = await userRef.get();
 
-      const userData = userDoc.exists ? userDoc.data() : {};
-      const freePromptUsed = userData.freePromptUsed ?? false;
-      const credits = userData.credits ?? 0;
+  const userData = userDoc.exists ? userDoc.data() : {};
+  const freePromptUsed = userData.freePromptUsed ?? false;
+  const credits = userData.credits ?? 0;
+  const abonnement = userData.abonnement ?? false;
 
-      if (freePromptUsed) {
-        if (credits <= 0) {
-          return res.status(403).json({ error: "Plus de crédits disponibles." });
-        }
-        await userRef.update({ credits: credits - 1 });
-      } else {
-        await userRef.set({ freePromptUsed: true }, { merge: true });
+  if (!abonnement) {
+    if (freePromptUsed) {
+      if (credits <= 0) {
+        return res.status(403).json({ error: "Plus de crédits disponibles." });
       }
+      await userRef.update({ credits: credits - 1 });
+    } else {
+      await userRef.set({ freePromptUsed: true }, { merge: true });
     }
+  } else {
+    console.log("✅ Utilisateur avec abonnement actif, accès illimité autorisé.");
+  }
+}
 
     // 🎯 Prompts adaptés pour 20 morceaux × 2
     const basePrompt = {
@@ -136,22 +141,49 @@ Solo responde con la lista JSON, nada más.
 
     const tracks = [...tracks1, ...tracks2];
 
-    // 🔍 Recherche des URIs Spotify
-    const resolvedUris = await Promise.all(
-      tracks.map(async (t) => {
-        const q = encodeURIComponent(`${t.name} ${t.artist}`);
-        const resSearch = await fetch(`https://api.spotify.com/v1/search?q=${q}&type=track&limit=1`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-        const data = await resSearch.json();
-        return data.tracks?.items?.[0]?.uri || null;
-      })
-    );
+    // 🔍 Recherche intelligente des URIs Spotify avec fallback
+const resolvedUris = await Promise.all(
+  tracks.map(async (t) => {
+    const queries = [
+      `${t.name} ${t.artist}`,
+      `${t.name}`,
+      `${t.artist}`,
+      `${t.artist} ${t.name.split(" ")[0]}`,
+    ];
 
-    const uris = resolvedUris.filter(Boolean);
-    if (uris.length === 0) {
-      return res.status(400).json({ error: "Aucun morceau trouvé" });
+    let uri = null;
+
+    for (const rawQuery of queries) {
+      const q = encodeURIComponent(rawQuery);
+      const resSearch = await fetch(`https://api.spotify.com/v1/search?q=${q}&type=track&limit=1`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const data = await resSearch.json();
+      uri = data.tracks?.items?.[0]?.uri || null;
+
+      if (uri) {
+        if (rawQuery !== `${t.name} ${t.artist}`) {
+          console.log(`🔁 Fallback réussi : ${rawQuery} → ${uri}`);
+        }
+        break;
+      }
     }
+
+    if (!uri) {
+      console.warn(`❌ Non trouvé sur Spotify : ${t.artist} - ${t.name}`);
+    }
+
+    return uri;
+  })
+);
+
+const uris = resolvedUris.filter(Boolean);
+
+console.log(`🎯 ${uris.length}/${tracks.length} morceaux trouvés sur Spotify`);
+
+if (uris.length === 0) {
+  return res.status(400).json({ error: "Aucun morceau trouvé" });
+}
 
     // 👤 Récupération de l'utilisateur Spotify
     const userRes = await fetch("https://api.spotify.com/v1/me", {
