@@ -102,11 +102,49 @@ export default async function handler(req, res) {
       }
     }
 
-    const basePrompt = {
-      fr: `Tu es un expert en curation musicale. En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist Spotify de 25 morceaux cohérente, originale et immersive. Prompt utilisateur : """${prompt}""" Réponds avec une liste JSON stricte, format : [ { "artist": "Nom artiste", "name": "Titre du morceau" }, ... ] Aucun commentaire. Aucun texte.`,
-      en: `You are a music curation expert. Based only on the user's description below, generate a coherent, original, and immersive playlist of 25 Spotify tracks. User prompt: """${prompt}""" Respond with a strict JSON list, format: [ { "artist": "Artist Name", "name": "Track Title" }, ... ] No explanation. No comments. Just the JSON list.`,
-      es: `Eres un experto en curaduría musical. Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción de Spotify con 25 canciones coherente, original e inmersiva. Prompt del usuario: """${prompt}""" Devuelve una lista en formato JSON estricto: [ { "artist": "Nombre del artista", "name": "Título de la canción" }, ... ] Solo la lista JSON, nada más.`
-    }[lang];
+   const basePrompt = {
+  fr: `Tu es un expert en curation musicale. En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist Spotify de 20 morceaux cohérente, originale et immersive.
+
+Inclue environ 10 morceaux peu connus, rares ou sous-estimés, pour faire découvrir des artistes ou titres qui sortent de l'ordinaire. Le reste peut être plus populaire, mais toujours en lien avec l'ambiance décrite.
+
+Prompt utilisateur : """${prompt}"""
+
+Réponds uniquement avec une liste JSON stricte, au format :
+[
+  { "artist": "Nom artiste", "name": "Titre du morceau" },
+  ...
+]
+
+Aucun commentaire. Aucun texte. Juste la liste JSON.`,
+  
+  en: `You are a music curation expert. Based only on the user's description below, generate a coherent, original, and immersive Spotify playlist of 20 tracks.
+
+Include around 10 lesser-known, underrated, or rare tracks to help discover hidden gems. The rest can be more popular but must still match the described mood.
+
+User prompt: """${prompt}"""
+
+Reply with a strict JSON list only, formatted as:
+[
+  { "artist": "Artist Name", "name": "Track Title" },
+  ...
+]
+
+No explanation. No comments. Just the JSON list.`,
+
+  es: `Eres un experto en curaduría musical. Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción de Spotify con 20 canciones coherente, original e inmersiva.
+
+Incluye alrededor de 10 canciones poco conocidas, raras o infravaloradas para descubrir nuevas joyas. El resto puede ser más popular, pero siempre en línea con la atmósfera descrita.
+
+Prompt del usuario: """${prompt}"""
+
+Devuelve únicamente una lista estricta en formato JSON:
+[
+  { "artist": "Nombre del artista", "name": "Título de la canción" },
+  ...
+]
+
+Nada de explicaciones ni comentarios. Solo la lista JSON.`
+}[lang];
 
     const completion = await openai.chat.completions.create({
   model: "gpt-3.5-turbo",
