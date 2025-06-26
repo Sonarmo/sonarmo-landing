@@ -21,6 +21,7 @@ export default function Generateur() {
   const [promptHistory, setPromptHistory] = useState([]);
   const router = useRouter();
   const [credits, setCredits] = useState(null);
+  const [spotifyError, setSpotifyError] = useState(null);
 
   useEffect(() => {
   const urlToken = router.query.access_token;
@@ -36,24 +37,34 @@ export default function Generateur() {
       Cookies.set("spotifyAccessToken", urlToken, { expires: 1 }); // 1 jour
     }
 
-    fetch("https://api.spotify.com/v1/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.email) {
-          setSpotifyProfile({
-            name: data.display_name,
-            email: data.email,
-            image: data.images?.[0]?.url || null,
-          });
-        }
-      })
-      .catch((err) => {
-        console.error("Erreur récupération profil Spotify :", err);
+  fetch("https://api.spotify.com/v1/me", {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+})
+  .then(async (res) => {
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Erreur Spotify : ${text}`);
+    }
+    return res.json();
+  })
+  .then((data) => {
+    if (data && data.email) {
+      setSpotifyProfile({
+        name: data.display_name,
+        email: data.email,
+        image: data.images?.[0]?.url || null,
       });
+      setSpotifyError(null); // reset si tout va bien
+    }
+  })
+  .catch((err) => {
+    console.error("❌ Erreur récupération profil Spotify :", err.message);
+    setIsAuthenticated(false);
+    setSpotifyProfile(null);
+    setSpotifyError("Erreur de connexion à Spotify. Veuillez vous reconnecter.");
+  });
   } else {
     setIsAuthenticated(false);
   }
