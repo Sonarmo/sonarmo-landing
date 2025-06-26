@@ -31,6 +31,11 @@ export default function Generateur() {
     setAccessToken(token);
     setIsAuthenticated(true);
 
+    // ✅ Ajout ici : on le garde pour les reload
+    if (urlToken) {
+      Cookies.set("spotifyAccessToken", urlToken, { expires: 1 }); // 1 jour
+    }
+
     fetch("https://api.spotify.com/v1/me", {
       headers: {
         Authorization: `Bearer ${token}`,
