@@ -268,14 +268,15 @@ export default function Generateur() {
   </div>
 </div>
 
-  {!isAuthenticated && (
-    <a
-  href="/api/login-user"
-  className="mb-10 bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl text-white font-semibold block text-center"
->
-  Se connecter à Spotify
-</a>
-  )}
+ {!isAuthenticated && (
+  // eslint-disable-next-line @next/next/no-html-link-for-pages
+  <a
+    href="/api/login-user"
+    className="mb-10 bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl text-white font-semibold block text-center"
+  >
+    Se connecter à Spotify
+  </a>
+)}
 
   {spotifyProfile && (
     <div className="mb-8 text-sm text-gray-300 bg-[#1c1c1c] p-4 rounded-xl text-center max-w-md">
