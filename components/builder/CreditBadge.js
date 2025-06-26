@@ -1,3 +1,8 @@
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { doc, onSnapshot } from "firebase/firestore";
+import { auth, db } from "/lib/firebase";
+
 export default function CreditBadge() {
   const [userData, setUserData] = useState(null);
   const router = useRouter();
