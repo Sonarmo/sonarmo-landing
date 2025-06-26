@@ -148,24 +148,26 @@ try {
   return res.status(500).json({ error: "Erreur de génération (2)." });
 }
 
-    const raw1 = completion1.choices[0].message.content.trim();
-    const raw2 = completion2.choices[0].message.content.trim();
+const raw1 = completion1?.choices?.[0]?.message?.content?.trim() || "";
+const raw2 = completion2?.choices?.[0]?.message?.content?.trim() || "";
 
-    if (!raw1.startsWith("[") || !raw2.startsWith("[")) {
-      console.error("❌ Réponse GPT invalide :", { raw1, raw2 });
-      return res.status(500).json({ error: "Réponse GPT non valide. Veuillez reformuler votre demande." });
-    }
+if (!isValidJsonList(raw1) || !isValidJsonList(raw2)) {
+  console.error("❌ Réponse GPT invalide :", { raw1, raw2 });
+  return res.status(500).json({
+    error: "Réponse GPT non valide. Veuillez reformuler votre demande ou réessayer plus tard.",
+  });
+}
 
-    let tracks1, tracks2;
-    try {
-      tracks1 = JSON.parse(raw1);
-      tracks2 = JSON.parse(raw2);
-    } catch (err) {
-      console.error("❌ Parsing JSON GPT", err);
-      return res.status(500).json({ error: "Erreur GPT, JSON invalide" });
-    }
+let tracks1 = [], tracks2 = [];
+try {
+  tracks1 = JSON.parse(raw1);
+  tracks2 = JSON.parse(raw2);
+} catch (err) {
+  console.error("❌ Parsing JSON GPT", err);
+  return res.status(500).json({ error: "Erreur GPT, JSON invalide" });
+}
 
-    const tracks = [...tracks1, ...tracks2];
+const tracks = [...tracks1, ...tracks2];
 
     // 🔍 Recherche intelligente des URIs Spotify avec fallback
 const resolvedUris = await Promise.all(
