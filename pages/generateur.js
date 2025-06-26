@@ -18,6 +18,7 @@ export default function Generateur() {
   const [promptHistory, setPromptHistory] = useState([]);
   const router = useRouter();
   const [credits, setCredits] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const auth = getAuth(app);
