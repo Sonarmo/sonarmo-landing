@@ -269,12 +269,12 @@ export default function Generateur() {
 </div>
 
   {!isAuthenticated && (
-    <Link
-      href="/api/login-user"
-      className="mb-10 bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl text-white font-semibold"
-    >
-      Se connecter à Spotify
-    </Link>
+    <a
+  href="/api/login-user"
+  className="mb-10 bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl text-white font-semibold block text-center"
+>
+  Se connecter à Spotify
+</a>
   )}
 
   {spotifyProfile && (
