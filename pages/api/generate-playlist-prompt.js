@@ -1,4 +1,3 @@
-// pages/api/generate-playlist-prompt.js
 import OpenAI from "openai";
 import { db, authAdmin } from "/lib/firebaseAdmin";
 import cookie from "cookie";
@@ -55,11 +54,11 @@ export default async function handler(req, res) {
       }
     }
 
-    // 🎯 Prompt multilingue
-    const systemPrompt = {
+    // 🎯 Prompts adaptés pour 20 morceaux × 2
+    const basePrompt = {
       fr: `
 Tu es un expert en curation musicale.
-En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist Spotify de 30 morceaux cohérente, originale et immersive.
+En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist Spotify de 20 morceaux cohérente, originale et immersive.
 
 Ta sélection doit inclure un mélange équilibré de titres populaires et de morceaux moins connus, rares ou émergents, afin de proposer une écoute à la fois engageante et surprenante. Priorise la cohérence de l'ambiance tout en favorisant la découverte musicale.
 
@@ -73,7 +72,7 @@ Réponds avec une liste JSON stricte, format :
 Aucun commentaire. Aucun texte. Seulement la liste JSON.`,
       en: `
 You are a music curation expert.
-Based only on the user's description below, generate a coherent, original, and immersive playlist of 30 Spotify tracks.
+Based only on the user's description below, generate a coherent, original, and immersive playlist of 20 Spotify tracks.
 
 Your selection should include a balanced mix of popular songs and lesser-known, rare, or emerging tracks to offer a fresh and surprising listening experience. Prioritize the overall vibe and atmosphere while encouraging musical discovery.
 
@@ -87,7 +86,7 @@ Respond with a strict JSON list, format:
 No explanation. No comments. Just the JSON list.`,
       es: `
 Eres un experto en curaduría musical.
-Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción de Spotify con 30 canciones coherente, original e inmersiva.
+Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción de Spotify con 20 canciones coherente, original e inmersiva.
 
 Tu selección debe incluir una mezcla equilibrada entre canciones populares y temas menos conocidos, raros o emergentes, con el fin de ofrecer una experiencia auditiva fresca y sorprendente. Prioriza la coherencia de la atmósfera y el estado de ánimo, fomentando el descubrimiento musical.
 
@@ -102,29 +101,42 @@ Tu única tarea es devolver una lista en formato JSON estricto como este:
 ⚠️ No agregues ningún comentario, explicación, texto introductorio o final.
 Solo responde con la lista JSON, nada más.
 `
-    }[lang] || prompt;
+    }[lang];
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: systemPrompt }],
-      temperature: 0.7,
-    });
+    // 🚀 Génération GPT en 2 appels de 20
+    const [completion1, completion2] = await Promise.all([
+      openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: basePrompt }],
+        temperature: 0.7,
+      }),
+      openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: basePrompt }],
+        temperature: 0.7,
+      }),
+    ]);
 
-    const raw = completion.choices[0].message.content.trim();
+    const raw1 = completion1.choices[0].message.content.trim();
+    const raw2 = completion2.choices[0].message.content.trim();
 
-if (!raw.startsWith("[")) {
-  console.error("❌ Réponse GPT invalide :", raw);
-  return res.status(500).json({ error: "Réponse GPT non valide. Veuillez reformuler votre demande." });
-}
+    if (!raw1.startsWith("[") || !raw2.startsWith("[")) {
+      console.error("❌ Réponse GPT invalide :", { raw1, raw2 });
+      return res.status(500).json({ error: "Réponse GPT non valide. Veuillez reformuler votre demande." });
+    }
 
-let tracks;
-try {
-  tracks = JSON.parse(raw);
-} catch (err) {
-  console.error("❌ Parsing JSON GPT", err);
-  return res.status(500).json({ error: "Erreur GPT, JSON invalide" });
-}
+    let tracks1, tracks2;
+    try {
+      tracks1 = JSON.parse(raw1);
+      tracks2 = JSON.parse(raw2);
+    } catch (err) {
+      console.error("❌ Parsing JSON GPT", err);
+      return res.status(500).json({ error: "Erreur GPT, JSON invalide" });
+    }
 
+    const tracks = [...tracks1, ...tracks2];
+
+    // 🔍 Recherche des URIs Spotify
     const resolvedUris = await Promise.all(
       tracks.map(async (t) => {
         const q = encodeURIComponent(`${t.name} ${t.artist}`);
@@ -141,6 +153,7 @@ try {
       return res.status(400).json({ error: "Aucun morceau trouvé" });
     }
 
+    // 👤 Récupération de l'utilisateur Spotify
     const userRes = await fetch("https://api.spotify.com/v1/me", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -150,6 +163,7 @@ try {
     const cleanTitle = rawTitle.replace(/[^\w\sÀ-ÿ!?.,:;'-]/g, "").trim();
     const playlistName = `${cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1)}`;
 
+    // 📝 Création de la playlist
     const playlistRes = await fetch(`https://api.spotify.com/v1/users/${user.id}/playlists`, {
       method: "POST",
       headers: {
