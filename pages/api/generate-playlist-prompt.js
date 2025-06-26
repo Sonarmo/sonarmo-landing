@@ -125,19 +125,28 @@ Solo responde con la lista JSON, nada más.
 `
     }[lang];
 
-    // 🚀 Génération GPT en 2 appels de 20
-    const [completion1, completion2] = await Promise.all([
-      openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: basePrompt }],
-        temperature: 0.7,
-      }),
-      openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: basePrompt }],
-        temperature: 0.7,
-      }),
-    ]);
+    let completion1, completion2;
+try {
+  completion1 = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: basePrompt }],
+    temperature: 0.7,
+  });
+} catch (error) {
+  console.error("❌ Erreur GPT (appel 1) :", error);
+  return res.status(500).json({ error: "Erreur de génération (1)." });
+}
+
+try {
+  completion2 = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: basePrompt }],
+    temperature: 0.7,
+  });
+} catch (error) {
+  console.error("❌ Erreur GPT (appel 2) :", error);
+  return res.status(500).json({ error: "Erreur de génération (2)." });
+}
 
     const raw1 = completion1.choices[0].message.content.trim();
     const raw2 = completion2.choices[0].message.content.trim();
