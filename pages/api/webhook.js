@@ -19,10 +19,10 @@ export const config = {
 };
 
 const PRICE_CREDIT_MAPPING = {
-  "price_1RYvdbDnUAWbLtYHm8e4eHjn": 1,
-  "price_1RYvg0DnUAWbLtYHytj446r3": 5,
-  "price_1RYvgxDnUAWbLtYHZbHwwP9K": 10,
-  "price_1RYvjLDnUAWbLtYHuVqkc3vk": "abonnement",
+  "price_1RePM2DnUAWbLtYHPSnpISD6": 2,
+  "price_1RePMeDnUAWbLtYHFqZxqpQg": 5,
+  "price_1RePNDDnUAWbLtYHzWjoiiGD": 10,
+  "price_1RePOBDnUAWbLtYHbk6qjT2c": "abonnement",
 };
 
 export default async function handler(req, res) {

@@ -4,10 +4,10 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const VALID_PRICE_IDS = {
-  one: 'price_1RYvdbDnUAWbLtYHm8e4eHjn',
-  five: 'price_1RYvg0DnUAWbLtYHytj446r3',
-  ten: 'price_1RYvgxDnUAWbLtYHZbHwwP9K',
-  subscription: 'price_1RdZHcDnUAWbLtYHPsrMOcE2',
+  one: 'price_1RePM2DnUAWbLtYHPSnpISD6',
+  five: 'price_1RePMeDnUAWbLtYHFqZxqpQg',
+  ten: 'price_1RePNDDnUAWbLtYHzWjoiiGD',
+  subscription: 'price_1RePOBDnUAWbLtYHbk6qjT2c',
 };
 
 export default async function handler(req, res) {

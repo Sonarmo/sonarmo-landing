@@ -44,7 +44,7 @@ export default function AchatCredits() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {[{ credits: 1, priceId: "price_1RYvdbDnUAWbLtYHm8e4eHjn", price: "0,99€" }, { credits: 5, priceId: "price_1RYvg0DnUAWbLtYHytj446r3", price: "4,49€" }, { credits: 10, priceId: "price_1RYvgxDnUAWbLtYHZbHwwP9K", price: "8,49€" }].map((offer, i) => (
+          {[{ credits: 2, priceId: "price_1RePM2DnUAWbLtYHPSnpISD6", price: "0,99€" }, { credits: 5, priceId: "price_1RePMeDnUAWbLtYHFqZxqpQg", price: "1,99€" }, { credits: 10, priceId: "price_1RePNDDnUAWbLtYHzWjoiiGD", price: "3,99€" }].map((offer, i) => (
             <motion.div
               key={i}
               whileHover={{ scale: 1.05 }}
@@ -67,9 +67,9 @@ export default function AchatCredits() {
             className="bg-[#2b2b2b] p-6 rounded-xl text-center shadow-xl border border-pink-500"
           >
             <h2 className="text-xl font-semibold mb-2">Abonnement Illimité</h2>
-            <p className="text-gray-400 mb-4">9,90€ / mois</p>
+            <p className="text-gray-400 mb-4">4,90€ / mois</p>
             <button
-              onClick={() => handleCheckout("price_1RdZHcDnUAWbLtYHPsrMOcE2")}
+              onClick={() => handleCheckout("price_1RePOBDnUAWbLtYHbk6qjT2c")}
               className="bg-pink-600 px-4 py-2 rounded-lg text-white font-medium hover:bg-pink-700"
             >
               S&apos;abonner
