@@ -67,9 +67,13 @@ export default function Generateur() {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const data = docSnap.data();
-          setCredits(data.credits ?? 0);
-        }
+  const data = docSnap.data();
+  setCredits(data.credits ?? 0);
+  if (data.abonnementActif === true) {
+    console.log("✅ Abonnement actif détecté");
+    setCredits("illimité"); // Pour affichage visuel
+  }
+}
 
         const promptRef = collection(db, "promptHistory");
         const q = query(promptRef, where("uid", "==", user.uid), orderBy("createdAt", "desc"), limit(5));

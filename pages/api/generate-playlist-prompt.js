@@ -48,7 +48,7 @@ export default async function handler(req, res) {
       userData = userDoc.data();
     }
 
-    const abonnement = userData.abonnement ?? false;
+    const abonnement = userData.abonnementActif === true;
     const credits = userData.credits ?? 0;
     const freePromptUsed = userData.freePromptUsed ?? false;
 
