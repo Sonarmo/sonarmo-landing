@@ -1,3 +1,5 @@
+// 🎧 PAGE MODIFIÉE : Playlist créée sur le compte Spotify de Sonarmo, plus besoin de connexion utilisateur
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -6,69 +8,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import CreditBadge from "/components/builder/CreditBadge";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
-import { app } from '/lib/firebase'
+import { app } from '/lib/firebase';
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
-import Cookies from "js-cookie";
 
 export default function Generateur() {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [playlistUrl, setPlaylistUrl] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
-  const [spotifyProfile, setSpotifyProfile] = useState(null);
   const [promptHistory, setPromptHistory] = useState([]);
   const router = useRouter();
   const [credits, setCredits] = useState(null);
-  const [spotifyError, setSpotifyError] = useState(null);
-
-  useEffect(() => {
-  const urlToken = router.query.access_token;
-  const cookieToken = Cookies.get("spotifyAccessToken");
-  const token = urlToken || cookieToken;
-
-  if (token) {
-    setAccessToken(token);
-    setIsAuthenticated(true);
-
-    // ✅ Ajout ici : on le garde pour les reload
-    if (urlToken) {
-      Cookies.set("spotifyAccessToken", urlToken, { expires: 1 }); // 1 jour
-    }
-
-  fetch("https://api.spotify.com/v1/me", {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-})
-  .then(async (res) => {
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`Erreur Spotify : ${text}`);
-    }
-    return res.json();
-  })
-  .then((data) => {
-    if (data && data.email) {
-      setSpotifyProfile({
-        name: data.display_name,
-        email: data.email,
-        image: data.images?.[0]?.url || null,
-      });
-      setSpotifyError(null); // reset si tout va bien
-    }
-  })
-  .catch((err) => {
-    console.error("❌ Erreur récupération profil Spotify :", err.message);
-    setIsAuthenticated(false);
-    setSpotifyProfile(null);
-    setSpotifyError("Erreur de connexion à Spotify. Veuillez vous reconnecter.");
-  });
-  } else {
-    setIsAuthenticated(false);
-  }
-}, [router.query.access_token]);
 
   useEffect(() => {
     const auth = getAuth(app);
@@ -87,13 +36,13 @@ export default function Generateur() {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-  const data = docSnap.data();
-  setCredits(data.credits ?? 0);
-  if (data.abonnementActif === true) {
-    console.log("✅ Abonnement actif détecté");
-    setCredits("illimité"); // Pour affichage visuel
-  }
-}
+          const data = docSnap.data();
+          setCredits(data.credits ?? 0);
+          if (data.abonnementActif === true) {
+            console.log("✅ Abonnement actif détecté");
+            setCredits("illimité");
+          }
+        }
 
         const promptRef = collection(db, "promptHistory");
         const q = query(promptRef, where("uid", "==", user.uid), orderBy("createdAt", "desc"), limit(5));
@@ -106,7 +55,6 @@ export default function Generateur() {
           };
         });
         setPromptHistory(history);
-
       } else {
         router.push("/login");
       }
@@ -115,32 +63,9 @@ export default function Generateur() {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const refreshToken = async () => {
-      try {
-        const res = await fetch("/api/refresh-spotify-token");
-        if (res.ok) {
-          const data = await res.json();
-          setAccessToken(data.access_token);
-          console.log("🔄 Token Spotify rafraîchi automatiquement");
-        } else {
-          console.warn("⚠️ Échec du rafraîchissement du token Spotify");
-        }
-      } catch (err) {
-        console.error("❌ Erreur lors du rafraîchissement du token :", err);
-      }
-    };
-
-    if (isAuthenticated) {
-      refreshToken();
-      const interval = setInterval(refreshToken, 55 * 60 * 1000);
-      return () => clearInterval(interval);
-    }
-  }, [isAuthenticated]);
-
   const handleGenerate = async () => {
-    if (!isAuthenticated) {
-      router.push("/api/login-user");
+    if (!prompt || prompt.length < 10) {
+      alert("Merci d'écrire un prompt plus complet avant de générer.");
       return;
     }
 
@@ -148,8 +73,7 @@ export default function Generateur() {
     const res = await fetch("/api/generate-playlist-prompt", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {})
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ prompt })
     });
@@ -164,15 +88,8 @@ export default function Generateur() {
     setIsLoading(false);
   };
 
-  const handleSpotifyDisconnect = () => {
-    setAccessToken(null);
-    setIsAuthenticated(false);
-    setSpotifyProfile(null);
-    router.replace("/generateur");
-  };
-
   return (
-<div className="min-h-screen bg-black text-white flex flex-col items-stretch p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-black text-white flex flex-col items-stretch p-6 relative overflow-hidden">
         <div className="absolute inset-0 z-0">
         <div className="absolute w-[400px] h-[400px] bg-[#FF00FF] rounded-full blur-[100px] top-[14%] right-1/2 opacity-50" />
         <div className="absolute w-[600px] h-[600px] bg-[#FF9400] rounded-full blur-[100px] top-[45%] right-[25%] opacity-10" />
@@ -232,95 +149,57 @@ export default function Generateur() {
       </AnimatePresence>
 
       <main className="flex flex-col items-center justify-start flex-grow w-full px-4 md:px-0 pt-20 pb-24 relative z-10">
-  {credits !== null && <CreditBadge credits={credits} />}
+        {credits !== null && <CreditBadge credits={credits} />}
 
-  <h1 className="text-4xl font-bold mb-15 text-center text-white">
-  Crée ta playlist avec Sonarmo IA
-</h1>
+        <h1 className="text-4xl font-bold mb-15 text-center text-white">
+          Crée ta playlist avec Sonarmo IA
+        </h1>
 
-<div className="mb-9 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
-  <h2 className="text-white font-semibold mb-4 text-base">Comment ça marche</h2>
-  <div className="space-y-4">
-    <div className="flex items-start gap-4">
-      <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
-      <p className="text-white leading-relaxed">
-        Connecte ton compte <strong>Spotify</strong> pour que la playlist soit créée directement sur ton profil.
-      </p>
-    </div>
-    <div className="flex items-start gap-4">
-      <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
-      <p className="text-white leading-relaxed">
-        Décris une ambiance (ex : <em>Jazz calme pour un dîner entre amis</em>).
-      </p>
-    </div>
-    <div className="flex items-start gap-4">
-      <span className="text-white text-xl font-bold w-6 flex-shrink-0">3.</span>
-      <p className="text-white leading-relaxed">
-        Clique sur <strong>“Générer”</strong> et découvre ta playlist personnalisée en quelques secondes.
-        
-    <Link href="/achat-credits" className="block mt-6">
-  <div className="bg-[#292929] border border-gray-700 rounded-lg px-4 py-3 text-sm text-white text-center hover:border-pink-500 hover:text-pink-300 transition duration-200">
-    Profite de <strong>2 générations de playlists offertes</strong> pour commencer !
-  </div>
-</Link>
-      </p>
-    </div>
-  </div>
-</div>
-
- {!isAuthenticated && (
-  // eslint-disable-next-line @next/next/no-html-link-for-pages
-  <a
-    href="/api/login-user"
-    className="mb-10 bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl text-white font-semibold block text-center"
-  >
-    Se connecter à Spotify
-  </a>
-)}
-
-  {spotifyProfile && (
-    <div className="mb-8 text-sm text-gray-300 bg-[#1c1c1c] p-4 rounded-xl text-center max-w-md">
-      Connecté avec <strong>{spotifyProfile.email}</strong><br />
-      {spotifyProfile.name && <span>Bienvenue, {spotifyProfile.name} !</span>}<br />
-      <button
-        onClick={handleSpotifyDisconnect}
-        className="mt-3 text-red-500 underline hover:text-red-300"
-      >
-        Se déconnecter de Spotify
-      </button>
-    </div>
-  )}
-
-  <div className="w-full max-w-xl">
-  <label htmlFor="prompt" className="text-white font-medium mb-2 block">
-    Décris ton ambiance
-  </label>
-
-  <textarea
-    id="prompt"
-    value={prompt}
-    onChange={(e) => setPrompt(e.target.value)}
-    placeholder="Ex : J’ai envie de danser, mais tranquille. Une vibe groovy et détendue."
-    className="w-full h-32 p-4 rounded-xl bg-[#1c1c1c] text-white border border-gray-700 mb-6 resize-none placeholder:text-gray-500"
-  />
-
-  {/* 🌟 Effet de survol lumineux sur le bouton */}
-  <div className="relative group">
-    <motion.button
-      onClick={handleGenerate}
-      disabled={isLoading || !prompt}
-      whileTap={{ scale: 0.97 }}
-      className="w-full relative z-10 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 overflow-hidden flex justify-center items-center"
-    >
-      {isLoading ? (
-        <div className="flex items-center gap-2">
-          <span className="loader ease-linear rounded-full border-4 border-t-4 border-white border-t-transparent h-5 w-5 animate-spin" />
-          <span>Génération en cours...</span>
+        <div className="mb-9 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
+          <h2 className="text-white font-semibold mb-4 text-base">Comment ça marche</h2>
+          <div className="space-y-4">
+            <div className="flex items-start gap-4">
+              <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
+              <p className="text-white leading-relaxed">
+                Décris une ambiance musicale (ex : <em>Jazz calme pour un dîner entre amis</em>).
+              </p>
+            </div>
+            <div className="flex items-start gap-4">
+              <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
+              <p className="text-white leading-relaxed">
+                Clique sur <strong>“Générer”</strong> et découvre ta playlist personnalisée en quelques secondes.
+              </p>
+            </div>
+          </div>
         </div>
-      ) : (
-        "Générer ma playlist"
-      )}
-    </motion.button>
+
+        <div className="w-full max-w-xl">
+          <label htmlFor="prompt" className="text-white font-medium mb-2 block">
+            Décris ton ambiance
+          </label>
+          <textarea
+            id="prompt"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Ex : J’ai envie de danser, mais tranquille. Une vibe groovy et détendue."
+            className="w-full h-32 p-4 rounded-xl bg-[#1c1c1c] text-white border border-gray-700 mb-6 resize-none placeholder:text-gray-500"
+          />
+          <div className="relative group">
+            <motion.button
+              onClick={handleGenerate}
+              disabled={isLoading || !prompt}
+              whileTap={{ scale: 0.97 }}
+              className="w-full relative z-10 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 overflow-hidden flex justify-center items-center"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <span className="loader ease-linear rounded-full border-4 border-t-4 border-white border-t-transparent h-5 w-5 animate-spin" />
+                  <span>Génération en cours...</span>
+                </div>
+              ) : (
+                "Générer ma playlist"
+              )}
+            </motion.button>
 
 
     {playlistUrl && (

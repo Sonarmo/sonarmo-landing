@@ -1,4 +1,6 @@
-// pages/api/login-user.js
+// 👉 Conservé pour usage futur avec Spotify OAuth (connexion directe utilisateur)
+// Actuellement inutilisé pour la génération classique de playlists
+// // pages/api/login-user.js
 
 export default function handler(req, res) {
     const scopes = process.env.NEXT_PUBLIC_SPOTIFY_SCOPES;

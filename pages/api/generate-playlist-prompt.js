@@ -12,6 +12,23 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+function isValidJsonList(str) {
+  try {
+    const data = JSON.parse(str);
+    return (
+      Array.isArray(data) &&
+      data.every(
+        (item) =>
+          typeof item === "object" &&
+          typeof item.artist === "string" &&
+          typeof item.name === "string"
+      )
+    );
+  } catch (e) {
+    return false;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Méthode non autorisée" });
@@ -42,7 +59,6 @@ export default async function handler(req, res) {
       userDoc = await userRef.get();
     }
 
-    // 🔐 Contrôle utilisateur
     let userData = {};
     if (userDoc?.exists) {
       userData = userDoc.data();
@@ -52,200 +68,92 @@ export default async function handler(req, res) {
     const credits = userData.credits ?? 0;
     const freePromptUsed = userData.freePromptUsed ?? false;
 
-    console.log("👤 Statut utilisateur :", {
-      abonnement,
-      credits,
-      freePromptUsed,
-    });
-
-    if (abonnement === true) {
-      console.log("✅ Utilisateur avec abonnement actif : accès illimité");
-    } else {
+    if (!abonnement) {
       if (!freePromptUsed) {
         await userRef?.set({ freePromptUsed: true }, { merge: true });
-        console.log("🎁 Premier prompt gratuit activé.");
       } else {
         if (credits <= 0) {
-          console.warn("⛔️ Blocage : plus de crédits.");
           return res.status(403).json({ error: "Plus de crédits disponibles." });
         }
         await userRef?.update({ credits: credits - 1 });
-        console.log("🔢 Crédit utilisé : il en reste", credits - 1);
       }
     }
 
-  
-
-    // 🎯 Prompts adaptés pour 20 morceaux × 2
     const basePrompt = {
-      fr: `
-Tu es un expert en curation musicale.
-En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist Spotify de 20 morceaux cohérente, originale et immersive.
-
-Ta sélection doit inclure un mélange équilibré de titres populaires et de morceaux moins connus, rares ou émergents, afin de proposer une écoute à la fois engageante et surprenante. Priorise la cohérence de l'ambiance tout en favorisant la découverte musicale.
-
-Prompt utilisateur : """${prompt}"""
-
-Réponds avec une liste JSON stricte, format :
-[
-  { "artist": "Nom artiste", "name": "Titre du morceau" },
-  ...
-]
-Aucun commentaire. Aucun texte. Seulement la liste JSON.`,
-      en: `
-You are a music curation expert.
-Based only on the user's description below, generate a coherent, original, and immersive playlist of 20 Spotify tracks.
-
-Your selection should include a balanced mix of popular songs and lesser-known, rare, or emerging tracks to offer a fresh and surprising listening experience. Prioritize the overall vibe and atmosphere while encouraging musical discovery.
-
-User prompt: """${prompt}"""
-
-Respond with a strict JSON list, format:
-[
-  { "artist": "Artist Name", "name": "Track Title" },
-  ...
-]
-No explanation. No comments. Just the JSON list.`,
-      es: `
-Eres un experto en curaduría musical.
-Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción de Spotify con 20 canciones coherente, original e inmersiva.
-
-Tu selección debe incluir una mezcla equilibrada entre canciones populares y temas menos conocidos, raros o emergentes, con el fin de ofrecer una experiencia auditiva fresca y sorprendente. Prioriza la coherencia de la atmósfera y el estado de ánimo, fomentando el descubrimiento musical.
-
-Prompt del usuario: """${prompt}"""
-
-Tu única tarea es devolver una lista en formato JSON estricto como este:
-[
-  { "artist": "Nombre del artista", "name": "Título de la canción" },
-  ...
-]
-
-⚠️ No agregues ningún comentario, explicación, texto introductorio o final.
-Solo responde con la lista JSON, nada más.
-`
+      fr: `Tu es un expert en curation musicale. En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist Spotify de 20 morceaux cohérente, originale et immersive. Prompt utilisateur : """${prompt}""" Réponds avec une liste JSON stricte, format : [ { "artist": "Nom artiste", "name": "Titre du morceau" }, ... ] Aucun commentaire. Aucun texte.`,
+      en: `You are a music curation expert. Based only on the user's description below, generate a coherent, original, and immersive playlist of 20 Spotify tracks. User prompt: """${prompt}""" Respond with a strict JSON list, format: [ { "artist": "Artist Name", "name": "Track Title" }, ... ] No explanation. No comments. Just the JSON list.`,
+      es: `Eres un experto en curaduría musical. Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción de Spotify con 20 canciones coherente, original e inmersiva. Prompt del usuario: """${prompt}""" Devuelve una lista en formato JSON estricto: [ { "artist": "Nombre del artista", "name": "Título de la canción" }, ... ] Solo la lista JSON, nada más.`
     }[lang];
-function isValidJsonList(str) {
-  try {
-    const data = JSON.parse(str);
-    return (
-      Array.isArray(data) &&
-      data.every(
-        (item) =>
-          typeof item === "object" &&
-          typeof item.artist === "string" &&
-          typeof item.name === "string"
-      )
+
+    const completions = await Promise.all([
+      openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: basePrompt }],
+        temperature: 0.7,
+      }),
+      openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: basePrompt }],
+        temperature: 0.7,
+      }),
+    ]);
+
+    const [raw1, raw2] = completions.map(
+      (comp) => comp?.choices?.[0]?.message?.content?.trim() || ""
     );
-  } catch (e) {
-    return false;
-  }
-}
-    let completion1, completion2;
-try {
-  completion1 = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: basePrompt }],
-    temperature: 0.7,
-  });
-} catch (error) {
-  console.error("❌ Erreur GPT (appel 1) :", error);
-  return res.status(500).json({ error: "Erreur de génération (1)." });
-}
 
-try {
-  completion2 = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: basePrompt }],
-    temperature: 0.7,
-  });
-} catch (error) {
-  console.error("❌ Erreur GPT (appel 2) :", error);
-  return res.status(500).json({ error: "Erreur de génération (2)." });
-}
+    if (!isValidJsonList(raw1) || !isValidJsonList(raw2)) {
+      return res.status(500).json({ error: "Réponse GPT non valide." });
+    }
 
-const raw1 = completion1?.choices?.[0]?.message?.content?.trim() || "";
-const raw2 = completion2?.choices?.[0]?.message?.content?.trim() || "";
+    const tracks = [...JSON.parse(raw1), ...JSON.parse(raw2)];
 
-if (!isValidJsonList(raw1) || !isValidJsonList(raw2)) {
-  console.error("❌ Réponse GPT invalide :", { raw1, raw2 });
-  return res.status(500).json({
-    error: "Réponse GPT non valide. Veuillez reformuler votre demande ou réessayer plus tard.",
-  });
-}
+    const resolvedUris = await Promise.all(
+      tracks.map(async (t) => {
+        const queries = [
+          `${t.name} ${t.artist}`,
+          `${t.name}`,
+          `${t.artist}`,
+          `${t.artist} ${t.name.split(" ")[0]}`,
+        ];
 
-let tracks1 = [], tracks2 = [];
-try {
-  tracks1 = JSON.parse(raw1);
-  tracks2 = JSON.parse(raw2);
-} catch (err) {
-  console.error("❌ Parsing JSON GPT", err);
-  return res.status(500).json({ error: "Erreur GPT, JSON invalide" });
-}
+        let uri = null;
 
-const tracks = [...tracks1, ...tracks2];
-
-    // 🔍 Recherche intelligente des URIs Spotify avec fallback
-const resolvedUris = await Promise.all(
-  tracks.map(async (t) => {
-    const queries = [
-      `${t.name} ${t.artist}`,
-      `${t.name}`,
-      `${t.artist}`,
-      `${t.artist} ${t.name.split(" ")[0]}`,
-    ];
-
-    let uri = null;
-
-    for (const rawQuery of queries) {
-      const q = encodeURIComponent(rawQuery);
-      const resSearch = await fetch(`https://api.spotify.com/v1/search?q=${q}&type=track&limit=1`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      const data = await resSearch.json();
-      uri = data.tracks?.items?.[0]?.uri || null;
-
-      if (uri) {
-        if (rawQuery !== `${t.name} ${t.artist}`) {
-          console.log(`🔁 Fallback réussi : ${rawQuery} → ${uri}`);
+        for (const rawQuery of queries) {
+          const q = encodeURIComponent(rawQuery);
+          const resSearch = await fetch(`https://api.spotify.com/v1/search?q=${q}&type=track&limit=1`, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+          const data = await resSearch.json();
+          uri = data.tracks?.items?.[0]?.uri || null;
+          if (uri) break;
         }
-        break;
-      }
+
+        return uri;
+      })
+    );
+
+    const uris = resolvedUris.filter(Boolean);
+
+    if (uris.length === 0) {
+      return res.status(400).json({ error: "Aucun morceau trouvé" });
     }
 
-    if (!uri) {
-      console.warn(`❌ Non trouvé sur Spotify : ${t.artist} - ${t.name}`);
+    const userRes = await fetch("https://api.spotify.com/v1/me", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    if (!userRes.ok) {
+      const errorText = await userRes.text();
+      return res.status(401).json({ error: "Token Spotify invalide ou expiré.", details: errorText });
     }
 
-    return uri;
-  })
-);
-
-const uris = resolvedUris.filter(Boolean);
-
-console.log(`🎯 ${uris.length}/${tracks.length} morceaux trouvés sur Spotify`);
-
-if (uris.length === 0) {
-  return res.status(400).json({ error: "Aucun morceau trouvé" });
-}
-
-   // 👤 Récupération de l'utilisateur Spotify
-const userRes = await fetch("https://api.spotify.com/v1/me", {
-  headers: { Authorization: `Bearer ${accessToken}` },
-});
-
-if (!userRes.ok) {
-  const errorText = await userRes.text();
-  console.error("❌ Erreur lors de la récupération du profil Spotify :", errorText);
-  return res.status(401).json({ error: "Token Spotify invalide ou expiré." });
-}
-
-const user = await userRes.json();
+    const user = await userRes.json();
 
     const rawTitle = prompt.length > 40 ? prompt.slice(0, 40) + "…" : prompt;
     const cleanTitle = rawTitle.replace(/[^\w\sÀ-ÿ!?.,:;'-]/g, "").trim();
     const playlistName = `${cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1)}`;
 
-    // 📝 Création de la playlist
     const playlistRes = await fetch(`https://api.spotify.com/v1/users/${user.id}/playlists`, {
       method: "POST",
       headers: {
@@ -260,7 +168,6 @@ const user = await userRes.json();
     });
 
     const playlist = await playlistRes.json();
-    console.log("🎵 Playlist Spotify API response :", playlist);
 
     await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
       method: "POST",
@@ -272,22 +179,18 @@ const user = await userRes.json();
     });
 
     if (uid) {
-      try {
-        await db.collection("promptHistory").add({
-          uid,
-          prompt,
-          playlistUrl: playlist?.external_urls?.spotify || "",
-          playlistName: playlist.name,
-          totalTracks: uris.length,
-          spotifyEmail: user.email || "",
-          spotifyCountry: user.country || "",
-          spotifyProduct: user.product || "",
-          spotifyDisplayName: user.display_name || "",
-          createdAt: admin.firestore.Timestamp.now(),
-        });
-      } catch (err) {
-        console.warn("⚠️ Impossible d'enregistrer l'historique du prompt :", err);
-      }
+      await db.collection("promptHistory").add({
+        uid,
+        prompt,
+        playlistUrl: playlist?.external_urls?.spotify || "",
+        playlistName: playlist.name,
+        totalTracks: uris.length,
+        spotifyEmail: user.email || "",
+        spotifyCountry: user.country || "",
+        spotifyProduct: user.product || "",
+        spotifyDisplayName: user.display_name || "",
+        createdAt: Timestamp.now(),
+      });
     }
 
     return res.status(200).json({

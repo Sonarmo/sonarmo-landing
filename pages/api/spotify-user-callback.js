@@ -1,3 +1,6 @@
+// 👉 Conservé pour usage futur avec Spotify OAuth (connexion directe utilisateur)
+// Actuellement inutilisé pour la génération classique de playlists
+
 import { db, authAdmin } from "/lib/firebaseAdmin";
 import cookie from "cookie";
 
