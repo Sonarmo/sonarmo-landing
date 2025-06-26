@@ -30,34 +30,51 @@ export default async function handler(req, res) {
   try {
     const cookies = cookie.parse(req.headers.cookie || "");
     const idToken = cookies.token;
+
     let uid = null;
     let userRef = null;
     let userDoc = null;
 
     if (idToken) {
-  const decodedToken = await authAdmin.verifyIdToken(idToken);
-  uid = decodedToken.uid;
-  userRef = db.collection("users").doc(uid);
-  userDoc = await userRef.get();
-
-  const userData = userDoc.exists ? userDoc.data() : {};
-  const freePromptUsed = userData.freePromptUsed ?? false;
-  const credits = userData.credits ?? 0;
-  const abonnement = userData.abonnement ?? false;
-
-  if (!abonnement) {
-    if (freePromptUsed) {
-      if (credits <= 0) {
-        return res.status(403).json({ error: "Plus de crédits disponibles." });
-      }
-      await userRef.update({ credits: credits - 1 });
-    } else {
-      await userRef.set({ freePromptUsed: true }, { merge: true });
+      const decodedToken = await authAdmin.verifyIdToken(idToken);
+      uid = decodedToken.uid;
+      userRef = db.collection("users").doc(uid);
+      userDoc = await userRef.get();
     }
-  } else {
-    console.log("✅ Utilisateur avec abonnement actif, accès illimité autorisé.");
-  }
-}
+
+    // 🔐 Contrôle utilisateur
+    let userData = {};
+    if (userDoc?.exists) {
+      userData = userDoc.data();
+    }
+
+    const abonnement = userData.abonnement ?? false;
+    const credits = userData.credits ?? 0;
+    const freePromptUsed = userData.freePromptUsed ?? false;
+
+    console.log("👤 Statut utilisateur :", {
+      abonnement,
+      credits,
+      freePromptUsed,
+    });
+
+    if (abonnement === true) {
+      console.log("✅ Utilisateur avec abonnement actif : accès illimité");
+    } else {
+      if (!freePromptUsed) {
+        await userRef?.set({ freePromptUsed: true }, { merge: true });
+        console.log("🎁 Premier prompt gratuit activé.");
+      } else {
+        if (credits <= 0) {
+          console.warn("⛔️ Blocage : plus de crédits.");
+          return res.status(403).json({ error: "Plus de crédits disponibles." });
+        }
+        await userRef?.update({ credits: credits - 1 });
+        console.log("🔢 Crédit utilisé : il en reste", credits - 1);
+      }
+    }
+
+  
 
     // 🎯 Prompts adaptés pour 20 morceaux × 2
     const basePrompt = {
