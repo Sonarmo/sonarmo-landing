@@ -124,7 +124,22 @@ Tu única tarea es devolver una lista en formato JSON estricto como este:
 Solo responde con la lista JSON, nada más.
 `
     }[lang];
-
+function isValidJsonList(str) {
+  try {
+    const data = JSON.parse(str);
+    return (
+      Array.isArray(data) &&
+      data.every(
+        (item) =>
+          typeof item === "object" &&
+          typeof item.artist === "string" &&
+          typeof item.name === "string"
+      )
+    );
+  } catch (e) {
+    return false;
+  }
+}
     let completion1, completion2;
 try {
   completion1 = await openai.chat.completions.create({
