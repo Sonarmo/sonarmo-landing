@@ -14,7 +14,7 @@ export default function Experience() {
     return (
         <>
             <Head>
-                <title>Sonarmo - Experiencia</title>
+                <title>Sonarmo - Sonarmo Pro</title>
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
             </Head>
             <main className="bg-black text-white overflow-x-hidden min-h-screen px-0">
@@ -79,7 +79,7 @@ export default function Experience() {
                         <div className="absolute w-[200px] h-[200px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-20" />
                     </div>
                     <div className="relative z-10 max-w-3xl mx-auto">
-                        <h1 className="text-5xl font-bold mb-6">La experiencia Sonarmo</h1>
+                        <h1 className="text-5xl font-bold mb-6">Sonarmo Pro</h1>
                         <p className="text-gray-300 text-lg">
                             Un ambiente musical inteligente, único en cada lugar. La música adecuada, en el momento adecuado, para hacer vibrar tu espacio.
                         </p>
