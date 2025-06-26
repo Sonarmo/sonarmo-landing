@@ -28,7 +28,33 @@ function isValidJsonList(str) {
     return false;
   }
 }
+const getSonarmoAccessToken = async () => {
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  const refreshToken = process.env.SONARMO_REFRESH_TOKEN;
 
+  const authHeader = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+
+  const response = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!data.access_token) {
+    throw new Error("Impossible d'obtenir un token Spotify.");
+  }
+
+  return data.access_token;
+};
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Méthode non autorisée" });
@@ -39,10 +65,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Prompt trop court ou manquant" });
   }
 
-  const accessToken = req.headers.authorization?.split(" ")[1];
-  if (!accessToken) {
-    return res.status(401).json({ error: "Token Spotify manquant." });
-  }
+  const accessToken = await getSonarmoAccessToken();
 
   try {
     const cookies = cookie.parse(req.headers.cookie || "");
