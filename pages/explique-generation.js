@@ -117,9 +117,11 @@ export default function ExplicationGeneration() {
     <span><strong>Personnalisé :</strong> Chaque morceau est sélectionné selon votre description.</span>
   </li>
   <li className="flex items-center gap-5">
-    <LinkIcon className="text-purple-400 mt-1" size={40} />
-    <span><strong>Spotify intégré :</strong> Écoutez, modifiez et partagez librement.</span>
-  </li>
+  <LinkIcon className="text-purple-400 mt-1" size={40} />
+  <span>
+    <strong>Playlist disponible sur Spotify :</strong> Un lien immédiat pour écouter et partager votre ambiance.
+  </span>
+</li>
   <li className="flex items-center gap-5">
     <Brain className="text-blue-400 mt-1" size={40} />
     <span><strong>IA évolutive :</strong> Elle apprend au fil de vos ambiances.</span>
