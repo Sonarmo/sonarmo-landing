@@ -103,9 +103,15 @@ export default async function handler(req, res) {
     }
 
    const basePrompt = {
+  
   fr: `Tu es un expert en curation musicale. En te basant uniquement sur le prompt utilisateur ci-dessous, génère une playlist Spotify de 20 morceaux cohérente, originale et immersive.
 
-Inclue environ 10 morceaux peu connus, rares ou sous-estimés, pour faire découvrir des artistes ou titres qui sortent de l'ordinaire. Le reste peut être plus populaire, mais toujours en lien avec l'ambiance décrite.
+🎯 Règles :
+– Respecte strictement le public ciblé (âge, ambiance, lieu, moment de la journée).
+– Adapte le niveau d'énergie et les paroles : évite les morceaux inappropriés, trop agressifs ou sombres pour des enfants ou contextes calmes.
+– Inclue environ 10 morceaux peu connus, rares ou sous-estimés, pour faire découvrir des artistes ou titres qui sortent de l'ordinaire.
+– Le reste peut être plus populaire, mais toujours en lien avec l'ambiance décrite.
+– Aucun morceau ne doit être décalé stylistiquement ou émotionnellement par rapport au prompt.
 
 Prompt utilisateur : """${prompt}"""
 
@@ -116,10 +122,15 @@ Réponds uniquement avec une liste JSON stricte, au format :
 ]
 
 Aucun commentaire. Aucun texte. Juste la liste JSON.`,
-  
+
   en: `You are a music curation expert. Based only on the user's description below, generate a coherent, original, and immersive Spotify playlist of 20 tracks.
 
-Include around 10 lesser-known, underrated, or rare tracks to help discover hidden gems. The rest can be more popular but must still match the described mood.
+🎯 Rules:
+– Strictly match the described audience (age, mood, location, time of day).
+– Adapt energy level and lyrics: avoid tracks that are inappropriate, too aggressive or dark for children or calm settings.
+– Include around 10 lesser-known, underrated, or rare tracks to help discover hidden gems.
+– The remaining tracks can be more popular, but must still match the described mood.
+– No track should be stylistically or emotionally out of place.
 
 User prompt: """${prompt}"""
 
@@ -133,7 +144,12 @@ No explanation. No comments. Just the JSON list.`,
 
   es: `Eres un experto en curaduría musical. Basándote únicamente en el siguiente prompt del usuario, genera una lista de reproducción de Spotify con 20 canciones coherente, original e inmersiva.
 
-Incluye alrededor de 10 canciones poco conocidas, raras o infravaloradas para descubrir nuevas joyas. El resto puede ser más popular, pero siempre en línea con la atmósfera descrita.
+🎯 Reglas:
+– Respeta estrictamente el público descrito (edad, ambiente, lugar, momento del día).
+– Ajusta el nivel de energía y las letras: evita canciones inapropiadas, demasiado agresivas u oscuras para niños o ambientes tranquilos.
+– Incluye alrededor de 10 canciones poco conocidas, raras o infravaloradas para descubrir nuevas joyas.
+– El resto puede ser más popular, pero siempre acorde a la atmósfera descrita.
+– Ninguna canción debe estar fuera de lugar en estilo o emoción.
 
 Prompt del usuario: """${prompt}"""
 
@@ -144,6 +160,7 @@ Devuelve únicamente una lista estricta en formato JSON:
 ]
 
 Nada de explicaciones ni comentarios. Solo la lista JSON.`
+
 }[lang];
 
     const completion = await openai.chat.completions.create({
