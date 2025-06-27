@@ -42,49 +42,63 @@ export default async function handler(req, res) {
   }
 
   // 🎯 GESTION DE L'ACHAT
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-const email = session.customer_details?.email || session.customer_email;
-    if (!email) {
-      console.warn("⚠️ Email manquant dans la session");
-      return res.status(400).send("Email manquant");
+if (event.type === 'checkout.session.completed') {
+  const session = event.data.object;
+
+  let email;
+
+  try {
+    if (session.customer_details?.email) {
+      email = session.customer_details.email;
+    } else if (session.customer) {
+      const customer = await stripe.customers.retrieve(session.customer);
+      email = customer.email;
     }
-
-    let priceId;
-    try {
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
-      priceId = lineItems.data?.[0]?.price?.id;
-    } catch (err) {
-      console.error("❌ Erreur récupération line_items :", err);
-      return res.status(500).send("Erreur récupération line items");
-    }
-
-    const creditsToAdd = PRICE_CREDIT_MAPPING[priceId];
-    if (!creditsToAdd) {
-      return res.status(400).send("Price ID invalide");
-    }
-
-    try {
-      const userSnapshot = await db.collection('users').where('email', '==', email).limit(1).get();
-      if (userSnapshot.empty) return res.status(404).send('Utilisateur introuvable');
-
-      const userRef = userSnapshot.docs[0].ref;
-      const userData = userSnapshot.docs[0].data();
-
-      if (creditsToAdd === "abonnement") {
-        await userRef.set({ abonnementActif: true }, { merge: true });
-      } else {
-        const newCredits = (userData.credits || 0) + creditsToAdd;
-        await userRef.set({ credits: newCredits }, { merge: true });
-      }
-
-      console.log(`✅ Crédit mis à jour pour ${email}`);
-      return res.status(200).send("OK");
-    } catch (err) {
-      console.error("❌ Erreur Firestore :", err);
-      return res.status(500).send("Erreur serveur");
-    }
+  } catch (err) {
+    console.error("❌ Erreur récupération email client Stripe :", err);
+    return res.status(500).send("Erreur récupération email client");
   }
+
+  if (!email) {
+    console.warn("⚠️ Email manquant dans la session ou le client");
+    return res.status(400).send("Email manquant");
+  }
+
+  let priceId;
+  try {
+    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
+    priceId = lineItems.data?.[0]?.price?.id;
+  } catch (err) {
+    console.error("❌ Erreur récupération line_items :", err);
+    return res.status(500).send("Erreur récupération line items");
+  }
+
+  const creditsToAdd = PRICE_CREDIT_MAPPING[priceId];
+  if (!creditsToAdd) {
+    return res.status(400).send("Price ID invalide");
+  }
+
+  try {
+    const userSnapshot = await db.collection('users').where('email', '==', email).limit(1).get();
+    if (userSnapshot.empty) return res.status(404).send('Utilisateur introuvable');
+
+    const userRef = userSnapshot.docs[0].ref;
+    const userData = userSnapshot.docs[0].data();
+
+    if (creditsToAdd === "abonnement") {
+      await userRef.set({ abonnementActif: true }, { merge: true });
+    } else {
+      const newCredits = (userData.credits || 0) + creditsToAdd;
+      await userRef.set({ credits: newCredits }, { merge: true });
+    }
+
+    console.log(`✅ Crédit mis à jour pour ${email}`);
+    return res.status(200).send("OK");
+  } catch (err) {
+    console.error("❌ Erreur Firestore :", err);
+    return res.status(500).send("Erreur serveur");
+  }
+}
 
   // 🔕 GESTION DE L'ANNULATION D’ABONNEMENT
   if (event.type === 'customer.subscription.deleted') {
