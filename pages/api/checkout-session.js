@@ -1,4 +1,3 @@
-// pages/api/checkout-session.js
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -15,9 +14,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Méthode non autorisée' });
   }
 
-  const { priceId } = req.body;
+  const { priceId, email } = req.body; // ✅ email récupéré ici
 
-  // Vérification que le priceId est autorisé
   if (!Object.values(VALID_PRICE_IDS).includes(priceId)) {
     return res.status(400).json({ error: 'ID de prix non valide' });
   }
@@ -28,6 +26,8 @@ export default async function handler(req, res) {
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/success`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cancel`,
+      customer_creation: 'always',
+      ...(email && { customer_email: email }) // ✅ facultatif mais inclus si dispo
     });
 
     return res.status(200).json({ url: session.url });

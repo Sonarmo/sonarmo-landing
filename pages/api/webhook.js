@@ -44,8 +44,7 @@ export default async function handler(req, res) {
   // 🎯 GESTION DE L'ACHAT
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const email = session.customer_details?.email;
-
+const email = session.customer_details?.email || session.customer_email;
     if (!email) {
       console.warn("⚠️ Email manquant dans la session");
       return res.status(400).send("Email manquant");

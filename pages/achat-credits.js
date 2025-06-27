@@ -1,14 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { getAuth } from "firebase/auth";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function AchatCredits() {
+  const [email, setEmail] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user && user.email) {
+      setEmail(user.email);
+    }
+  }, []);
+
   const handleCheckout = async (priceId) => {
     const res = await fetch("/api/checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ priceId }),
+      body: JSON.stringify({ priceId, email }), // ✅ on envoie aussi l'email
     });
 
     const data = await res.json();
