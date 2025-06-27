@@ -27,9 +27,9 @@ export default function Generateur() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         if (!user.emailVerified) {
-          alert("⚠️ Veuillez vérifier votre adresse email avant d'utiliser Sonarmo.");
+          alert("⚠️ Por favor, verifica tu dirección de correo electrónico antes de usar Sonarmo.");
           await auth.signOut();
-          router.push("/login");
+          router.push("/login-es");
           return;
         }
 
@@ -40,7 +40,7 @@ export default function Generateur() {
           const data = docSnap.data();
           setCredits(data.credits ?? 0);
           if (data.abonnementActif === true) {
-            console.log("✅ Abonnement actif détecté");
+            console.log("Suscripción activa detectada");
             setCredits("illimité");
           }
         }
@@ -57,7 +57,7 @@ export default function Generateur() {
         });
         setPromptHistory(history);
       } else {
-        router.push("/login");
+        router.push("/login-es");
       }
     });
 
@@ -66,7 +66,7 @@ export default function Generateur() {
 
   const handleGenerate = async () => {
     if (!prompt || prompt.length < 10) {
-      alert("Merci d'écrire un prompt plus complet avant de générer.");
+      alert("Por favor, escribe una descripción más completa antes de generar.");
       return;
     }
 
@@ -81,10 +81,10 @@ export default function Generateur() {
 
     if (res.ok) {
       const data = await res.json();
-      console.log("🎧 Playlist URL reçue :", data.url);
+      console.log("🎧 URL de la playlist recibida :", data.url);
       setPlaylistUrl(data.url);
     } else {
-      alert("Erreur lors de la génération. Réessaie !");
+      alert("Error al generar la playlist. ¡Inténtalo de nuevo!");
     }
     setIsLoading(false);
   };
@@ -97,19 +97,19 @@ export default function Generateur() {
       </div>
 
       <header className="flex justify-between items-center px-6 py-4 w-full relative z-10">
-        <Link href="/" passHref>
+        <Link href="/index-es" passHref>
   <a className="flex items-center gap-2">
     <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
     <span className="text-white text-lg font-semibold italic">Sonarmo</span>
   </a>
 </Link>
         <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-          <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-          <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+          <Link href="/explique-generation-es" className="hover:text-gray-300">GENERADOR DE PLAYLISTS</Link>
+          <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+          <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTANOS</Link>
           <Link href="/logout" className="hover:text-gray-300 flex items-center gap-1">
             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-            SE DECONNECTER
+            CERRAR SESIÓN
           </Link>
           <LanguageSwitcher />
           
@@ -137,12 +137,12 @@ export default function Generateur() {
             exit={{ opacity: 0, y: -10 }}
             className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50 w-full"
           >
-            <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-            <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-            <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+            <Link href="/explique-generation-es" className="hover:text-gray-300">GENERADOR DE PLAYLISTS</Link>
+            <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>
+            <Link href="/contact-es" className="hover:text-gray-300">CONTÁCTANOS</Link>
             <Link href="/logout" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-              SE DECONNECTER
+              CERRAR SESIÓN
             </Link>
             <LanguageSwitcher />
           </motion.div>
@@ -153,22 +153,22 @@ export default function Generateur() {
         {credits !== null && <CreditBadge credits={credits} />}
 
         <h1 className="text-4xl font-bold mb-15 text-center text-white">
-          Crée ta playlist avec Sonarmo IA
+          Crea tu playlist con Sonarmo IA
         </h1>
 
         <div className="mb-9 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
-          <h2 className="text-white font-semibold mb-4 text-base">Comment ça marche</h2>
+          <h2 className="text-white font-semibold mb-4 text-base">¿Cómo funciona?</h2>
           <div className="space-y-4">
             <div className="flex items-start gap-4">
               <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
               <p className="text-white leading-relaxed">
-                Décris une ambiance musicale (ex : <em>Jazz calme pour un dîner entre amis</em>).
+                Describe una atmósfera musical (ej : <em>Jazz tranquilo para una cena con amigos</em>).
               </p>
             </div>
             <div className="flex items-start gap-4">
               <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
               <p className="text-white leading-relaxed">
-                Clique sur <strong>“Générer”</strong> et découvre ta playlist personnalisée en quelques secondes.
+                Haz clic en <strong>“Generar”</strong> y descubre tu playlist personalizada en segundos.
               </p>
             </div>
           </div>
@@ -176,13 +176,13 @@ export default function Generateur() {
 
         <div className="w-full max-w-xl">
           <label htmlFor="prompt" className="text-white font-medium mb-2 block">
-            Décris ton ambiance
+            Describe tu ambiente
           </label>
           <textarea
             id="prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Ex : J’ai envie de danser, mais tranquille. Une vibe groovy et détendue."
+            placeholder="Ej.: Tengo ganas de bailar, pero tranquilo. Un ambiente groovy y relajado"
             className="w-full h-32 p-4 rounded-xl bg-[#1c1c1c] text-white border border-gray-700 mb-6 resize-none placeholder:text-gray-500"
           />
           <div className="relative group">
@@ -195,10 +195,10 @@ export default function Generateur() {
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <span className="loader ease-linear rounded-full border-4 border-t-4 border-white border-t-transparent h-5 w-5 animate-spin" />
-                  <span>Génération en cours...</span>
+                  <span>Generando…</span>
                 </div>
               ) : (
-                "Générer ma playlist"
+                "Generar mi playlist"
               )}
             </motion.button>
 
@@ -207,7 +207,7 @@ export default function Generateur() {
   <div className="mt-10 text-center bg-[#1c1c1c] p-6 rounded-xl shadow-xl border border-green-500 animate-fade-in">
     <div className="flex items-center justify-center gap-2 mb-3">
       <Image src="/icons/spotify.png" alt="Spotify" width={24} height={24} />
-      <p className="text-green-400 font-semibold text-lg">Playlist créée avec succès</p>
+      <p className="text-green-400 font-semibold text-lg">Playlist creada con éxito</p>
     </div>
     <a
       href={playlistUrl}
@@ -215,7 +215,7 @@ export default function Generateur() {
       rel="noopener noreferrer"
       className="inline-block mt-2 px-5 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white font-semibold hover:scale-105 transition"
     >
-      Écouter sur Spotify
+      Escuchar en Spotify
     </a>
   </div>
 )}
@@ -228,16 +228,16 @@ export default function Generateur() {
   
     <div className="mt-10 flex flex-col items-center animate-fade-in text-center max-w-sm">
       <p className="text-sm text-pink-300 mb-6">
-        Plus assez de crédits pour générer de nouvelles playlists ?<br />
-        Recharge ton compte pour continuer l&apos;expérience Sonarmo.
+        ¿No tienes suficientes créditos para generar nuevas playlists?<br />
+        Recarga tu cuenta para seguir disfrutando de la experiencia Sonarmo.
       </p>
       <div className="relative group">
         <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-orange-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300 group-hover:scale-105 animate-pulse"></div>
         <button
-          onClick={() => router.push("/achat-credits")}
+          onClick={() => router.push("/achat-credits-es")}
           className="relative inline-flex items-center justify-center px-6 py-3 text-base font-bold text-white bg-black border border-pink-500 rounded-xl transition duration-300 hover:scale-105 hover:border-orange-500"
         >
-          Recharge ton compte
+          Recargar mi cuenta
         </button>
       </div>
     </div>
@@ -245,7 +245,7 @@ export default function Generateur() {
 
   {promptHistory.length > 0 && (
     <div className="mt-14 w-full max-w-xl">
-      <h2 className="text-xl font-semibold mb-4 text-white">Historique de tes playlists</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white">Historial de tus playlists</h2>
       <ul className="space-y-4">
         {promptHistory.map((item, idx) => (
           <li key={idx} className="bg-[#1c1c1c] border border-gray-700 p-4 rounded-xl">
@@ -259,7 +259,7 @@ export default function Generateur() {
               rel="noopener noreferrer"
               className="text-orange-400 underline hover:text-orange-200 text-sm"
             >
-              Voir sur Spotify
+              Ver en Spotify
             </a>
           </li>
         ))}
@@ -269,7 +269,7 @@ export default function Generateur() {
 
   {promptHistory.length === 0 && (
     <div className="mt-20 text-center text-gray-400">
-      <p>Tu n’as pas encore généré de playlist.<br /> Lance-toi et découvre la magie sonore de Sonarmo !</p>
+      <p>Todavía no has generado ninguna playlist.<br /> ¡Empieza ahora y descubre la magia sonora de Sonarmo!</p>
     </div>
   )}
 </main>
@@ -293,9 +293,9 @@ export default function Generateur() {
             <Image src="/icons/facebook.png" alt="Facebook" width={24} height={24} />
           </a>
         </div>
-        <Link href="/sonarmo-team" className="hover:text-white">Sonarmo Team</Link>
-        <Link href="/about" className="hover:text-white">À propos de nous</Link>
-        <Link href="/contact" className="hover:text-white">Nous contacter</Link>
+        <Link href="/sonarmo-team" className="hover:text-white">Equipo Sonarmo</Link>
+        <Link href="/about" className="hover:text-white">Sobre nosotros</Link>
+        <Link href="/contact-es" className="hover:text-white">Contáctanos</Link>
       </div>
 
       {/* Logo French Tech (centré sur mobile) */}
@@ -315,9 +315,9 @@ export default function Generateur() {
     <div className="flex flex-col items-center md:items-end text-center md:text-right gap-2">
       <Image src="/Logo-app-header.png" alt="Sonarmo Logo" width={100} height={30} />
       <p className="text-xs">Sonarmo™</p>
-      <Link href="/cgu" className="text-sm hover:underline">Conditions d&apos;utilisation &amp; Politique de confidentialité</Link>
-      <Link href="/mentions-legales" className="text-sm hover:underline">Mentions légales</Link>
-      <Link href="/conditions-vente" className="text-sm hover:underline">Conditions de vente</Link>
+      <Link href="/cgu" className="text-sm hover:underline">Términos de uso y Política de privacidad</Link>
+      <Link href="/mentions-legales" className="text-sm hover:underline">Aviso legal</Link>
+      <Link href="/conditions-vente" className="text-sm hover:underline">Términos de venta</Link>
     </div>
 
   </div>
