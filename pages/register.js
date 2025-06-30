@@ -30,30 +30,32 @@ export default function Register() {
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  const user = userCredential.user;
 
-      // Envoi de l'email de vérification
-      await sendEmailVerification(user);
+  // Envoi de l'email de vérification
+  await sendEmailVerification(user);
 
-      // Création du document utilisateur
-      await setDoc(doc(db, "users", user.uid), {
-        email,
-        role: "particulier",
-        credits: 2,
-        createdAt: new Date(),
-      }, { merge: true });
+  // Création du document utilisateur
+  await setDoc(doc(db, "users", user.uid), {
+    email,
+    role: "particulier",
+    credits: 2,
+    createdAt: new Date(),
+  }, { merge: true });
 
-      // Déconnexion immédiate
-      await auth.signOut();
+  // Déconnexion immédiate
+  await auth.signOut();
 
-      // Message et redirection
-      alert("Un email de vérification a été envoyé. Veuillez confirmer votre adresse avant de vous connecter.");
-      router.push("/login");
-    } catch (err) {
-      console.error(err);
-      setError("Erreur lors de l'inscription.");
-    }
+  // Indique au login d’afficher un message
+  localStorage.setItem("pendingVerification", "true");
+
+  // Redirection vers login
+  router.push("/login");
+} catch (err) {
+  console.error(err);
+  setError("Erreur lors de l'inscription.");
+}
   };
 
   return (

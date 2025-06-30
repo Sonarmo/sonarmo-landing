@@ -2,7 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  sendEmailVerification,
+} from "firebase/auth";
 import { auth } from "../lib/firebase";
 import nookies from "nookies";
 import Head from "next/head";
@@ -10,77 +16,108 @@ import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
 export default function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
-    const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [showResend, setShowResend] = useState(false);
+  const router = useRouter();
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const token = await user.getIdToken();
-                nookies.set(undefined, "token", token, {
-                    maxAge: 60 * 60 * 24,
-                    path: "/",
-                });
-                router.push("/generateur-en");
-            }
-        });
-        return () => unsubscribe();
-    }, [router]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            const token = await user.getIdToken();
-            nookies.set(undefined, "token", token, {
-                maxAge: 60 * 60 * 24,
-                path: "/",
-            });
-            router.push("/generateur-en");
-        } catch (err) {
-            setError("Email or password incorrect.");
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        if (!user.emailVerified) {
+          setShowResend(true);
+          return;
         }
-    };
 
-    const signInWithGoogle = async () => {
-  const provider = new GoogleAuthProvider();
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const token = await result.user.getIdToken();
-    nookies.set(undefined, "token", token, {
-      maxAge: 60 * 60 * 24,
-      path: "/",
+        const token = await user.getIdToken();
+        nookies.set(undefined, "token", token, {
+          maxAge: 60 * 60 * 24,
+          path: "/",
+        });
+        router.push("/generateur-en");
+      }
     });
+    return () => unsubscribe();
+  }, [router]);
 
-    const db = getFirestore();
-    const userRef = doc(db, "users", result.user.uid);
-    const userSnap = await getDoc(userRef);
-
-    if (!userSnap.exists()) {
-      await setDoc(userRef, {
-        email: result.user.email || "",
-        role: "particulier",
-        credits: 2,
-        createdAt: new Date(),
-      });
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("pendingVerification")) {
+      alert("📩 A verification email has been sent to you. Please confirm your address.");
+      localStorage.removeItem("pendingVerification");
     }
+  }, []);
 
-    const updatedSnap = await getDoc(userRef);
-    const role = updatedSnap.data()?.role || "particulier";
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-    if (role === "pro") {
-  router.push("/dashboard");
-} else {
-  window.location.href = "/generateur-en"; // force un vrai reload
-}
-  } catch (err) {
-    console.error("Erreur connexion Google :", err);
-    setError("Échec de la connexion avec Google.");
-  }
-};
+      if (!user.emailVerified) {
+        setShowResend(true);
+        return;
+      }
+
+      const token = await user.getIdToken();
+      nookies.set(undefined, "token", token, {
+        maxAge: 60 * 60 * 24,
+        path: "/",
+      });
+      router.push("/generateur-en");
+    } catch (err) {
+      setError("Incorrect email or password.");
+    }
+  };
+
+  const resendVerificationEmail = async () => {
+    if (auth.currentUser) {
+      try {
+        await sendEmailVerification(auth.currentUser);
+        alert("✅ Verification email resent!");
+      } catch (err) {
+        console.error("Error resending verification:", err);
+        alert("❌ Error sending the verification email.");
+      }
+    }
+  };
+
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const token = await result.user.getIdToken();
+      nookies.set(undefined, "token", token, {
+        maxAge: 60 * 60 * 24,
+        path: "/",
+      });
+
+      const db = getFirestore();
+      const userRef = doc(db, "users", result.user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          email: result.user.email || "",
+          role: "particulier",
+          credits: 2,
+          createdAt: new Date(),
+        });
+      }
+
+      const updatedSnap = await getDoc(userRef);
+      const role = updatedSnap.data()?.role || "particulier";
+
+      if (role === "pro") {
+        router.push("/dashboard");
+      } else {
+        window.location.href = "/generateur-en";
+      }
+    } catch (err) {
+      console.error("Google sign-in error:", err);
+      setError("Failed to sign in with Google.");
+    }
+  };
 
     return (
         <>

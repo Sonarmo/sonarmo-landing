@@ -8,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 
-export default function Register() {
+export default function Registro() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -33,10 +33,8 @@ export default function Register() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Envoi de l'email de vérification
       await sendEmailVerification(user);
 
-      // Création du document utilisateur
       await setDoc(doc(db, "users", user.uid), {
         email,
         role: "particulier",
@@ -44,15 +42,13 @@ export default function Register() {
         createdAt: new Date(),
       }, { merge: true });
 
-      // Déconnexion immédiate
       await auth.signOut();
 
-      // Message et redirection
-      alert("Se ha enviado un correo de verificación. Por favor, confirma tu dirección antes de iniciar sesión.");
+      localStorage.setItem("pendingVerification", "true");
       router.push("/login-es");
     } catch (err) {
       console.error(err);
-      setError("Error al registrarse.");
+      setError("Error al crear la cuenta.");
     }
   };
 

@@ -20,12 +20,12 @@ export default function Register() {
     setError(null);
 
     if (password.length < 8) {
-      setError("The password must contain at least 8 characters.");
+      setError("Password must be at least 8 characters long.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("The passwords do not match.");
+      setError("Passwords do not match.");
       return;
     }
 
@@ -33,10 +33,8 @@ export default function Register() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Envoi de l'email de vérification
       await sendEmailVerification(user);
 
-      // Création du document utilisateur
       await setDoc(doc(db, "users", user.uid), {
         email,
         role: "particulier",
@@ -44,15 +42,13 @@ export default function Register() {
         createdAt: new Date(),
       }, { merge: true });
 
-      // Déconnexion immédiate
       await auth.signOut();
 
-      // Message et redirection
-      alert("A verification email has been sent. Please confirm your address before logging in.");
+      localStorage.setItem("pendingVerification", "true");
       router.push("/login-en");
     } catch (err) {
       console.error(err);
-      setError("Error during registration.");
+      setError("Error while creating the account.");
     }
   };
 
