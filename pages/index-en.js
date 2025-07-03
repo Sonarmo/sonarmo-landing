@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import AnimatedWave from "/components/builder/AnimatedWave";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
+import BlurText from "/components/builder/BlurText";
 
 
 export default function Home() {
@@ -80,12 +81,18 @@ export default function Home() {
     priority
   />
 </div>
+      <div className="w-full flex justify-center text-center px-4">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-6 max-w-3xl">
+          <BlurText
+            text="Atmospheric Intelligence"
+            animateBy="words"
+            direction="top"
+            className="inline-block"
+            highlight={{ Atmospheric : "text-[#FCE2BA]" }}
+          />
+        </h1>
+      </div>
           
-          <h1 className="text-5xl font-semibold mb-4">
-            <span className="text-[#FCE2BA]">Atmospheric </span>
-            <span className="text-white">Intelligence</span>
-            
-          </h1>
           
           <p className="mx-auto text-gray-400 text-lg mb-12">
             Create a custom musical atmosphere, whether you are an individual or a professional.
