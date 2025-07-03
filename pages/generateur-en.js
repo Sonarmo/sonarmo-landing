@@ -19,6 +19,15 @@ export default function Generateur() {
   const router = useRouter();
   const [credits, setCredits] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const suggestions = [
+  "relaxed", "rainy", "energetic", "morning", "evening", "wine bar",
+  "cocktail", "chill", "romantic", "intense", "wood", "lounge",
+  "calm", "melancholic", "funk", "jazz", "coffee", "vinyl",
+  "sunny", "tropical", "cozy", "focus", "elegant vibe", "minimal",
+  "electronic", "classical", "vintage", "underground", "beach", "nighttime"
+];
+
+const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(() => {
     const auth = getAuth(app);
@@ -97,11 +106,9 @@ export default function Generateur() {
       </div>
 
       <header className="flex justify-between items-center px-6 py-4 w-full relative z-10">
-        <Link href="/index-en" passHref>
-  <a className="flex items-center gap-2">
-    <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-    <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-  </a>
+        <Link href="/index-en" className="flex items-center gap-2">
+  <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+  <span className="text-white text-lg font-semibold italic">Sonarmo</span>
 </Link>
         <nav className="hidden md:flex gap-6 text-sm items-center">
           <Link href="/explique-generation-en" className="hover:text-gray-300">PLAYLIST GENERATOR</Link>
@@ -157,27 +164,58 @@ export default function Generateur() {
         </h1>
 
         <div className="mb-9 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
-          <h2 className="text-white font-semibold mb-4 text-base">How it works</h2>
-          <div className="space-y-4">
-            <div className="flex items-start gap-4">
-              <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
-              <p className="text-white leading-relaxed">
-                Describe a musical atmosphere (ex : <em>Calm jazz for a dinner with friends</em>).
-              </p>
-            </div>
-            <div className="flex items-start gap-4">
-              <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
-              <p className="text-white leading-relaxed">
-                Click on <strong>“Generate”</strong> to get your custom playlist in a few seconds.
-              </p>
-            </div>
-          </div>
-        </div>
+  <h2 className="text-white font-semibold mb-4 text-base">How it works</h2>
+  <div className="space-y-4">
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
+      <div className="text-white leading-relaxed">
+        <p className="mb-2">Describe a musical atmosphere. For example:</p>
+        <ul className="list-disc pl-6 space-y-1 text-white">
+          <li><em>A wine tasting night with thirty-something friends</em></li>
+          <li><em>A late-summer Sunday on a terrace with elegant acoustic tunes</em></li>
+          <li><em>A wooden table, candlelight, and intimate jazz in the background</em></li>
+        </ul>
+      </div>
+    </div>
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
+      <p className="text-white leading-relaxed">
+        Click on <strong>“Generate”</strong> and discover your personalized playlist in just a few seconds.
+      </p>
+    </div>
+  </div>
+</div>
 
         <div className="w-full max-w-xl">
           <label htmlFor="prompt" className="text-white font-medium mb-2 block">
             Describe your vibe
           </label>
+
+<div className="mb-4 flex flex-wrap gap-2">
+  <button
+    onClick={() => setShowSuggestions(!showSuggestions)}
+    className="bg-[#1f1f1f] border border-gray-700 hover:border-orange-500 text-white text-sm px-3 py-1 rounded-full transition-all hover:scale-105"
+  >
+    💡 Need some inspiration?
+  </button>
+
+  {showSuggestions && suggestions.map((mot, i) => (
+    <button
+      key={i}
+      onClick={() => setPrompt(prev => {
+        const mots = prev.split(' ').filter(Boolean);
+        return mots.includes(mot)
+          ? mots.filter(m => m !== mot).join(' ') // remove if already present
+          : [...mots, mot].join(' '); // add if not present
+      })}
+      className={`bg-[#1f1f1f] border border-gray-700 hover:border-orange-500 text-white text-sm px-3 py-1 rounded-full transition-all hover:scale-105 \${prompt.includes(mot) ? 'bg-orange-600 text-black' : ''}`}
+    >
+      #{mot}
+    </button>
+  ))}
+</div>
+
+
           <textarea
             id="prompt"
             value={prompt}

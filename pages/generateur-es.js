@@ -19,6 +19,15 @@ export default function Generateur() {
   const router = useRouter();
   const [credits, setCredits] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const suggestions = [
+  "relajado", "lluvia", "enérgico", "mañana", "noche", "bar de vinos",
+  "cóctel", "tranquilo", "romántico", "intenso", "madera", "lounge",
+  "calma", "melancólico", "funk", "jazz", "café", "vinilo",
+  "sol", "tropical", "acogedor", "concentración", "ambiente elegante", "minimal",
+  "electrónica", "clásica", "vintage", "underground", "playa", "nocturno"
+];
+
+const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(() => {
     const auth = getAuth(app);
@@ -97,11 +106,9 @@ export default function Generateur() {
       </div>
 
       <header className="flex justify-between items-center px-6 py-4 w-full relative z-10">
-        <Link href="/index-es" passHref>
-  <a className="flex items-center gap-2">
-    <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-    <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-  </a>
+        <Link href="/index-es" className="flex items-center gap-2">
+  <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+  <span className="text-white text-lg font-semibold italic">Sonarmo</span>
 </Link>
         <nav className="hidden md:flex gap-6 text-sm items-center">
           <Link href="/explique-generation-es" className="hover:text-gray-300">GENERADOR DE PLAYLISTS</Link>
@@ -157,27 +164,57 @@ export default function Generateur() {
         </h1>
 
         <div className="mb-9 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
-          <h2 className="text-white font-semibold mb-4 text-base">¿Cómo funciona?</h2>
-          <div className="space-y-4">
-            <div className="flex items-start gap-4">
-              <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
-              <p className="text-white leading-relaxed">
-                Describe una atmósfera musical (ej : <em>Jazz tranquilo para una cena con amigos</em>).
-              </p>
-            </div>
-            <div className="flex items-start gap-4">
-              <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
-              <p className="text-white leading-relaxed">
-                Haz clic en <strong>“Generar”</strong> y descubre tu playlist personalizada en segundos.
-              </p>
-            </div>
-          </div>
-        </div>
+  <h2 className="text-white font-semibold mb-4 text-base">¿Cómo funciona?</h2>
+  <div className="space-y-4">
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
+      <div className="text-white leading-relaxed">
+        <p className="mb-2">Describe un ambiente musical. Por ejemplo:</p>
+        <ul className="list-disc pl-6 space-y-1 text-white">
+          <li><em>Una noche de cata de vinos con amigos de 30 años</em></li>
+          <li><em>Un domingo de finales de verano en una terraza con acústica elegante</em></li>
+          <li><em>Una mesa de madera, velas y un fondo de jazz íntimo</em></li>
+        </ul>
+      </div>
+    </div>
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
+      <p className="text-white leading-relaxed">
+        Haz clic en <strong>“Generar”</strong> y descubre tu playlist personalizada en unos segundos.
+      </p>
+    </div>
+  </div>
+</div>
 
         <div className="w-full max-w-xl">
           <label htmlFor="prompt" className="text-white font-medium mb-2 block">
             Describe tu ambiente
           </label>
+
+<div className="mb-4 flex flex-wrap gap-2">
+  <button
+    onClick={() => setShowSuggestions(!showSuggestions)}
+    className="bg-[#1f1f1f] border border-gray-700 hover:border-orange-500 text-white text-sm px-3 py-1 rounded-full transition-all hover:scale-105"
+  >
+    💡 ¿Necesitas inspiración?
+  </button>
+
+  {showSuggestions && suggestions.map((mot, i) => (
+    <button
+      key={i}
+      onClick={() => setPrompt(prev => {
+        const mots = prev.split(' ').filter(Boolean);
+        return mots.includes(mot)
+          ? mots.filter(m => m !== mot).join(' ') // suppression si déjà présent
+          : [...mots, mot].join(' '); // ajout si absent
+      })}
+      className={`bg-[#1f1f1f] border border-gray-700 hover:border-orange-500 text-white text-sm px-3 py-1 rounded-full transition-all hover:scale-105 \${prompt.includes(mot) ? 'bg-orange-600 text-black' : ''}`}
+    >
+      #{mot}
+    </button>
+  ))}
+</div>
+
           <textarea
             id="prompt"
             value={prompt}

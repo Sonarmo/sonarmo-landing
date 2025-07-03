@@ -19,6 +19,15 @@ export default function Generateur() {
   const router = useRouter();
   const [credits, setCredits] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const suggestions = [
+    "détente", "pluie", "énergique", "matin", "soirée", "bar à vin",
+    "cocktail", "chill", "romantique", "intense", "bois", "lounge",
+    "calme", "mélancolique", "funk", "jazz", "café", "vinyle",
+    "soleil", "tropical", "cosy", "focus", "ambiance chic", "minimal",
+    "électro", "classique", "vintage", "underground", "plage", "nocturne"
+  ];
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
 
   useEffect(() => {
     const auth = getAuth(app);
@@ -97,11 +106,9 @@ export default function Generateur() {
       </div>
 
       <header className="flex justify-between items-center px-6 py-4 w-full relative z-10">
-        <Link href="/" passHref>
-  <a className="flex items-center gap-2">
-    <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-    <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-  </a>
+        <Link href="/" className="flex items-center gap-2">
+  <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+  <span className="text-white text-lg font-semibold italic">Sonarmo</span>
 </Link>
         <nav className="hidden md:flex gap-6 text-sm items-center">
           <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
@@ -156,28 +163,57 @@ export default function Generateur() {
           Crée ta playlist avec Sonarmo IA
         </h1>
 
-        <div className="mb-9 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
-          <h2 className="text-white font-semibold mb-4 text-base">Comment ça marche</h2>
-          <div className="space-y-4">
-            <div className="flex items-start gap-4">
-              <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
-              <p className="text-white leading-relaxed">
-                Décris une ambiance musicale (ex : <em>Jazz calme pour un dîner entre amis</em>).
-              </p>
-            </div>
-            <div className="flex items-start gap-4">
-              <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
-              <p className="text-white leading-relaxed">
-                Clique sur <strong>“Générer”</strong> et découvre ta playlist personnalisée en quelques secondes.
-              </p>
-            </div>
-          </div>
-        </div>
-
+      <div className="mb-9 max-w-xl text-gray-400 bg-[#1a1a1a] border border-gray-700 rounded-xl p-6 text-left shadow-md">
+  <h2 className="text-white font-semibold mb-4 text-base">Comment ça marche</h2>
+  <div className="space-y-4">
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">1.</span>
+      <div className="text-white leading-relaxed">
+        <p className="mb-2">Décris une ambiance musicale. Par exemple :</p>
+        <ul className="list-disc pl-6 space-y-1 text-white">
+          <li><em>Une soirée dégustation de vins rouges entre amis de 30 ans</em></li>
+          <li><em>Un dimanche de fin d’été en terrasse avec une ambiance acoustique élégante</em></li>
+          <li><em>Une table en bois, des bougies et un fond de jazz confidentiel</em></li>
+        </ul>
+      </div>
+    </div>
+    <div className="flex items-start gap-4">
+      <span className="text-white text-xl font-bold w-6 flex-shrink-0">2.</span>
+      <p className="text-white leading-relaxed">
+        Clique sur <strong>“Générer”</strong> et découvre ta playlist personnalisée en quelques secondes.
+      </p>
+    </div>
+  </div>
+</div>
         <div className="w-full max-w-xl">
           <label htmlFor="prompt" className="text-white font-medium mb-2 block">
             Décris ton ambiance
           </label>
+
+<div className="mb-4 flex flex-wrap gap-2">
+  <button
+    onClick={() => setShowSuggestions(!showSuggestions)}
+    className="bg-[#1f1f1f] border border-gray-700 hover:border-orange-500 text-white text-sm px-3 py-1 rounded-full transition-all hover:scale-105"
+  >
+    💡 Besoin d&apos;inspiration ?
+  </button>
+
+  {showSuggestions && suggestions.map((mot, i) => (
+    <button
+      key={i}
+      onClick={() => setPrompt(prev => {
+        const mots = prev.split(' ').filter(Boolean);
+        return mots.includes(mot)
+          ? mots.filter(m => m !== mot).join(' ') // suppression si déjà présent
+          : [...mots, mot].join(' '); // ajout si absent
+      })}
+      className={`bg-[#1f1f1f] border border-gray-700 hover:border-orange-500 text-white text-sm px-3 py-1 rounded-full transition-all hover:scale-105 \${prompt.includes(mot) ? 'bg-orange-600 text-black' : ''}`}
+    >
+      #{mot}
+    </button>
+  ))}
+</div>
+
           <textarea
             id="prompt"
             value={prompt}
