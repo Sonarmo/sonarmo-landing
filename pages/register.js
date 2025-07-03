@@ -50,7 +50,7 @@ export default function Register() {
   await auth.signOut();
 
   // Indique au login d’afficher un message
-toast.success("📧 Un e-mail de vérification vient de t&apos;être envoyé. Vérifie ta boîte de réception (et les spams).", {
+toast.success("📧 Un e-mail de vérification vient de t'être envoyé. Vérifie ta boîte de réception (et les spams).", {
   position: "top-center",
   autoClose: 8000, // ⏱️ durée un peu plus longue (8s)
   hideProgressBar: false,
