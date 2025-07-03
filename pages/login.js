@@ -14,6 +14,8 @@ import nookies from "nookies";
 import Head from "next/head";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -71,16 +73,40 @@ export default function Login() {
   };
 
   const resendVerificationEmail = async () => {
-    if (auth.currentUser) {
-      try {
-        await sendEmailVerification(auth.currentUser);
-        alert("✅ E-mail de vérification renvoyé !");
-      } catch (err) {
-        console.error("Erreur renvoi vérification :", err);
-        alert("❌ Erreur lors du renvoi de l'e-mail.");
-      }
+  if (auth.currentUser) {
+    try {
+      await sendEmailVerification(auth.currentUser);
+      toast.success("📩 E-mail de vérification renvoyé avec succès !", {
+        position: "top-center",
+        autoClose: 6000,
+        style: {
+          fontSize: "1.1rem",
+          fontWeight: "500",
+          padding: "14px 18px",
+          borderRadius: "12px",
+          backgroundColor: "#1a1a1a",
+          color: "#ffffff",
+          border: "1px solid #F28500",
+        },
+      });
+    } catch (err) {
+      console.error("Erreur renvoi vérification :", err);
+      toast.error("❌ Une erreur est survenue lors de l&apos;envoi de l&apos;e-mail.", {
+        position: "top-center",
+        autoClose: 6000,
+        style: {
+          fontSize: "1.1rem",
+          fontWeight: "500",
+          padding: "14px 18px",
+          borderRadius: "12px",
+          backgroundColor: "#1a1a1a",
+          color: "#ffffff",
+          border: "1px solid #FF0033",
+        },
+      });
     }
-  };
+  }
+};
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
@@ -126,6 +152,7 @@ export default function Login() {
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
       </Head>
       <main className="overflow-x-hidden bg-black text-white min-h-screen flex flex-col">
+       <ToastContainer />
         <header className="flex justify-between items-center px-6 py-4">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />

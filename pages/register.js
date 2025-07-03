@@ -7,6 +7,8 @@ import nookies from "nookies";
 import Link from "next/link";
 import Image from "next/image";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -48,10 +50,27 @@ export default function Register() {
   await auth.signOut();
 
   // Indique au login d’afficher un message
-  localStorage.setItem("pendingVerification", "true");
+toast.success("📧 Un e-mail de vérification vient de t&apos;être envoyé. Vérifie ta boîte de réception (et les spams).", {
+  position: "top-center",
+  autoClose: 8000, // ⏱️ durée un peu plus longue (8s)
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  style: {
+    fontSize: "1.1rem", // ⬆️ texte plus grand
+    fontWeight: "500",
+    padding: "16px 20px",
+    borderRadius: "12px",
+    backgroundColor: "#1a1a1a", // fond noir pour coller à ton thème
+    color: "#ffffff", // texte blanc
+    border: "1px solid #C800FF"
+  },
+});
+setTimeout(() => router.push("/login"), 8000);
 
   // Redirection vers login
-  router.push("/login");
+  
 } catch (err) {
   console.error(err);
   setError("Erreur lors de l'inscription.");
@@ -59,7 +78,9 @@ export default function Register() {
   };
 
   return (
+    
     <main className="overflow-x-hidden bg-black text-white min-h-screen flex flex-col relative">
+      <ToastContainer />
       {/* Fond visuel */}
       <div className="absolute inset-0 z-0">
         <div className="absolute w-[300px] h-[300px] bg-[#F28500] rounded-full blur-[120px] top-1/4 left-1/2 opacity-60" />

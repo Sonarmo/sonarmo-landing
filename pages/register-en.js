@@ -7,6 +7,8 @@ import nookies from "nookies";
 import Link from "next/link";
 import Image from "next/image";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -44,16 +46,33 @@ export default function Register() {
 
       await auth.signOut();
 
-      localStorage.setItem("pendingVerification", "true");
-      router.push("/login-en");
+      toast.success("📧 A verification email has been sent. Please check your inbox (and spam folder).", {
+  position: "top-center",
+  autoClose: 8000, // ⏱️ slightly longer duration (8s)
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  style: {
+    fontSize: "1.1rem", // ⬆️ larger text
+    fontWeight: "500",
+    padding: "16px 20px",
+    borderRadius: "12px",
+    backgroundColor: "#1a1a1a", // black background matching your theme
+    color: "#ffffff", // white text
+    border: "1px solid #C800FF"
+  },
+});
+setTimeout(() => router.push("/login-en"), 8000);
     } catch (err) {
       console.error(err);
-      setError("Error while creating the account.");
+      setError("An error occurred during registration.");
     }
   };
 
   return (
     <main className="overflow-x-hidden bg-black text-white min-h-screen flex flex-col relative">
+      <ToastContainer />
       {/* Fond visuel */}
       <div className="absolute inset-0 z-0">
         <div className="absolute w-[300px] h-[300px] bg-[#F28500] rounded-full blur-[120px] top-1/4 left-1/2 opacity-60" />
