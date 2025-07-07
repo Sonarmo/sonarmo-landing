@@ -82,12 +82,12 @@ export default function Home() {
   />
 </div>
       <div className="w-full flex justify-center text-center px-4">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-6 max-w-3xl">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-6 max-w-3xl mx-auto">
           <BlurText
             text="Atmospheric Intelligence"
             animateBy="words"
             direction="top"
-            className="inline-block"
+            className="inline"
             highlight={{ Atmospheric : "text-[#FCE2BA]" }}
           />
         </h1>
