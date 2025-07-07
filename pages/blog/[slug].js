@@ -73,12 +73,16 @@ export async function getStaticProps({ params }) {
 
   const data = docSnap.data();
 
-  // ✅ Convertir les objets non sérialisables comme Timestamp
+  // ✅ On ne garde que les champs sérialisables
   const post = {
-    ...data,
     slug: params.slug,
+    title: data.title || "",
+    content: data.content || "",
+    imageUrl: data.imageUrl || null,
+    excerpt: data.excerpt || "",
+    date: data.date || data.createdAt?.toDate().toLocaleDateString("fr-FR"),
     createdAt: data.createdAt?.toDate().toISOString() || null,
-    date: data.date || data.createdAt?.toDate().toLocaleDateString("fr-FR"), // fallback affichable
+    author: data.author || "",
   };
 
   return {
