@@ -81,17 +81,19 @@ export default function Home() {
     priority
   />
 </div>
-      <div className="w-full flex justify-center text-center px-4">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-6 max-w-3xl mx-auto">
-          <BlurText
+      <div className="w-full px-4 text-center">
+  <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-6 max-w-xl mx-auto leading-snug">
+    <span className="block">
+      <BlurText
             text="Atmospheric Intelligence"
             animateBy="words"
             direction="top"
             className="inline"
             highlight={{ Atmospheric : "text-[#FCE2BA]" }}
-          />
-        </h1>
-      </div>
+         />
+    </span>
+  </h1>
+</div>
           
           
           <p className="mx-auto text-gray-400 text-lg mb-12">
