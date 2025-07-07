@@ -16,7 +16,10 @@ export default function BlogPost({ post }) {
     <div className="min-h-screen bg-black text-white font-[Poppins]">
       <Head>
         <title>{post?.title} | Sonarmo Blog</title>
-        <meta name="description" content={post?.excerpt || post?.content?.slice(0, 150)} />
+        <meta
+          name="description"
+          content={post?.excerpt || post?.content?.slice(0, 150)}
+        />
       </Head>
 
       <main className="max-w-3xl mx-auto px-6 py-12">
@@ -39,8 +42,8 @@ export default function BlogPost({ post }) {
         )}
 
         <div className="prose prose-invert max-w-none text-white">
-  <ReactMarkdown>{post.content}</ReactMarkdown>
-</div>
+          <ReactMarkdown>{post.content}</ReactMarkdown>
+        </div>
       </main>
     </div>
   );
@@ -49,7 +52,7 @@ export default function BlogPost({ post }) {
 export async function getStaticPaths() {
   const snapshot = await getDocs(collection(db, "blogPosts"));
   const paths = snapshot.docs.map((doc) => ({
-    params: { slug: doc.id }, // on utilise l'ID comme slug
+    params: { slug: doc.id },
   }));
 
   return {
@@ -68,14 +71,19 @@ export async function getStaticProps({ params }) {
     };
   }
 
-  const post = docSnap.data();
+  const data = docSnap.data();
+
+  // ✅ Convertir les objets non sérialisables comme Timestamp
+  const post = {
+    ...data,
+    slug: params.slug,
+    createdAt: data.createdAt?.toDate().toISOString() || null,
+    date: data.date || data.createdAt?.toDate().toLocaleDateString("fr-FR"), // fallback affichable
+  };
 
   return {
     props: {
-      post: {
-        ...post,
-        slug: params.slug,
-      },
+      post,
     },
     revalidate: 60,
   };
