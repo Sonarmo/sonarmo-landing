@@ -18,7 +18,7 @@ export default function AnimatedWave() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    const NUM_PARTICLES = 8000;
+    const NUM_PARTICLES = 3000;
     const baseAmplitude = canvas.height * 0.1;
 
     let particles = [];
