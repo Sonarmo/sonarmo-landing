@@ -79,11 +79,10 @@ const BlurText = ({
   );
 
   return (
-    <p
-      ref={ref}
-      className={className}
-      style={{ display: 'flex', flexWrap: 'wrap' }}
-    >
+   <p
+  ref={ref}
+  className={`flex flex-wrap md:flex-nowrap justify-center ${className}`}
+>
       {elements.map((segment, index) => {
   const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
   const spanTransition = {

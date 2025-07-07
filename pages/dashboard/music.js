@@ -144,7 +144,57 @@ export default function MusicPage() {
             spotifyUrl={`https://open.spotify.com/playlist/${userProfile?.mainPlaylist?.id}`}
           />
         )}
+{userProfile?.mainPlaylist?.id && (
+  <div className="bg-[#1c1c1c] p-6 rounded-xl shadow-lg mb-10">
+    <h2 className="text-xl font-bold mb-2">Playlist principale</h2>
+    
+    <p className="text-gray-400 text-sm mb-4">
+      Générée le : {new Date(userProfile.mainPlaylist.lastUpdated).toLocaleString("fr-FR")}
+      <br />
+      Ambiance : {userProfile.mainPlaylist.mood || "N.C."} | Météo : {userProfile.mainPlaylist.meteo || "N.C."}
+    </p>
 
+    <div className="flex flex-wrap gap-4">
+      <button
+        onClick={() => playPlaylist(`spotify:playlist:${userProfile.mainPlaylist.id}`)}
+        className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] text-white px-6 py-2 rounded-full font-semibold hover:opacity-90"
+      >
+        Écouter la playlist
+      </button>
+
+      <a
+        href={userProfile.mainPlaylist.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline text-[#1DB954] flex items-center"
+      >
+        Voir sur Spotify
+      </a>
+
+      <button
+        onClick={async () => {
+          try {
+            const res = await fetch(`/api/generate-playlist?id=${uid}`);
+            const data = await res.json();
+
+            if (res.ok) {
+              alert("✅ Playlist régénérée avec succès !");
+              window.location.reload();
+            } else {
+              alert("❌ Erreur : " + data.error);
+            }
+          } catch (error) {
+            console.error("Erreur génération:", error);
+            alert("❌ Erreur inattendue");
+          }
+        }}
+        className="bg-blue-700 px-6 py-2 rounded-full text-white font-semibold hover:bg-blue-600"
+      >
+        Régénérer la playlist
+      </button>
+    </div>
+  </div>
+)}
         <section className="bg-[#1c1c1c] p-6 rounded-xl shadow-lg mb-10">
           <h2 className="text-2xl font-semibold mb-4">Intelligence Atmospherique</h2>
           <textarea
