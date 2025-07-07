@@ -18,6 +18,7 @@
     "@vercel/analytics": "^1.5.0",
     "ai": "^4.3.16",
     "axios": "^1.9.0",
+    "easymde": "^2.20.0",
     "firebase": "^11.6.0",
     "firebase-admin": "^13.3.0",
     "framer-motion": "^12.23.0",
@@ -31,8 +32,10 @@
     "react-bits": "^1.0.5",
     "react-dom": "^19.0.0",
     "react-select": "^5.10.1",
+    "react-simplemde-editor": "^5.2.0",
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.3",
+    "simplemde": "^1.11.2",
     "stripe": "^18.2.1",
     "tarteaucitronjs": "^1.21.0"
   },

@@ -1,3 +1,5 @@
+// pages/_app.js
+
 import "/styles/globals.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -15,6 +17,10 @@ function MyApp({ Component, pageProps }) {
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@uiw/react-markdown-preview@5.1.4/markdown.css"
         />
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
       </Head>

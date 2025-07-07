@@ -74,3 +74,31 @@ body {
     border-top-color: transparent;
   }
 }
+/* 🎨 Thème sombre personnalisé pour SimpleMDE */
+.editor-toolbar {
+  background-color: #1c1c1c !important;
+  border-color: #333 !important;
+}
+
+.editor-toolbar a {
+  color: #fff !important;
+}
+
+.editor-toolbar a:hover,
+.editor-toolbar a.active {
+  background-color: #333 !important;
+}
+
+.CodeMirror {
+  background-color: #1c1c1c !important;
+  color: #fff !important;
+  border: 1px solid #3d3d3d;
+}
+
+.CodeMirror-cursor {
+  border-left: 1px solid #fff !important;
+}
+
+.CodeMirror-lines {
+  padding: 12px;
+}
