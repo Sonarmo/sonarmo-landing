@@ -15,9 +15,9 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
 // 🔧 Initialisation Firebase Admin
 if (!getApps().length) {
   initializeApp({
-    credential: cert(serviceAccount),
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "sonarmo-app.appspot.com",
-  });
+  credential: cert(serviceAccount),
+  storageBucket: "sonarmo-app.appspot.com", // ✅ valeur directe ici
+});
 }
 
 const bucket = getStorage().bucket();
