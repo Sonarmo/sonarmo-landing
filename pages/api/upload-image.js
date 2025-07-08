@@ -1,53 +1,57 @@
-import { initializeApp, getApps } from "firebase/app";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage } from "firebase-admin/storage";
+import { getApp, getApps, initializeApp, cert } from "firebase-admin/app";
+import { v4 as uuidv4 } from "uuid";
 
-// ✅ Recycle ou initialise Firebase uniquement côté API
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+const serviceAccount = {
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
 };
 
 if (!getApps().length) {
-  initializeApp(firebaseConfig);
+  initializeApp({
+    credential: cert(serviceAccount),
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  });
 }
-const storage = getStorage();
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "10mb", // augmente la taille autorisée pour le body
-    },
-  },
-};
+const bucket = getStorage().bucket();
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 
-  const { file, fileName } = req.body;
-
-  if (!file || !fileName) {
-    return res.status(400).json({ error: "Fichier ou nom manquant" });
-  }
-
   try {
-    const base64Data = file.split(",")[1]; // retire le header "data:image/..."
-    const buffer = Buffer.from(base64Data, "base64");
-    const safeName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const fullPath = `blog/${Date.now()}-${safeName}`;
-    const storageRef = ref(storage, fullPath);
+    const { image, fileName } = req.body;
 
-    await uploadBytes(storageRef, buffer);
-    const downloadURL = await getDownloadURL(storageRef);
+    if (!image || !fileName) {
+      return res.status(400).json({ error: "Image ou nom de fichier manquant" });
+    }
 
-    return res.status(200).json({ url: downloadURL });
-  } catch (err) {
-    console.error("🔥 Erreur dans upload-image:", err);
+    const base64EncodedImage = image.replace(/^data:image\/\w+;base64,/, "");
+    const buffer = Buffer.from(base64EncodedImage, "base64");
+
+    const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
+    const destination = `blog/${Date.now()}-${sanitizedFileName}`;
+
+    const file = bucket.file(destination);
+
+    await file.save(buffer, {
+      metadata: {
+        contentType: "image/jpeg",
+        metadata: {
+          firebaseStorageDownloadTokens: uuidv4(),
+        },
+      },
+      public: true,
+    });
+
+    const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(destination)}?alt=media`;
+
+    return res.status(200).json({ imageUrl });
+  } catch (error) {
+    console.error("🔥 Erreur dans upload-image:", error);
     return res.status(500).json({ error: "Erreur serveur durant l'upload" });
   }
 }
