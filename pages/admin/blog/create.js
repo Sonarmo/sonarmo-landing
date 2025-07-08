@@ -4,7 +4,7 @@ import { db, auth, storage } from "/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import dynamic from "next/dynamic";
-import "easymde/dist/easymde.min.css"; // ✅ CSS à garder
+import "easymde/dist/easymde.min.css";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false });
 
@@ -31,7 +31,12 @@ export default function CreateBlogPost() {
         const sanitizedFileName = imageFile.name.replace(/[^a-zA-Z0-9.-]/g, "_");
         const imageRef = ref(storage, `blog/${Date.now()}-${sanitizedFileName}`);
         await uploadBytes(imageRef, imageFile);
+
+        // 🧪 Attente avant de récupérer l'URL
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
         imageUrl = await getDownloadURL(imageRef);
+        console.log("✅ Image URL récupérée :", imageUrl);
       }
 
       await addDoc(collection(db, "blogPosts"), {
@@ -66,19 +71,19 @@ export default function CreateBlogPost() {
         />
 
         <div className="rounded overflow-hidden">
-  <SimpleMDE
-    key="simplemde"
-    value={content}
-    onChange={setContent}
-    options={{
-      spellChecker: false,
-      autofocus: true,
-      placeholder: "Écris ton article ici...",
-      status: false,
-      toolbar: ["bold", "italic", "heading", "|", "quote", "code", "|", "preview", "side-by-side", "fullscreen"],
-    }}
-  />
-</div>
+          <SimpleMDE
+            key="simplemde"
+            value={content}
+            onChange={setContent}
+            options={{
+              spellChecker: false,
+              autofocus: true,
+              placeholder: "Écris ton article ici...",
+              status: false,
+              toolbar: ["bold", "italic", "heading", "|", "quote", "code", "|", "preview", "side-by-side", "fullscreen"],
+            }}
+          />
+        </div>
 
         <input
           type="file"
