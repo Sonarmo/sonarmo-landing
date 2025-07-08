@@ -93,7 +93,7 @@ export default function BlogHome({ posts }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const snapshot = await getDocs(collection(db, "blogPosts"));
 
   const posts = snapshot.docs.map((doc) => {
@@ -110,6 +110,5 @@ export async function getStaticProps() {
     props: {
       posts,
     },
-    revalidate: 60, // Mise à jour automatique
   };
 }
