@@ -23,7 +23,7 @@ export default function CreateBlogPost() {
           const res = await fetch("/api/upload-image", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ image: base64, fileName: file.name }), // ← ici
+body: JSON.stringify({ file: base64, fileName: file.name }),
 });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error);

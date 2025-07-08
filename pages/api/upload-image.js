@@ -1,26 +1,5 @@
-import { getStorage } from "firebase-admin/storage";
-import { getApps, initializeApp, cert } from "firebase-admin/app";
 import { v4 as uuidv4 } from "uuid";
-
-// 🔐 Récupération et parsing sécurisé de la clé
-let serviceAccount;
-
-if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
-  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
-  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n");
-} else {
-  throw new Error("❌ Variable FIREBASE_SERVICE_ACCOUNT_KEY manquante.");
-}
-
-// 🔧 Initialisation Firebase Admin
-if (!getApps().length) {
-  initializeApp({
-  credential: cert(serviceAccount),
-  storageBucket: "sonarmo-app.appspot.com", // ✅ valeur directe ici
-});
-}
-
-const bucket = getStorage().bucket();
+import { bucket } from "@/lib/firebaseStorage"; // 🔥 Tu utilises maintenant le bon bucket initialisé
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -28,13 +7,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { image, fileName } = req.body;
+    const { file: image, fileName } = req.body;
 
     if (!image || !fileName) {
       return res.status(400).json({ error: "Image ou nom de fichier manquant" });
     }
 
-    // 🔍 Extraction du type MIME + données
     const matches = image.match(/^data:(image\/\w+);base64,(.+)$/);
     if (!matches || matches.length !== 3) {
       return res.status(400).json({ error: "Format d'image invalide" });
@@ -48,7 +26,6 @@ export default async function handler(req, res) {
     const destination = `blog/${Date.now()}-${sanitizedFileName}`;
     const file = bucket.file(destination);
 
-    // 📤 Envoi du fichier
     await file.save(buffer, {
       metadata: {
         contentType,
@@ -59,7 +36,6 @@ export default async function handler(req, res) {
       public: true,
     });
 
-    // 🔗 Construction de l’URL publique
     const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(destination)}?alt=media`;
 
     return res.status(200).json({ imageUrl });
