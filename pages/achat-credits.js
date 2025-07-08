@@ -45,6 +45,7 @@ export default function AchatCredits() {
           <Link href="/generateur" className="hover:text-gray-300">GÉNÉRATEUR DE PLAYLIST</Link>
           <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACT</Link>
+          <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
           <LanguageSwitcher />
         </nav>
       </header>

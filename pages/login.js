@@ -162,6 +162,7 @@ export default function Login() {
             <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
             <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+            <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
             <LanguageSwitcher />
           </nav>
         </header>

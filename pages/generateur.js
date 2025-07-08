@@ -114,6 +114,7 @@ export default function Generateur() {
           <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
           <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+          <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
           <Link href="/logout" className="hover:text-gray-300 flex items-center gap-1">
             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
             SE DECONNECTER
@@ -147,6 +148,7 @@ export default function Generateur() {
             <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
             <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+            <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
             <Link href="/logout" className="hover:text-gray-300 flex items-center gap-1">
               <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
               SE DECONNECTER

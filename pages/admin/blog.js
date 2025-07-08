@@ -55,7 +55,7 @@ export default function BlogAdminPage() {
                 </div>
                 <div className="flex gap-2">
                   <Link
-                    href={`/admin/blog/${article.id}`}
+                    href={`/admin/edit-post/${article.id}`}
                     className="bg-white text-black px-3 py-1 rounded text-sm"
                   >
                     Modifier

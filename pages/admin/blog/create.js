@@ -113,7 +113,7 @@ export default function CreateBlogPost() {
           disabled={loading}
           className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] text-white px-6 py-2 rounded font-semibold"
         >
-          {loading ? "Enregistrement..." : "Créer l&apos;article"}
+          {loading ? "Enregistrement..." : "Créer l'article"}
         </button>
       </form>
     </div>
