@@ -28,7 +28,8 @@ export default function CreateBlogPost() {
 
       let imageUrl = "";
       if (imageFile) {
-        const imageRef = ref(storage, `blog/${Date.now()}-${imageFile.name}`);
+        const sanitizedFileName = imageFile.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+        const imageRef = ref(storage, `blog/${Date.now()}-${sanitizedFileName}`);
         await uploadBytes(imageRef, imageFile);
         imageUrl = await getDownloadURL(imageRef);
       }
