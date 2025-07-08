@@ -1,19 +1,18 @@
 import { getStorage } from "firebase-admin/storage";
-import { getApp, getApps, initializeApp, cert } from "firebase-admin/app";
+import { getApps, initializeApp, cert } from "firebase-admin/app";
 import { v4 as uuidv4 } from "uuid";
 
-// 🔍 Sécurité & debug
-console.log("🔐 ENV - PROJECT_ID:", process.env.FIREBASE_PROJECT_ID);
-console.log("🔐 ENV - CLIENT_EMAIL:", process.env.FIREBASE_CLIENT_EMAIL);
-console.log("🔐 ENV - STORAGE_BUCKET:", process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
+// 🔐 Récupération et parsing sécurisé de la clé
+let serviceAccount;
 
-const serviceAccount = {
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-};
+if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n");
+} else {
+  throw new Error("❌ Variable FIREBASE_SERVICE_ACCOUNT_KEY manquante.");
+}
 
-// ✅ Initialisation Firebase Admin
+// 🔧 Initialisation Firebase Admin
 if (!getApps().length) {
   initializeApp({
     credential: cert(serviceAccount),
@@ -29,15 +28,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { image, fileName } = req.body;
+    const { file: image, fileName } = req.body;
 
     if (!image || !fileName) {
       return res.status(400).json({ error: "Image ou nom de fichier manquant" });
     }
 
+    // 🔍 Extraction du type MIME + données
     const matches = image.match(/^data:(image\/\w+);base64,(.+)$/);
     if (!matches || matches.length !== 3) {
-      return res.status(400).json({ error: "Format d&apos;image invalide" });
+      return res.status(400).json({ error: "Format d'image invalide" });
     }
 
     const contentType = matches[1];
@@ -48,11 +48,7 @@ export default async function handler(req, res) {
     const destination = `blog/${Date.now()}-${sanitizedFileName}`;
     const file = bucket.file(destination);
 
-    // 🧪 Debug log
-    console.log("📤 Uploading to:", bucket.name);
-    console.log("📝 File:", destination);
-    console.log("🧾 Content-Type:", contentType);
-
+    // 📤 Envoi du fichier
     await file.save(buffer, {
       metadata: {
         contentType,
@@ -63,13 +59,12 @@ export default async function handler(req, res) {
       public: true,
     });
 
+    // 🔗 Construction de l’URL publique
     const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(destination)}?alt=media`;
 
-    console.log("✅ Upload réussi. URL:", imageUrl);
     return res.status(200).json({ imageUrl });
-
   } catch (error) {
     console.error("🔥 Erreur dans upload-image:", error);
-    return res.status(500).json({ error: "Erreur serveur durant l&apos;upload" });
+    return res.status(500).json({ error: "Erreur serveur durant l'upload" });
   }
 }
