@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { db, auth, storage } from "/lib/firebase";
+import { db, auth } from "/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 
@@ -14,6 +13,30 @@ export default function CreateBlogPost() {
   const [content, setContent] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const uploadImageViaApi = async (file) => {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onloadend = async () => {
+        try {
+          const base64 = reader.result;
+          const res = await fetch("/api/upload-image", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ file: base64, fileName: file.name }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error);
+          resolve(data.url);
+        } catch (err) {
+          console.error("Erreur API upload:", err);
+          reject(err);
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,15 +51,8 @@ export default function CreateBlogPost() {
 
       let imageUrl = "";
       if (imageFile) {
-        const sanitizedFileName = imageFile.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-        const imageRef = ref(storage, `blog/${Date.now()}-${sanitizedFileName}`);
-        await uploadBytes(imageRef, imageFile);
-
-        // 🧪 Attente avant de récupérer l'URL
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
-        imageUrl = await getDownloadURL(imageRef);
-        console.log("✅ Image URL récupérée :", imageUrl);
+        imageUrl = await uploadImageViaApi(imageFile);
+        console.log("✅ Image uploadée via API :", imageUrl);
       }
 
       await addDoc(collection(db, "blogPosts"), {
