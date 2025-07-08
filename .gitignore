@@ -44,3 +44,10 @@ firebaseServiceAccount.json
 firebaseServiceAccount.json
 lib/firebaseServiceAccount.json
 node_modules.env.local
+
+node_modules/
+.next/
+.DS_Store
+dist/
+.cache/
+firebase-debug.log
