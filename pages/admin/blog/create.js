@@ -20,14 +20,14 @@ export default function CreateBlogPost() {
       reader.onloadend = async () => {
         try {
           const base64 = reader.result;
-          const res = await fetch("/api/upload-image", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ file: base64, fileName: file.name }),
-});
+          const res = await fetch("/api/upload-cloudinary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ imageBase64: base64, fileName: file.name }),
+          });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error);
-          resolve(data.url);
+          resolve(data.imageUrl);
         } catch (err) {
           console.error("Erreur API upload:", err);
           reject(err);
@@ -52,7 +52,7 @@ body: JSON.stringify({ file: base64, fileName: file.name }),
       let imageUrl = "";
       if (imageFile) {
         imageUrl = await uploadImageViaApi(imageFile);
-        console.log("✅ Image uploadée via API :", imageUrl);
+        console.log("✅ Image uploadée via Cloudinary :", imageUrl);
       }
 
       await addDoc(collection(db, "blogPosts"), {
@@ -113,7 +113,7 @@ body: JSON.stringify({ file: base64, fileName: file.name }),
           disabled={loading}
           className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] text-white px-6 py-2 rounded font-semibold"
         >
-          {loading ? "Enregistrement..." : "Créer l'article"}
+          {loading ? "Enregistrement..." : "Créer l&apos;article"}
         </button>
       </form>
     </div>
