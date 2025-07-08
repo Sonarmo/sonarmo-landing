@@ -29,17 +29,27 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Image ou nom de fichier manquant" });
     }
 
-    const base64EncodedImage = image.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64EncodedImage, "base64");
+    const matches = image.match(/^data:(image\/\w+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return res.status(400).json({ error: "Format d&apos;image invalide" });
+    }
+
+    const contentType = matches[1];
+    const base64Data = matches[2];
+    const buffer = Buffer.from(base64Data, "base64");
 
     const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
     const destination = `blog/${Date.now()}-${sanitizedFileName}`;
-
     const file = bucket.file(destination);
+
+    // 🔍 Debug logs
+    console.log("📦 Uploading to bucket:", bucket.name);
+    console.log("🖼️ Nom du fichier:", destination);
+    console.log("📎 Type:", contentType);
 
     await file.save(buffer, {
       metadata: {
-        contentType: "image/jpeg",
+        contentType,
         metadata: {
           firebaseStorageDownloadTokens: uuidv4(),
         },
@@ -52,6 +62,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ imageUrl });
   } catch (error) {
     console.error("🔥 Erreur dans upload-image:", error);
-    return res.status(500).json({ error: "Erreur serveur durant l'upload" });
+    return res.status(500).json({ error: "Erreur serveur durant l&apos;upload" });
   }
 }
