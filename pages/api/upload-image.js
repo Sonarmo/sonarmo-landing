@@ -1,9 +1,7 @@
-// pages/api/upload-image.js
-
+import { initializeApp, getApps } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { initializeApp } from "firebase/app";
 
-// ⚙️ Firebase config minimal (ou importe depuis /lib/firebase si tu préfères)
+// ✅ Recycle ou initialise Firebase uniquement côté API
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -13,13 +11,15 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
+if (!getApps().length) {
+  initializeApp(firebaseConfig);
+}
+const storage = getStorage();
 
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "10mb", // max image upload size
+      sizeLimit: "10mb", // augmente la taille autorisée pour le body
     },
   },
 };
@@ -32,21 +32,22 @@ export default async function handler(req, res) {
   const { file, fileName } = req.body;
 
   if (!file || !fileName) {
-    return res.status(400).json({ error: "Fichier manquant" });
+    return res.status(400).json({ error: "Fichier ou nom manquant" });
   }
 
   try {
-    const buffer = Buffer.from(file.split(",")[1], "base64");
-    const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const filePath = `blog/${Date.now()}-${sanitizedFileName}`;
-    const fileRef = ref(storage, filePath);
+    const base64Data = file.split(",")[1]; // retire le header "data:image/..."
+    const buffer = Buffer.from(base64Data, "base64");
+    const safeName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
+    const fullPath = `blog/${Date.now()}-${safeName}`;
+    const storageRef = ref(storage, fullPath);
 
-    await uploadBytes(fileRef, buffer);
-    const downloadURL = await getDownloadURL(fileRef);
+    await uploadBytes(storageRef, buffer);
+    const downloadURL = await getDownloadURL(storageRef);
 
     return res.status(200).json({ url: downloadURL });
   } catch (err) {
-    console.error("Erreur upload image API :", err);
-    return res.status(500).json({ error: "Échec de l'upload" });
+    console.error("🔥 Erreur dans upload-image:", err);
+    return res.status(500).json({ error: "Erreur serveur durant l'upload" });
   }
 }
