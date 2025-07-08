@@ -15,7 +15,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "mosaic.scdn.co", // images mosaïques Spotify
       },
-      // Ajoute ici d'autres domaines si besoin
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com", // ✅ pour Cloudinary
+      },
     ],
   },
 };
