@@ -2,11 +2,14 @@ import { getStorage } from "firebase-admin/storage";
 import { getApp, getApps, initializeApp, cert } from "firebase-admin/app";
 import { v4 as uuidv4 } from "uuid";
 
-const serviceAccount = {
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-};
+let serviceAccount;
+
+if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n");
+} else {
+  throw new Error("❌ Clé FIREBASE_SERVICE_ACCOUNT_KEY manquante.");
+}
 
 if (!getApps().length) {
   initializeApp({
@@ -41,11 +44,6 @@ export default async function handler(req, res) {
     const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
     const destination = `blog/${Date.now()}-${sanitizedFileName}`;
     const file = bucket.file(destination);
-
-    // 🔍 Debug logs
-    console.log("📦 Uploading to bucket:", bucket.name);
-    console.log("🖼️ Nom du fichier:", destination);
-    console.log("📎 Type:", contentType);
 
     await file.save(buffer, {
       metadata: {
