@@ -29,6 +29,7 @@ export default function BlogHome({ posts }) {
       <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
       <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
       <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+      <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
       <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
         <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
         SE CONNECTER
@@ -51,6 +52,7 @@ export default function BlogHome({ posts }) {
       <Link href="/explique-generation" className="block text-white hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
       <Link href="/experience" className="block text-white hover:text-gray-300">SONARMO PRO</Link>
       <Link href="/contact" className="block text-white hover:text-gray-300">CONTACTEZ-NOUS</Link>
+      <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
       <Link href="/login" className="block text-white hover:text-gray-300 flex items-center gap-1">
         <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
         SE CONNECTER

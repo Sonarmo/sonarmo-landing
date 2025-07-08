@@ -28,6 +28,7 @@ export default function BlogPost({ post }) {
     <Link href="/explique-generation" className="hover:text-gray-300">GÉNÉRATEUR DE PLAYLIST</Link>
     <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
     <Link href="/contact" className="hover:text-gray-300">CONTACT</Link>
+    <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
     <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
       <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
       SE CONNECTER
@@ -47,10 +48,12 @@ export default function BlogPost({ post }) {
   {/* Drawer menu mobile */}
   {mobileMenuOpen && (
     <div className="absolute top-full right-4 mt-2 bg-[#1a1a1a] border border-gray-700 rounded-xl shadow-lg z-50 flex flex-col w-56 p-4 space-y-2">
-      <Link href="/explique-generation" className="text-sm text-white hover:text-[#F28500]">Générateur</Link>
+      <Link href="/explique-generation" className="text-sm text-white hover:text-[#F28500]">Générateur de playlit</Link>
       <Link href="/experience" className="text-sm text-white hover:text-[#F28500]">Sonarmo Pro</Link>
-      <Link href="/contact" className="text-sm text-white hover:text-[#F28500]">Contact</Link>
+      <Link href="/contact" className="text-sm text-white hover:text-[#F28500]">Contactez-nous</Link>
+      <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
       <Link href="/login" className="text-sm text-white hover:text-[#F28500]">Connexion</Link>
+      
     </div>
   )}
 </header>
