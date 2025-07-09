@@ -107,6 +107,7 @@ export default function Team() {
       Pour que chaque lieu puisse vibrer à sa propre fréquence.
     </p>
 
+
     <div className="flex justify-center mt-2">
       <a
         href="https://www.linkedin.com/in/arthur-fromont-895ba8a9/"
@@ -129,6 +130,24 @@ export default function Team() {
     </div>
   </div>
 </motion.div>
+
+<div className="max-w-4xl mx-auto mt-8 relative z-10">
+  <p className="text-3xl font-semibold mb-10 text-center">Mon univers musical :</p>
+  <div className="flex justify-center">
+    <div className="rounded-xl overflow-hidden w-[70%]">
+      <iframe
+        style={{ borderRadius: '12px' }}
+        src="https://open.spotify.com/embed/playlist/2ttG6ckTlmoNLYDsnFztN6?utm_source=generator"
+        width="100%"
+        height="352"
+        frameBorder="0"
+        allowFullScreen
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
