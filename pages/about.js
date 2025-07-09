@@ -18,7 +18,7 @@ export default function About() {
                 <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
             </Head>
 
-            <main className="min-h-screen px-6 md:px-20 py-16 relative">
+            <main className="min-h-screen px-6 md:px-20 relative">
                 {/* HEADER */}
                 <header className="relative z-10 flex justify-between items-center py-4">
                     <Link href="/" className="flex items-center gap-2">
@@ -30,6 +30,7 @@ export default function About() {
                         <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
                         <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
                         <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+                        <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
                         <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
                             <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
                             SE CONNECTER
@@ -64,6 +65,7 @@ export default function About() {
                             <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
                             <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
                             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
+                            <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
                             <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
                                 <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
                                 SE CONNECTER
