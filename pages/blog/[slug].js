@@ -92,10 +92,23 @@ export default function BlogPost({ post }) {
           </div>
         )}
 
-        <ReactMarkdown
+       <ReactMarkdown
   components={{
-    p: ({ node, ...props }) => <p className="mb-6" {...props} />,
-    li: ({ node, ...props }) => <li className="mb-3 ml-4 list-disc" {...props} />,
+    h1: ({ node, ...props }) => (
+      <h1 className="text-3xl font-bold mt-10 mb-4 text-white" {...props} />
+    ),
+    h2: ({ node, ...props }) => (
+      <h2 className="text-2xl font-bold mt-8 mb-3 text-white" {...props} />
+    ),
+    h3: ({ node, ...props }) => (
+      <h3 className="text-xl font-semibold mt-6 mb-2 text-white" {...props} />
+    ),
+    p: ({ node, ...props }) => (
+      <p className="mb-6 leading-relaxed" {...props} />
+    ),
+    li: ({ node, ...props }) => (
+      <li className="mb-3 ml-4 list-disc" {...props} />
+    ),
   }}
 >
   {post.content}
