@@ -92,9 +92,14 @@ export default function BlogPost({ post }) {
           </div>
         )}
 
-        <div className="prose prose-invert max-w-none text-white leading-relaxed tracking-wide text-[17px] prose-p:mb-4 prose-li:mb-2 prose-img:rounded-xl prose-img:border prose-img:border-gray-700">
-  <ReactMarkdown>{post.content}</ReactMarkdown>
-</div>
+        <ReactMarkdown
+  components={{
+    p: ({ node, ...props }) => <p className="mb-6" {...props} />,
+    li: ({ node, ...props }) => <li className="mb-3 ml-4 list-disc" {...props} />,
+  }}
+>
+  {post.content}
+</ReactMarkdown>
       </main>
     </div>
   );
