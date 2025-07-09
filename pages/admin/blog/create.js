@@ -4,6 +4,7 @@ import { db, auth } from "/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
+import ReactMarkdown from "react-markdown";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false });
 
@@ -96,7 +97,12 @@ export default function CreateBlogPost() {
               autofocus: true,
               placeholder: "Écris ton article ici...",
               status: false,
-              toolbar: ["bold", "italic", "heading", "|", "quote", "code", "|", "preview", "side-by-side", "fullscreen"],
+              toolbar: [
+  "bold", "italic", "heading", "|",
+  "quote", "unordered-list", "ordered-list", "|",
+  "link", "image", "code", "|",
+  "preview", "side-by-side", "fullscreen"
+]
             }}
           />
         </div>

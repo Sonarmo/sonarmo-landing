@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, auth } from "/lib/firebase";
 import Head from "next/head";
+import dynamic from "next/dynamic";
+import "easymde/dist/easymde.min.css";
 
 export default function EditPost() {
   const router = useRouter();
@@ -13,6 +15,7 @@ export default function EditPost() {
   const [imageUrl, setImageUrl] = useState("");
   const [date, setDate] = useState("");
   const [loading, setLoading] = useState(true);
+  const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false });
 
   useEffect(() => {
     if (!id) return;
@@ -62,14 +65,22 @@ export default function EditPost() {
           className="w-full p-2 bg-gray-800 rounded text-white"
           required
         />
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Contenu Markdown"
-          rows={10}
-          className="w-full p-2 bg-gray-800 rounded text-white"
-          required
-        ></textarea>
+        <SimpleMDE
+  key="simplemde-edit"
+  value={content}
+  onChange={setContent}
+  options={{
+    spellChecker: false,
+    placeholder: "Modifie ton article ici...",
+    status: false,
+    toolbar: [
+      "bold", "italic", "heading", "|",
+      "quote", "unordered-list", "ordered-list", "|",
+      "link", "image", "code", "|",
+      "preview", "side-by-side", "fullscreen"
+    ],
+  }}
+/>
         <input
           type="text"
           value={imageUrl}
