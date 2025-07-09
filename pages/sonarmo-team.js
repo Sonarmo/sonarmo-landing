@@ -109,7 +109,7 @@ export default function Team() {
 
     <div className="flex justify-center mt-2">
       <a
-        href="https://www.linkedin.com/in/arthurfromont"
+        href="https://www.linkedin.com/in/arthur-fromont-895ba8a9/"
         target="_blank"
         rel="noopener noreferrer"
         className="text-gray-400 hover:text-white transition"
