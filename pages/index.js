@@ -1,17 +1,15 @@
 import Image from "next/image";
 import Head from "next/head";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import AnimatedWave from "/components/builder/AnimatedWave";
-import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 import BlurText from "/components/builder/BlurText";
+import Link from "next/link";
 import Footer from "/components/layout/Footer";
+import Header from "/components/layout/Header"; // ✅ Import du composant Header
+import { motion } from "framer-motion";
+
 
 export default function Home() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <>
       <Head>
@@ -24,68 +22,21 @@ export default function Home() {
         <link rel="icon" href="/sonarmo-experience.png" type="image/png" />
 
         {/* Open Graph / Facebook */}
-  <meta property="og:title" content="Sonarmo | Ambiance musicale intelligente" />
-  <meta property="og:description" content="Crée ton ambiance musicale personnalisée grâce à l’intelligence atmosphérique." />
-  <meta property="og:image" content="https://www.sonarmo.com/og-sonarmo.jpg" />
-  <meta property="og:url" content="https://www.sonarmo.com/" />
-  <meta property="og:type" content="website" />
+        <meta property="og:title" content="Sonarmo | Ambiance musicale intelligente" />
+        <meta property="og:description" content="Crée ton ambiance musicale personnalisée grâce à l’intelligence atmosphérique." />
+        <meta property="og:image" content="https://www.sonarmo.com/og-sonarmo.jpg" />
+        <meta property="og:url" content="https://www.sonarmo.com/" />
+        <meta property="og:type" content="website" />
 
-  {/* Twitter */}
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Sonarmo | Ambiance musicale intelligente" />
-  <meta name="twitter:description" content="Crée ton ambiance musicale personnalisée grâce à l’intelligence atmosphérique." />
-  <meta name="twitter:image" content="https://www.sonarmo.com/og-sonarmo.jpg" />
-
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sonarmo | Ambiance musicale intelligente" />
+        <meta name="twitter:description" content="Crée ton ambiance musicale personnalisée grâce à l’intelligence atmosphérique." />
+        <meta name="twitter:image" content="https://www.sonarmo.com/og-sonarmo.jpg" />
       </Head>
 
       <main className="bg-black text-white overflow-x-hidden">
-        <header className="flex justify-between items-center px-6 py-4">
-          <div className="flex items-center gap-2">
-            <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-            <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-          </div>
-
-          <nav className="hidden md:flex gap-6 text-sm items-center">
-            <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-            <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-            <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-            <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-            <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-              <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-              SE CONNECTER
-            </Link>
-            <LanguageSwitcher />
-          </nav>
-
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-              </svg>
-            </button>
-          </div>
-        </header>
-
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm z-50"
-            >
-              <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-              <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-              <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-              <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-              <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-                <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-                SE CONNECTER
-              </Link>
-              <LanguageSwitcher />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <Header />
 
         <section className="text-center px-4 py-5 bg-black">
           <div className="relative w-full max-w-xs sm:max-w-md h-[140px] sm:h-[225px] mx-auto mb-6">

@@ -107,9 +107,9 @@ const [showSuggestions, setShowSuggestions] = useState(false);
 
       <header className="flex justify-between items-center px-6 py-4 w-full relative z-10">
         <Link href="/index-es" className="flex items-center gap-2">
-  <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-  <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-</Link>
+        <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
+       <span className="text-white text-lg font-semibold italic">Sonarmo</span>
+        </Link>
         <nav className="hidden md:flex gap-6 text-sm items-center">
           <Link href="/explique-generation-es" className="hover:text-gray-300">GENERADOR DE PLAYLISTS</Link>
           <Link href="/experience-es" className="hover:text-gray-300">SONARMO PRO</Link>

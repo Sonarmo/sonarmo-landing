@@ -7,60 +7,20 @@ import { db } from "/lib/firebase"; // 🔁 Assure-toi que le chemin est bon
 import { useState } from "react";
 import { Menu, X } from "lucide-react"; // ou Heroicons si tu préfères
 import Footer from "/components/layout/Footer";
+import Header from "/components/layout/Header";
 
 export default function BlogHome({ posts }) {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-black text-white font-[Poppins]">
       <Head>
         <title>Blog Sonarmo | Musique, Ambiance & IA</title>
         <meta name="description" content="Explorez nos articles autour de l'ambiance musicale, des lieux inspirants et de l'intelligence atmosphérique." />
       </Head>
 
-      {/* Header */}
-      <header className="px-6 py-4 border-b border-gray-700">
-  <div className="flex justify-between items-center">
-    <Link href="/" className="flex items-center gap-2 cursor-pointer">
-<Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-  <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-</Link>
-
-    {/* Desktop menu */}
-    <nav className="hidden md:flex gap-6 text-sm items-center">
-      <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-      <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-      <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-      <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-      <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-        <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-        SE CONNECTER
-      </Link>
-    </nav>
-
-    {/* Mobile burger */}
-    <button
-      className="md:hidden text-white"
-      onClick={() => setMenuOpen(!menuOpen)}
-      aria-label="Toggle menu"
-    >
-      {menuOpen ? <X size={24} /> : <Menu size={24} />}
-    </button>
-  </div>
-
-  {/* Mobile dropdown */}
-  {menuOpen && (
-    <div className="md:hidden mt-4 space-y-3 text-sm">
-      <Link href="/explique-generation" className="block text-white hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-      <Link href="/experience" className="block text-white hover:text-gray-300">SONARMO PRO</Link>
-      <Link href="/contact" className="block text-white hover:text-gray-300">CONTACTEZ-NOUS</Link>
-      <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-      <Link href="/login" className="block text-white hover:text-gray-300 flex items-center gap-1">
-        <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-        SE CONNECTER
-      </Link>
-    </div>
-  )}
-</header>
+      
 
       {/* Blog */}
       <main className="px-6 py-10">
@@ -97,10 +57,10 @@ export default function BlogHome({ posts }) {
     </Link>
   ))}
 </div>
-      </main>
-
-      <Footer />
+      </main>   
     </div>
+      <Footer />
+    </>
   );
 }
 

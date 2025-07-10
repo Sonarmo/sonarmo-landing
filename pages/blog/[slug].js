@@ -6,57 +6,22 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import { useState } from "react";
+import Footer from "/components/layout/Footer";
+import Header from "/components/layout/Header";
 
 export default function BlogPost({ post }) {
   const router = useRouter();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+ 
 
   if (router.isFallback) {
     return <div className="text-white p-10">Chargement...</div>;
   }
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-black text-white font-[Poppins]">
-      <header className="flex justify-between items-center px-6 py-4 border-b border-gray-700 relative z-50">
-  <Link href="/" className="flex items-center gap-2">
-    <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-    <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-  </Link>
-
-  {/* Menu desktop */}
-  <nav className="hidden md:flex gap-6 text-sm items-center">
-    <Link href="/explique-generation" className="hover:text-gray-300">GÉNÉRATEUR DE PLAYLIST</Link>
-    <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-    <Link href="/contact" className="hover:text-gray-300">CONTACT</Link>
-    <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-    <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-      <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-      SE CONNECTER
-    </Link>
-  </nav>
-
-  {/* Menu mobile */}
-  <div className="md:hidden">
-    <button
-      onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-      className="text-white focus:outline-none text-xl"
-    >
-      ☰
-    </button>
-  </div>
-
-  {/* Drawer menu mobile */}
-  {mobileMenuOpen && (
-    <div className="absolute top-full right-4 mt-2 bg-[#1a1a1a] border border-gray-700 rounded-xl shadow-lg z-50 flex flex-col w-56 p-4 space-y-2">
-      <Link href="/explique-generation" className="text-sm text-white hover:text-[#F28500]">Générateur de playlit</Link>
-      <Link href="/experience" className="text-sm text-white hover:text-[#F28500]">Sonarmo Pro</Link>
-      <Link href="/contact" className="text-sm text-white hover:text-[#F28500]">Contactez-nous</Link>
-      <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-      <Link href="/login" className="text-sm text-white hover:text-[#F28500]">Connexion</Link>
       
-    </div>
-  )}
-</header>
       <Head>
         <title>{post?.title} | Sonarmo Blog</title>
         <meta
@@ -115,6 +80,8 @@ export default function BlogPost({ post }) {
 </ReactMarkdown>
       </main>
     </div>
+<Footer />
+    </>
   );
 }
 

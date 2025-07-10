@@ -10,6 +10,7 @@ import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "/components/layout/Footer";
+import Header from "/components/layout/Header";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -79,7 +80,11 @@ setTimeout(() => router.push("/login"), 8000);
   };
 
   return (
-    
+    <>
+    <ToastContainer />
+
+    {/* ✅ Header hors du <main> */}
+    <Header />
     <main className="overflow-x-hidden bg-black text-white min-h-screen flex flex-col relative">
       <ToastContainer />
       {/* Fond visuel */}
@@ -88,20 +93,7 @@ setTimeout(() => router.push("/login"), 8000);
         <div className="absolute w-[300px] h-[300px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-50" />
       </div>
 
-      {/* Header */}
-      <header className="flex justify-between items-center px-6 py-4 z-10 relative">
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-          <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-        </Link>
-        <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-          <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-          <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-          <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-          <LanguageSwitcher />
-        </nav>
-      </header>
+      
 
       {/* Formulaire */}
       <section className="relative z-10 px-4 py-8 flex-1 flex justify-center items-center w-full">
@@ -152,8 +144,8 @@ setTimeout(() => router.push("/login"), 8000);
           </form>
         </div>
       </section>
-
-      <Footer />
     </main>
+    <Footer />
+    </>
   );
 }

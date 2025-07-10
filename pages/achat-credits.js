@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 import Footer from "/components/layout/Footer";
+import Header from "/components/layout/Header";
 
 export default function AchatCredits() {
   const [email, setEmail] = useState(null);
@@ -33,24 +34,10 @@ export default function AchatCredits() {
   };
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-black text-white flex flex-col">
-      {/* Header Sonarmo */}
-      <header className="flex justify-between items-center px-6 py-4 w-full">
-        <Link href="/" passHref>
-  <a className="flex items-center gap-2">
-    <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-    <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-  </a>
-</Link>
-        <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/generateur" className="hover:text-gray-300">GÉNÉRATEUR DE PLAYLIST</Link>
-          <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-          <Link href="/contact" className="hover:text-gray-300">CONTACT</Link>
-          <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-          <LanguageSwitcher />
-        </nav>
-      </header>
-
+      
       <main className="flex flex-col items-center flex-grow px-6 py-10">
         <h1 className="text-3xl font-bold mb-4">Recharge tes crédits Sonarmo</h1>
         <p className="mb-8 text-center text-gray-300 max-w-xl">
@@ -104,7 +91,9 @@ export default function AchatCredits() {
 </div>
       </main>
 
-      <Footer />
+      
     </div>
+    <Footer />
+    </>
   );
 }

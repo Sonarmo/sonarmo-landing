@@ -3,68 +3,20 @@ import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import Footer from "/components/layout/Footer";
+import Header from "/components/layout/Header";
 
 export default function ConditionsVente() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   return (
+    <>
+            <Header />
     <div className="bg-black text-white min-h-screen px-6 py-10 md:px-24 md:py-16">
       <Head>
         <title>Sonarmo - Conditions Générales de Vente</title>
         <meta name="robots" content="noindex" />
       </Head>
 
-      <header className="flex justify-between items-center px-5 py-10">
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-          <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-6 text-sm items-center">
-          <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-          <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-          <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-          <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-            <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-            SE CONNECTER
-          </Link>
-        </nav>
-
-        {/* Mobile Nav Toggle */}
-        <div className="md:hidden">
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu mobile">
-            {isMenuOpen ? (
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Nav Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.nav
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="flex flex-col items-center gap-4 pb-6 md:hidden"
-          >
-            <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-            <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-            <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-            <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-              <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-              SE CONNECTER
-            </Link>
-          </motion.nav>
-        )}
-      </AnimatePresence>
 
       <h1 className="text-4xl font-bold mb-10 text-center">Conditions Générales de Vente</h1>
 
@@ -108,5 +60,7 @@ export default function ConditionsVente() {
         <p>Les présentes CGV sont régies par le droit français. En cas de litige, une solution amiable sera privilégiée. À défaut, les tribunaux compétents seront ceux du ressort du siège de l&apos;auto-entrepreneur.</p>
       </section>
     </div>
+    <Footer />
+    </>
   );
 }

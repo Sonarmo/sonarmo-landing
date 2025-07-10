@@ -7,11 +7,14 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Footer from "/components/layout/Footer";
+import Header from "/components/layout/Header";
 
 export default function About() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
 
     return (
+        <>
+        <Header />
         <div className="overflow-x-hidden bg-black text-white font-[Poppins]">
             <Head>
                 <title>Sonarmo - À propos</title>
@@ -20,60 +23,7 @@ export default function About() {
             </Head>
 
             <main className="min-h-screen px-6 md:px-20 relative">
-                {/* HEADER */}
-                <header className="relative z-10 flex justify-between items-center py-4">
-                    <Link href="/" className="flex items-center gap-2">
-                        <Image src="/sonarmo-experience.png" alt="Logo" width={32} height={32} />
-                        <span className="text-white text-lg font-semibold italic">Sonarmo</span>
-                    </Link>
-
-                    <nav className="relative z-10 hidden md:flex gap-6 text-sm items-center">
-                        <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-                        <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-                        <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-                        <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-                        <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-                            <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-                            SE CONNECTER
-                        </Link>
-                    </nav>
-
-                    {/* Mobile Nav Toggle */}
-                    <div className="md:hidden">
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                            {isMenuOpen ? (
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            ) : (
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            )}
-                        </button>
-                    </div>
-                </header>
-
-                {/* Mobile Menu */}
-                <AnimatePresence>
-                    {isMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="relative z-20 md:hidden px-6 py-4 bg-[#1c1c1c] shadow-lg flex flex-col gap-4 text-sm"
-                        >
-                            <Link href="/explique-generation" className="hover:text-gray-300">GENERATEUR DE PLAYLIST</Link>
-                            <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
-                            <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
-                            <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-                            <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-                                <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-                                SE CONNECTER
-                            </Link>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                
 
                 {/* BACKGROUND FX */}
                 <div className="absolute inset-0 z-0">
@@ -141,8 +91,8 @@ export default function About() {
                     </p>
                 </motion.div>
             </main>
-
-            <Footer />
         </div>
+        <Footer />
+        </>
     );
 }
