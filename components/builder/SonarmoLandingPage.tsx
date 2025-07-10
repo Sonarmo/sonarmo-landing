@@ -7,7 +7,7 @@ import HeroSection from "./HeroSection";
 import ConceptSection from "./ConceptSection";
 import ControlSection from "./ControlSection";
 import ContactSection from "./ContactSection";
-import Footer from "./Footer";
+import Footer from "../layout/Footer"; // bon chemin
 
 const SonarmoLandingPage = () => {
   return (
