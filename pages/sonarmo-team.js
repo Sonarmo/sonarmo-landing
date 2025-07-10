@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Heart, Waves, Users } from "lucide-react";
+import Footer from "/components/layout/Footer";
 
 export default function Team() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -196,6 +197,7 @@ export default function Team() {
           <div className="absolute w-[600px] h-[600px] bg-[#FF00FF] rounded-full blur-[100px] top-1/2 right-1/2 opacity-20" />
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
