@@ -236,32 +236,32 @@ export default function Experience() {
 
 
                 {/* SECTION - CATALOGUE */}
-                <motion.section
-                    className="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden py-20 bg-black"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
-                    viewport={{ once: true }}
-                >
-                    <motion.div
-                        className="absolute left-1/4 top-1/2 w-[200px] h-[200px] bg-[#2FD668] rounded-full blur-3xl opacity-80 -translate-x-1/2 -translate-y-1/2 z-0"
-                        animate={{ scale: [1, 1.1, 1], x: [0, 20, 0], y: [0, -20, 0] }}
-                        transition={{ duration: 0, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto px-4">
-                        <div className="text-left">
-                            <h3 className="text-2xl font-semibold text-white mb-2">Connecté à Spotify</h3>
-                            <div className="text-white text-5xl font-light">+100</div>
-                            <div className="text-gray-300 text-sm">millions de titres disponibles</div>
-                        </div>
-                        <div className="text-left max-w-md">
-                            <h4 className="text-white font-semibold text-lg mb-2">Toute la musique, sans limite</h4>
-                            <p className="text-gray-300 text-base leading-relaxed">
-                                Connectez votre compte Spotify et accédez à l&apos;intégralité de son catalogue, directement depuis la plateforme Sonarmo.
-                            </p>
-                        </div>
-                    </div>
-                </motion.section>
+<motion.section
+  className="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden py-20 bg-black"
+  initial={{ opacity: 0, y: 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6, delay: 0.4 }}
+  viewport={{ once: true }}
+>
+  <motion.div
+    className="absolute left-1/4 top-1/2 w-[200px] h-[200px] bg-[#2FD668] rounded-full blur-3xl opacity-80 -translate-x-1/2 -translate-y-1/2 z-0"
+    animate={{ scale: [1, 1.1, 1], x: [0, 20, 0], y: [0, -20, 0] }}
+    transition={{ duration: 0, repeat: Infinity, ease: "easeInOut" }}
+  />
+  <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto px-4">
+    <div className="text-left">
+      <h3 className="text-2xl font-semibold text-white mb-2">Compatible streaming</h3>
+      <div className="text-white text-5xl font-light">+100</div>
+      <div className="text-gray-300 text-sm">millions de titres disponibles</div>
+    </div>
+    <div className="text-left max-w-md">
+      <h4 className="text-white font-semibold text-lg mb-2">Toute la musique, sans limite</h4>
+      <p className="text-gray-300 text-base leading-relaxed">
+        Sonarmo se connecte aux principales plateformes de streaming pour vous offrir un accès fluide à un vaste catalogue musical mondial.
+      </p>
+    </div>
+  </div>
+</motion.section>
 
                 {/* CTA */}
                 <motion.section
