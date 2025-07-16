@@ -172,7 +172,7 @@ export default function Generateur() {
             id="prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Ex : J’ai envie de danser, mais tranquille. Une vibe groovy et détendue."
+            placeholder="Ex : Je fais un apéro en terrasse un dimanche ensoleillé avec des amis, ambiance chill & joyeuse."
             className="w-full h-32 p-4 rounded-xl bg-[#1c1c1c] text-white border border-gray-700 mb-6 resize-none placeholder:text-gray-500"
           />
           <div className="relative group">
