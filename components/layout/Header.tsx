@@ -1,13 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../lib/firebase";import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import LanguageSwitcher from "../builder/LanguageSwitcher"; // ajuste le chemin si besoin
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    setUser(user);
+  });
+  return () => unsubscribe();
+}, []);
+
+const handleLogout = async () => {
+  await signOut(auth);
+  setUser(null);
+};
 
   return (
     <header className="bg-black text-white">
@@ -24,10 +38,17 @@ export default function Header() {
           <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
           <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
           <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-          <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-            <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
-            SE CONNECTER
-          </Link>
+          {user ? (
+  <button onClick={handleLogout} className="hover:text-gray-300 flex items-center gap-1">
+    <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
+    SE DÉCONNECTER
+  </button>
+) : (
+  <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+    <Image src="/sonarmo-experience.png" alt="Mini Logo" width={20} height={20} />
+    SE CONNECTER
+  </Link>
+)}
           <LanguageSwitcher />
         </nav>
 
@@ -59,10 +80,17 @@ export default function Header() {
             <Link href="/experience" className="hover:text-gray-300">SONARMO PRO</Link>
             <Link href="/contact" className="hover:text-gray-300">CONTACTEZ-NOUS</Link>
             <Link href="/blog" className="hover:text-gray-300">BLOG</Link>
-            <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
-              <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
-              SE CONNECTER
-            </Link>
+            {user ? (
+  <button onClick={handleLogout} className="hover:text-gray-300 flex items-center gap-1">
+    <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
+    SE DÉCONNECTER
+  </button>
+) : (
+  <Link href="/login" className="hover:text-gray-300 flex items-center gap-1">
+    <Image src="/favicon.png" alt="Mini Logo" width={20} height={20} />
+    SE CONNECTER
+  </Link>
+)}
             <LanguageSwitcher />
           </motion.div>
         )}
