@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { auth, db } from "/lib/firebase";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { doc, getDoc } from "firebase/firestore";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -16,7 +15,7 @@ import { usePlayer } from "/lib/contexts/PlayerContext";
 
 export default function Dashboard() {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = router.pathname;
   const [loading, setLoading] = useState(true);
   const [ambiance, setAmbiance] = useState("Lounge Chill 🌙");
   const [ambianceUri, setAmbianceUri] = useState(null);

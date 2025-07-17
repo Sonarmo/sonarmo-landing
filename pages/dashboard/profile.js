@@ -3,13 +3,11 @@ import { useRouter } from "next/router";
 import { auth, db } from "../../lib/firebase";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { updatePassword as firebaseUpdatePassword } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export default function ProfilePage() {
     const router = useRouter();
-    const pathname = usePathname();
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState({
         placeName: "",

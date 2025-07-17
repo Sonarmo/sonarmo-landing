@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { Menu } from "lucide-react";
 import EnhancedPlayer from "/components/builder/EnhancedPlayer";
 import { usePlayer } from "/lib/contexts/PlayerContext";
 
 export default function DashboardLayout({ children }) {
-  const pathname = usePathname();
+const router = useRouter();
+  const pathname = router.pathname;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [recentTracks, setRecentTracks] = useState([]);
 

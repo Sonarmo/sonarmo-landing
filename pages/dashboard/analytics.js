@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "/components/ui/card";
@@ -28,7 +28,8 @@ function interpretValence(value) {
 }
 
 export default function AnalyticsPage() {
-  const pathname = usePathname();
+   const router = useRouter();
+  const pathname = router.pathname;
   const [stats, setStats] = useState(null);
   const [history, setHistory] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);

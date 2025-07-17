@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { auth, db } from "../../lib/firebase";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { MainPlaylistBadge } from "/components/builder/MainPlaylistBadge";
@@ -11,7 +10,6 @@ import { usePlayer } from "/lib/contexts/PlayerContext";
 
 export default function MusicPage() {
   const router = useRouter();
-  const pathname = usePathname();
   const { deviceId, setAccessToken: setContextToken } = usePlayer();
 
   const [loading, setLoading] = useState(true);

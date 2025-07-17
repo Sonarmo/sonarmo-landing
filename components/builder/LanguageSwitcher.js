@@ -1,10 +1,11 @@
 import { Menu } from "@headlessui/react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function LanguageSwitcher() {
-  const pathname = usePathname();
+  const router = useRouter();
+  const pathname = router.pathname;
 
   let currentLang = "fr";
   if (pathname.includes("-en")) currentLang = "en";
