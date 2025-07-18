@@ -7,6 +7,7 @@ import Link from "next/link";
 import Footer from "/components/layout/Footer";
 import Header from "/components/layout/Header"; // ✅ Import du composant Header
 import { motion } from "framer-motion";
+import { Sparkles, Brain, Timer } from "lucide-react"; // 👈 à importer en haut de ton fichier
 
 
 export default function Home() {
@@ -115,43 +116,62 @@ export default function Home() {
         </section>
 
         {/* IMPACT SECTION AMÉLIORÉE */}
-        <section className="relative text-center px-10 py-20 overflow-hidden bg-gradient-to-br from-[#2a0a00] via-[#1a0015] to-[#120d0d]">
-          <div className="absolute left-0 top-0 w-[600px] h-[600px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-20 -translate-x-1/3 -translate-y-1/3 z-0" />
-          <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-8">
-            Pourquoi Sonarmo ?
-          </p>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2 }}
-            viewport={{ once: true }}
-            className="relative z-10"
-          >
-            <h2 className="text-3xl font-semibold mb-10">Une ambiance qui change tout</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-6xl mx-auto text-gray-300">
-              {[{
-                value: "100%",
-                text: "des playlists générées sont uniques, basées sur votre ambiance."
-              }, {
-                value: "+9%",
-                text: "de Dopamine libérée dans le cerveau lorsqu'on écoute de la musique qu'on aime"
-              }, {
-                value: "1 min",
-                text: "pour générer une ambiance musicale cohérente et prête à diffuser."
-              }].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.3 }}
-                >
-                  <p className="text-5xl font-bold text-white mb-2">{item.value}</p>
-                  <p>{item.text}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </section>
+<section className="relative text-center px-10 py-20 overflow-hidden bg-gradient-to-br from-[#1a000b] via-[#0e0b14] to-[#000000]">
+
+  {/* Blobs lumineux pour enrichir le fond */}
+  <div className="absolute left-[-100px] top-[-100px] w-[500px] h-[500px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-10 z-0" />
+  <div className="absolute right-[-150px] bottom-[-150px] w-[600px] h-[600px] bg-gradient-to-tr from-[#00FFF0] to-[#2B0036] rounded-full blur-3xl opacity-10 z-0" />
+  <div className="absolute left-1/2 top-1/2 w-[300px] h-[300px] bg-gradient-to-tr from-[#FF00FF] to-[#F28500] rounded-full blur-2xl opacity-10 transform -translate-x-1/2 -translate-y-1/2 z-0" />
+
+  {/* Titre & contenus */}
+  <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-8 relative z-10">
+    Pourquoi Sonarmo ?
+  </p>
+
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1.2 }}
+    viewport={{ once: true }}
+    className="relative z-10"
+  >
+    <h2 className="text-3xl font-semibold text-white mb-10">Une ambiance qui change tout</h2>
+
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-6xl mx-auto text-gray-300">
+      {[
+        {
+          icon: <Sparkles className="text-white w-10 h-10 mb-4 mx-auto" />,
+          value: "100%",
+          text: "des playlists sont générées à partir de votre ambiance, votre moment, votre public."
+        },
+        {
+          icon: <Brain className="text-white w-10 h-10 mb-4 mx-auto" />,
+          value: "42M",
+          text: "de neurones activés quand vous écoutez de la musique que vous aimez."
+        },
+        {
+          icon: <Timer className="text-white w-10 h-10 mb-4 mx-auto" />,
+          value: "60 sec",
+          text: "pour transformer l’ambiance de votre lieu ou de votre moment."
+        }
+].map((item, index) => (
+  <motion.div
+    key={index}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, delay: index * 0.3 }}
+    className="transition-transform duration-300 hover:scale-105"
+  >
+    {item.icon} {/* 👈 C'était cette ligne qui manquait */}
+    <p className="text-5xl font-bold text-white mb-2 drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,133,255,0.8)] transition-all duration-300">
+      {item.value}
+    </p>
+    <p>{item.text}</p>
+  </motion.div>
+))}
+    </div>
+  </motion.div>
+</section>
 <Footer />
         
       </main>

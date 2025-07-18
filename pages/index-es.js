@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/next";
 import AnimatedWave from "/components/builder/AnimatedWave";
 import LanguageSwitcher from "/components/builder/LanguageSwitcher";
 import BlurText from "/components/builder/BlurText";
+import { Sparkles, Brain, Timer } from "lucide-react"; // 👈 à importer en haut de ton fichier
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -150,44 +151,63 @@ export default function Home() {
           </div>
         </section>
 
-        {/* IMPACT SECTION AMÉLIORÉE */}
-        <section className="relative text-center px-10 py-20 overflow-hidden bg-gradient-to-br from-[#2a0a00] via-[#1a0015] to-[#120d0d]">
-          <div className="absolute left-0 top-0 w-[600px] h-[600px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-20 -translate-x-1/3 -translate-y-1/3 z-0" />
-          <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-8">
-            ¿Por qué Sonarmo?
+        {/* IMPACT SECTION – VERSIÓN ESPAÑOLA */}
+<section className="relative text-center px-10 py-20 overflow-hidden bg-gradient-to-br from-[#1a000b] via-[#0e0b14] to-[#000000]">
+
+  {/* Burbujas luminosas decorativas */}
+  <div className="absolute left-[-100px] top-[-100px] w-[500px] h-[500px] bg-gradient-to-br from-[#FF9400] to-[#FF0BED] rounded-full blur-3xl opacity-10 z-0" />
+  <div className="absolute right-[-150px] bottom-[-150px] w-[600px] h-[600px] bg-gradient-to-tr from-[#00FFF0] to-[#2B0036] rounded-full blur-3xl opacity-10 z-0" />
+  <div className="absolute left-1/2 top-1/2 w-[300px] h-[300px] bg-gradient-to-tr from-[#FF00FF] to-[#F28500] rounded-full blur-2xl opacity-10 transform -translate-x-1/2 -translate-y-1/2 z-0" />
+
+  {/* Título */}
+  <p className="text-lg text-[#FCE2BA] uppercase tracking-widest mb-8 relative z-10">
+    ¿Por qué Sonarmo?
+  </p>
+
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1.2 }}
+    viewport={{ once: true }}
+    className="relative z-10"
+  >
+    <h2 className="text-3xl font-semibold text-white mb-10">Una atmósfera lo cambia todo</h2>
+
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-6xl mx-auto text-gray-300">
+      {[
+        {
+          icon: <Sparkles className="text-white w-10 h-10 mb-4 mx-auto" />,
+          value: "100%",
+          text: "de las playlists se generan de forma única según tu ambiente, momento y público."
+        },
+        {
+          icon: <Brain className="text-white w-10 h-10 mb-4 mx-auto" />,
+          value: "42M",
+          text: "de neuronas se activan al escuchar música que te gusta."
+        },
+        {
+          icon: <Timer className="text-white w-10 h-10 mb-4 mx-auto" />,
+          value: "60 seg",
+          text: "es suficiente para transformar la atmósfera de tu espacio o evento."
+        }
+      ].map((item, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: index * 0.3 }}
+          className="transition-transform duration-300 hover:scale-105"
+        >
+          {item.icon}
+          <p className="text-5xl font-bold text-white mb-2 drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,133,255,0.8)] transition-all duration-300">
+            {item.value}
           </p>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2 }}
-            viewport={{ once: true }}
-            className="relative z-10"
-          >
-            <h2 className="text-3xl font-semibold mb-10">Un ambiente que cambia todo</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-6xl mx-auto text-gray-300">
-              {[{
-                value: "100%",
-                text: "de las Playlist generadas son únicas, basadas en tu ambiente."
-              }, {
-                value: "+9%",
-                text: "Dopamina es liberada en el cerebro cuando oímos música que nos gusta"
-              }, {
-                value: "1 min",
-                text: "basta."
-              }].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.3 }}
-                >
-                  <p className="text-5xl font-bold text-white mb-2">{item.value}</p>
-                  <p>{item.text}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </section>
+          <p>{item.text}</p>
+        </motion.div>
+      ))}
+    </div>
+  </motion.div>
+</section>
 
         <footer className="bg-black text-sm text-gray-400 px-6 py-10 mt-20 w-full relative z-10">
   <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-y-8 w-full">
