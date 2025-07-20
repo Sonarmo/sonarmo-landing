@@ -37,61 +37,61 @@ export default function PromptHistoryDashboard() {
 
     fetchData();
   }, []);
+
   const exportToCSV = (data) => {
-  if (!data.length) return;
+    if (!data.length) return;
 
-  const headers = [
-    "Date",
-    "Email",
-    "Nom Playlist",
-    "Prompt",
-    "Nombre de tracks",
-    "Pays",
-    "Produit",
-    "Lien Playlist"
-  ];
+    const headers = [
+      "Date",
+      "Email",
+      "Prompt",
+      "Nombre de tracks",
+      "Pays",
+      "Produit",
+      "Lien Playlist"
+    ];
 
-  const rows = data.map((item) => [
-    new Date(item.createdAt.toDate()).toLocaleString(),
-    item.userEmail,
-    item.playlistName,
-    item.prompt,
-    item.totalTracks,
-    item.spotifyCountry,
-    item.spotifyProduct,
-    item.playlistUrl
-  ]);
+    const rows = data.map((item) => [
+      new Date(item.createdAt.toDate()).toLocaleString(),
+      item.userEmail,
+      item.prompt,
+      item.totalTracks,
+      item.spotifyCountry,
+      item.spotifyProduct,
+      item.playlistUrl
+    ]);
 
-  const csvContent =
-    "data:text/csv;charset=utf-8," +
-    [headers, ...rows]
-      .map((row) =>
-        row
-          .map((val) =>
-            typeof val === "string" ? `"${val.replace(/"/g, '""')}"` : val
-          )
-          .join(";")
-      )
-      .join("\n");
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers, ...rows]
+        .map((row) =>
+          row
+            .map((val) =>
+              typeof val === "string" ? `"${val.replace(/"/g, '""')}"` : val
+            )
+            .join(";")
+        )
+        .join("\n");
 
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "historique_playlists_sonarmo.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "historique_playlists_sonarmo.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="min-h-screen bg-black text-white p-8">
       <h1 className="text-2xl font-bold mb-6">Historique des playlists générées</h1>
+
       <button
-  onClick={() => exportToCSV(history)}
-  className="mb-6 bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition"
->
-  Exporter en CSV
-</button>
+        onClick={() => exportToCSV(history)}
+        className="mb-6 bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition"
+      >
+        Exporter en CSV
+      </button>
 
       {loading ? (
         <p>Chargement...</p>
@@ -102,7 +102,6 @@ export default function PromptHistoryDashboard() {
               <tr className="bg-gray-800 text-left">
                 <th className="p-4">Date</th>
                 <th className="p-4">Email</th>
-                <th className="p-4">Nom Playlist</th>
                 <th className="p-4">Prompt</th>
                 <th className="p-4">Tracks</th>
                 <th className="p-4">Pays</th>
@@ -115,7 +114,6 @@ export default function PromptHistoryDashboard() {
                 <tr key={item.id} className="border-t border-gray-700 hover:bg-gray-800">
                   <td className="p-4">{new Date(item.createdAt.toDate()).toLocaleString()}</td>
                   <td className="p-4">{item.userEmail}</td>
-                  <td className="p-4">{item.playlistName || "-"}</td>
                   <td className="p-4 max-w-xs whitespace-pre-wrap break-words">{item.prompt}</td>
                   <td className="p-4">{item.totalTracks}</td>
                   <td className="p-4">{item.spotifyCountry}</td>
@@ -134,7 +132,7 @@ export default function PromptHistoryDashboard() {
               ))}
             </tbody>
           </table>
-        </div> 
+        </div>
       )}
     </div>
   );
