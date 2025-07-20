@@ -4,11 +4,13 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../lib/firebase";
+import { query, orderBy } from "firebase/firestore";
 
 export default function AdminUsers() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -18,7 +20,9 @@ export default function AdminUsers() {
             }
 
             try {
-                const usersSnap = await getDocs(collection(db, "users"));
+                const usersRef = collection(db, "users");
+const q = query(usersRef, orderBy("createdAt", "desc")); // du plus récent au plus ancien
+const usersSnap = await getDocs(q);
                 const usersData = usersSnap.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data(),
@@ -54,26 +58,49 @@ export default function AdminUsers() {
                 <Link href="/admin" className="text-sm hover:underline">Retour au dashboard</Link>
             </header>
 
-            <main className="p-6 space-y-10">
+            <main className="px-4 py-6 sm:px-6 space-y-10">
+                <div className="mb-6">
+  <input
+    type="text"
+    placeholder="Rechercher par email..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="w-full sm:w-1/2 px-4 py-2 rounded bg-[#1f1f1f] border border-gray-600 text-white placeholder-gray-400"
+  />
+</div>
                 <section>
                     <div className="space-y-4">
-                        {users.map(user => (
+                        {users
+  .filter((user) =>
+    user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+  .map((user) => (
                             <div key={user.id} className="bg-[#1f1f1f] border border-gray-600 p-4 rounded">
-                                <div className="flex justify-between items-center">
+                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                                     <div>
+                                        <p className="text-sm text-gray-500">
+  Créé le :{" "}
+  {user.createdAt?.toDate
+    ? user.createdAt.toDate().toLocaleDateString("fr-FR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "Non défini"}
+</p>
                                         <p className="font-semibold text-lg">{user.email || "Email inconnu"}</p>
                                         <p className="text-sm text-gray-400">Crédits : {user.credits ?? 0}</p>
                                         <p className="text-sm text-gray-400">Abonnement : {user.abonnementActif ? "✅ Actif" : "❌ Inactif"}</p>
                                     </div>
-                                    <div className="flex flex-col gap-2">
+                                    <div className="w-full sm:w-auto flex flex-col gap-2">
                                         <button
                                             onClick={() => updateUser(user.id, { credits: (user.credits ?? 0) + 1 })}
-                                            className="text-xs bg-green-500 px-3 py-1 rounded hover:opacity-80">
+                                            className="w-full sm:w-auto text-xs bg-green-500 px-3 py-1 rounded hover:opacity-80">
                                             +1 Crédit
                                         </button>
                                         <button
                                             onClick={() => updateUser(user.id, { abonnementActif: !user.abonnementActif })}
-                                            className="text-xs bg-blue-500 px-3 py-1 rounded hover:opacity-80">
+                                            className="w-full sm:w-auto text-xs bg-blue-500 px-3 py-1 rounded hover:opacity-80">
                                             {user.abonnementActif ? "Désactiver Abonnement" : "Activer Abonnement"}
                                         </button>
                                     </div>
