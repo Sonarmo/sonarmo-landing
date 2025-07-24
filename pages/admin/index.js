@@ -10,10 +10,31 @@ export default function AdminDashboard() {
       </header>
 
       <main className="p-8 grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
-        <AdminCard title="📓 Blog" href="/admin/blog" description="Créer et gérer les articles du blog musical." />
-        <AdminCard title="👤 Utilisateurs" href="/admin/users" description="Gérer crédits & abonnements individuels." />
-        <AdminCard title="🏢 Clients Pro" href="/admin/clients" description="Configurer les lieux & playlists principales." />
-        <AdminCard title="📜 Historique" href="/admin/history" description="Consulter les playlists générées." />
+        <AdminCard
+          title="📓 Blog"
+          href="/admin/blog"
+          description="Créer et gérer les articles du blog musical."
+        />
+        <AdminCard
+          title="👤 Utilisateurs"
+          href="/admin/users"
+          description="Gérer crédits & abonnements individuels."
+        />
+        <AdminCard
+          title="🏢 Clients Pro"
+          href="/admin/clients"
+          description="Configurer les lieux & playlists principales."
+        />
+        <AdminCard
+          title="📜 Historique"
+          href="/admin/history"
+          description="Consulter les playlists générées."
+        />
+        <AdminCard
+          title="🎵 Artistes App"
+          href="/admin/artists"
+          description="Ajouter, modifier ou supprimer des artistes."
+        />
       </main>
     </div>
   );
