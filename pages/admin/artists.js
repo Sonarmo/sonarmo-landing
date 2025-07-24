@@ -1,6 +1,6 @@
 // pages/admin/artists.js
 import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase"; // ✅ adapte si ton chemin est différent
+import { db } from "/lib/firebase"; // ✅ adapte si ton chemin est différent
 import {
   collection,
   getDocs,

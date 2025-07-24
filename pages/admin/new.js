@@ -1,6 +1,6 @@
 // pages/admin/artists/new.js
 import { useState } from "react";
-import { db } from "@/lib/firebase";
+import { db } from "/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import Link from "next/link";
