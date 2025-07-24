@@ -34,7 +34,7 @@ export default function AdminArtistsPage() {
       <header className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">🎵 Gestion des artistes</h1>
         <Link
-          href="/admin/artists/new"
+          href="/admin/new"
           className="bg-gradient-to-r from-[#F28500] to-[#FF00FF] text-white px-4 py-2 rounded-md hover:opacity-90 transition"
         >
           + Ajouter un artiste
