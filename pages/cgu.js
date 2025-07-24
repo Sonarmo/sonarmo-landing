@@ -68,9 +68,9 @@ export default function ConditionsEtConfidentialite() {
         <h3 className="text-xl font-semibold mt-6 mb-2">5. Cookies</h3>
 <p>Notre site n’utilise pas de cookies de suivi marketing ou publicitaire. Aucune donnée personnelle n’est stockée à travers des cookies.</p>
 
-<h3 className="text-xl font-semibold mt-6 mb-2">6. Analyse d’audience avec Plausible</h3>
-<p>Nous utilisons <strong>Plausible Analytics</strong>, un outil d’analyse respectueux de la vie privée, hébergé en Europe. Il ne collecte aucune donnée personnelle identifiable, ne place pas de cookie et ne nécessite pas de consentement.</p>
-<p>Les données collectées (pages visitées, durée de session, type de navigateur) sont totalement anonymisées et utilisées uniquement pour comprendre l’usage global du site, sans traçage individuel.</p>
+<h3 className="text-xl font-semibold mt-6 mb-2">6. Analyse d’audience avec Umami</h3>
+<p>Nous utilisons <strong>Umami</strong>, un outil d’analyse d’audience respectueux de la vie privée. Il est hébergé en Europe et ne collecte aucune donnée personnelle identifiable.</p>
+<p>Aucun cookie n’est utilisé, et aucune information permettant d’identifier un visiteur n’est conservée. Les données (pages consultées, durée de session, type de navigateur, etc.) sont totalement anonymisées et utilisées uniquement pour améliorer l’expérience globale du site.</p>
 
         <h3 className="text-xl font-semibold mt-6 mb-2">7. Vos droits</h3>
         <p>Conformément au RGPD, vous pouvez accéder, modifier ou supprimer vos données. Contactez-nous à <a href="mailto:arthur.fromont@sonarmo.com" className="text-blue-400 underline">arthur.fromont@sonarmo.com</a>.</p>

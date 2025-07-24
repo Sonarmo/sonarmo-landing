@@ -9,20 +9,12 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
-         {/* ✅ Plausible Analytics avec options */}
+
+        {/* ✅ Umami Analytics */}
         <script
           defer
-          data-domain="www.sonarmo.com"
-          src="https://plausible.io/js/script.outbound-links.js"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.plausible = window.plausible || function() {
-                (window.plausible.q = window.plausible.q || []).push(arguments);
-              }
-            `,
-          }}
+          src="https://cloud.umami.is/script.js"
+          data-website-id="d1d25c76-7c9d-4184-98e5-aecf20dd59a0"
         ></script>
       </Head>
       <body>
