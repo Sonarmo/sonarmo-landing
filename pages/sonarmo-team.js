@@ -53,7 +53,7 @@ export default function Team() {
       DJ et passionné de musique depuis mon plus jeune âge, j’ai toujours été fasciné par l’impact des sons sur nos émotions.
     </p>
     <p className="text-gray-300 leading-relaxed">
-      Après un parcours mêlant création musicale, voyages et projets tech, j’ai imaginé Sonarmo comme un pont entre
+      Après un parcours mêlant création musicale, voyages et projets, j’ai imaginé Sonarmo comme un pont entre
       l’intelligence artificielle et l’intelligence émotionnelle.
     </p>
     <p className="text-gray-300 leading-relaxed">
@@ -120,7 +120,7 @@ export default function Team() {
             </div>
             <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 shadow-md hover:shadow-lg transition text-center">
               <Waves className="mx-auto mb-4 text-white" size={32} />
-              <h4 className="text-white text-lg font-semibold mb-2">Écologie sonore</h4>
+              <h4 className="text-white text-lg font-semibold mb-2">Atmosphère respectueuse</h4>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Un monde moins bruyant, plus harmonieux. Où chaque son a sa place et respecte l’espace.
               </p>
